@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="All Test Suite">
+  <!--  <listeners>
+        <listener class-name="org.example.MyTestListener"/>
+    </listeners>-->
+    <test verbose="2" preserve-order="false" name="Test1">
+        <!--<parameter name="ENV" value="POD1"></parameter>
+        <parameter name="Browser" value="Chrome"></parameter>-->
+        <classes>
+
+            <class name="org.shikshalokam.backend.Test1">
+                <methods>
+                    <include name="test1"/>
+                </methods>
+            </class>
+
+        </classes>
+    </test>
+</suite>

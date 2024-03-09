@@ -4,7 +4,7 @@
   <!--  <listeners>
         <listener class-name="org.example.MyTestListener"/>
     </listeners>-->
-    <test verbose="2" preserve-order="false" name="Test1">
+    <test verbose="2" preserve-order="false" name="MentorED API Validations">
         <!--<parameter name="ENV" value="POD1"></parameter>
         <parameter name="Browser" value="Chrome"></parameter>-->
         <classes>

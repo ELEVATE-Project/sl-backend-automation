@@ -9,9 +9,9 @@
         <parameter name="Browser" value="Chrome"></parameter>-->
         <classes>
 
-            <class name="org.shikshalokam.backend.Test1">
+            <class name="org.shikshalokam.backend.TestGetOrgPolicies">
                 <methods>
-                    <include name="test1"/>
+                    <include name="testGetOrgPolicies"/>
                 </methods>
             </class>
 

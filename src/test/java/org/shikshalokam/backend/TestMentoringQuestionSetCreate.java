@@ -12,6 +12,7 @@ import java.net.URISyntaxException;
 
 import static io.restassured.RestAssured.given;
 import static org.shikshalokam.backend.PropertyLoader.PROP_LIST;
+import static org.testng.Assert.assertEquals;
 
 public class TestMentoringQuestionSetCreate extends MentorEDBaseTest{
 
@@ -48,6 +49,7 @@ public class TestMentoringQuestionSetCreate extends MentorEDBaseTest{
 
         logger.info("Ended calling the testMentoringQuestionSetCreate:");
 
+        assertEquals(responce.getStatusCode(),201,"status code failed for testMentoringQuestionSetCreate");
 
     }
 

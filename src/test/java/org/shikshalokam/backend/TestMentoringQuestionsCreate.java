@@ -27,6 +27,7 @@ public class TestMentoringQuestionsCreate extends MentorEDBaseTest {
     @Test
     public void testCreatingQuestion() {
 
+        logger.info("Started calling the CreateQuestion:");
         try {
             createQuestionEndpoint = new URI("mentoring/v1/questions/create");
         } catch (URISyntaxException e) {
@@ -59,6 +60,9 @@ public class TestMentoringQuestionsCreate extends MentorEDBaseTest {
                 .when().post(createQuestionEndpoint);
         logger.info(responce.getBody().asString());
 
+        logger.info("Ended calling the CreateQuestion:");
+
     }
+
 
 }

@@ -14,7 +14,13 @@
                     <include name="testGetOrgPolicies"/>
                 </methods>
             </class>
+            <class name="org.shikshalokam.backend.TestMentoringQuestionsCreate">
+                <methods>
+                    <include name="testCreatingQuestion"/>
+                </methods>
+            </class>
 
         </classes>
+
     </test>
 </suite>

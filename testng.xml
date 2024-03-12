@@ -24,6 +24,11 @@
                     <include name="testMentoringQuestionSetCreate"/>
                 </methods>
             </class>
+            <class name="org.shikshalokam.backend.TestMentoringQuestionsRead">
+                <methods>
+                    <include name="testMentoringQuestoinsRead"/>
+                </methods>
+            </class>
 
         </classes>
 

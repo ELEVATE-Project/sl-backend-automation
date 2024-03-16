@@ -41,7 +41,7 @@ public class TestGetOrgPolicies extends MentorEDBaseTest {
         assertEquals(responce.getBody().jsonPath().get("result.mentor_visibility_policy"),"CURRENT","mentor_visibility_policy Not valid");
 
         logger.info("Ended calling the get org Policies: with all the assertions");
-        logger.info("Ended calling the get org Policies: with all the assertions");
+
 
     }
 }

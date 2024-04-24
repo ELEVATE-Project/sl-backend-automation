@@ -18,7 +18,7 @@ public class PropertyLoader {
         System.out.println("Current directory: " + currentDirectory);
         String filePath=null;
         if (System.getProperty("automationPropertiesFile")==null) {
-            filePath = currentDirectory + "\\src\\main\\resources\\config\\automation.properties";
+            filePath = currentDirectory + File.separator+ Paths.get("src","main","resources","config").toString()+File.separator+"automation.properties";
             System.out.println("The file path from if flow :" + filePath);
         }else
         {

@@ -10,6 +10,8 @@ import org.shikshalokam.backend.MentorEDBaseTest;
 import org.shikshalokam.backend.PropertyLoader;
 import com.microsoft.playwright.*;
 
+import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
+
 public class PWBasePage extends MentorEDBaseTest {
     private static final Logger logger = LogManager.getLogger(PWBasePage.class);
     public static BrowserContext browserContext;
@@ -17,17 +19,19 @@ public class PWBasePage extends MentorEDBaseTest {
     public static PWBrowser PWBrowser;
     public static Playwright playwright = Playwright.create();
     public static Browser browser;
+    private String pwTitle;
+
     static {
 
-        Boolean headless=true;
-        if(PropertyLoader.PROP_LIST.getProperty("mentor.qa.browser.setHeadless").equals("false")){
-            headless=false;
+        Boolean headless = true;
+        if (PropertyLoader.PROP_LIST.getProperty("mentor.qa.browser.setHeadless").equals("false")) {
+            headless = false;
         }
         switch (PropertyLoader.PROP_LIST.getProperty("mentor.qa.browser")) {
             case "chromium":
                 logger.info("Using Chromium browser for Test suite ");
                 PWBasePage.PWBrowser = PWBrowser.chromium;
-                browser = playwright.chromium().launch( new BrowserType.LaunchOptions().setHeadless(headless));
+                browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(headless));
                 browserContext = browser.newContext();
                 page = browserContext.newPage();
                 break;
@@ -59,6 +63,19 @@ public class PWBasePage extends MentorEDBaseTest {
         }
     }
 
+    public PWBasePage(String givenTitleName) {
+
+        this.pwTitle = givenTitleName;
+
+
+    }
+
+    public void validPage() {
+
+        assertThat(PWBasePage.page).hasTitle(this.pwTitle);
+
+
+    }
 
 }
 

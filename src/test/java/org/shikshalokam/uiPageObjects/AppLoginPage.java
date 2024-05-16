@@ -21,9 +21,9 @@ public class AppLoginPage extends PWBasePage {
         this.validPage();
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("mail outline Login")).click();
         page.getByLabel("Email *").dblclick();
-        page.getByLabel("Email *").fill("adithya@shikshalokam.org");
+        page.getByLabel("Email *").fill(userName);
         page.getByLabel("Password *").click();
-        page.getByLabel("Password *").fill("Welcome@123");
+        page.getByLabel("Password *").fill(password);
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Login")).click();
         //page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Login")).click();
 

@@ -18,6 +18,7 @@ public class SampleUITest {
         robot.openApp();
         robot.sees(AppAllPages.loginPage).loginToApp("adithya@shikshalokam.org", "Welcome@123").logOutFromApp();
         robot.quitAppBrowser();
+        robot.debugAPP();
 
 
 

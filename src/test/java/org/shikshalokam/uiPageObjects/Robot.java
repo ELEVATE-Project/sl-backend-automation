@@ -24,10 +24,10 @@ public class Robot {
         PWBasePage.page.pause();
     }
 
-    public <T extends PWBasePage> T sees(T PWBasePage)
+    public <T extends PWBasePage> T sees(T myPage)
     {
 
-        return PWBasePage;
+        return myPage;
     }
 
 }

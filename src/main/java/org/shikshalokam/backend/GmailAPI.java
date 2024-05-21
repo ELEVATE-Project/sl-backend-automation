@@ -135,9 +135,9 @@ public class GmailAPI {
         }
     }
 
-    public static String getOTP() {
+    public static String getOTP(String subjectLine) {
 
-        HashMap<String, String> gmailData = GmailAPI.getGmailData("Your OTP to sign-up on MentorED");
+        HashMap<String, String> gmailData = GmailAPI.getGmailData(subjectLine);
         String gmailData1 = gmailData.get("body");
         return extractNumbers(gmailData1).get(0);
 

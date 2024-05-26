@@ -60,7 +60,7 @@ public class MentorEDBaseTest extends MentorBase {
             try {
                 responce = given().header("X-auth-token", "bearer " + X_AUTH_TOKEN).when().delete(new URI(deleteUseruserEndPoint + menteeUserId));
                 logger.info("Mentee User  deleted from the User service status :" + responce.getStatusCode());
-                responce = given().header("X-auth-token ", "bearer " + X_AUTH_TOKEN).when().delete(new URI(deleteUserMentorEndPoint + menteeUserId));
+                responce = given().header("X-auth-token", "bearer " + X_AUTH_TOKEN).when().delete(new URI(deleteUserMentorEndPoint + menteeUserId));
                 logger.info("Mentee User  deleted from the Mentor service status :" + responce.getStatusCode());
             }
             catch (URISyntaxException e)

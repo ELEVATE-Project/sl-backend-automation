@@ -7,4 +7,6 @@ public class AppAllPages {
 
     private static final Logger logger = LogManager.getLogger(AppAllPages.class);
     public static AppLoginPage loginPage = new AppLoginPage("MentorED");
+    public static AppSignupPage SignupPage = new AppSignupPage("MentorED");
+
 }

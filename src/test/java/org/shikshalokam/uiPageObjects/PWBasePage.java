@@ -32,7 +32,7 @@ public class PWBasePage extends MentorEDBaseTest {
                 logger.info("Using Chromium browser for Test suite ");
                 PWBasePage.PWBrowser = PWBrowser.chromium;
                 browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(headless));
-                browserContext = browser.newContext();
+                browserContext = browser.newContext(new Browser.NewContextOptions().setViewportSize(null));
                 page = browserContext.newPage();
                 break;
             case "msedge":

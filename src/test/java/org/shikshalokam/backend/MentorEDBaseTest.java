@@ -17,7 +17,8 @@ public class MentorEDBaseTest extends MentorBase {
     private static final Logger logger = LogManager.getLogger(MentorEDBaseTest.class);
     public static String X_AUTH_TOKEN = null;
 
-    private String searchMenteeEndPoint = "mentoring/v1/users/list?type=mentee&page=1&limit=2&search=";
+    private String searchMenteeEndPoint = "mentoring/v1/users/list?type=mentee&page=1&limit=1&search=";
+    private String searchMentorEndPoint = "mentoring/v1/users/list?type=mentor&page=1&limit=1&search=";
     private String deleteUseruserEndPoint="user/v1/admin/deleteUser/";
 
     private String deleteUserMentorEndPoint ="/mentoring/v1/admin/userDelete?userId=";
@@ -72,6 +73,35 @@ public class MentorEDBaseTest extends MentorBase {
         }
 
     }
+
+
+    public void deleteMentorByGivenName( String name)
+    {
+        String mentorUserID=null;
+        String encodedString = Base64.getEncoder().encodeToString(name.getBytes());
+        searchMentorEndPoint =  new StringBuilder(searchMentorEndPoint).append(encodedString).toString();
+        Response responce = given().header("X-auth-token", "bearer " + X_AUTH_TOKEN).when().get(searchMentorEndPoint);
+        if (responce.getStatusCode()==200)
+        {
+
+            mentorUserID=responce.getBody().jsonPath().get("result.data.values.id" ).toString().split("\\[\\[|\\]\\]")[1];
+            loginToMentorED("adminmaster@admin.com","password");
+            try {
+                responce = given().header("X-auth-token", "bearer " + X_AUTH_TOKEN).when().delete(new URI(deleteUseruserEndPoint + mentorUserID));
+                logger.info("Mentor User  deleted from the User service status :" + responce.getStatusCode());
+                responce = given().header("X-auth-token", "bearer " + X_AUTH_TOKEN).when().delete(new URI(deleteUserMentorEndPoint + mentorUserID));
+                logger.info("Mentor User  deleted from the Mentor service status :" + responce.getStatusCode());
+            }
+            catch (URISyntaxException e)
+            {
+                logger.info ("User deleteion flow URI is not defined properly");
+            }
+        }else {
+            logger.info("User not found for the given username :" +name);
+        }
+
+    }
+
 
 
 }

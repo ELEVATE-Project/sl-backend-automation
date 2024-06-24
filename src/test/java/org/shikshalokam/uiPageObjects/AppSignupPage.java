@@ -16,9 +16,9 @@ public class AppSignupPage extends PWBasePage {
         super(givenTitleName);
         this.signupPage = this;
     }
-    public AppSignupPage SignupToApp(String Name, String Email, String password) throws InterruptedException {
+    public AppSignupPage SignupToApp(String Name, String Email, String password)  {
+        try {
         this.validPage();
-
         page.getByLabel("Name *").click();
         page.getByLabel("Name *").fill(Name);
 
@@ -34,7 +34,7 @@ public class AppSignupPage extends PWBasePage {
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Validate OTP")).click();
 
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Generate OTP")).click();
-        TimeUnit.SECONDS.sleep(10);
+        TimeUnit.SECONDS.sleep(5);
         String script = "navigator.clipboard.writeText('"+ GmailAPI.getOTP("Your OTP to sign-up on MentorED")+"')";
         System.out.println(script);
         page.locator("//div[@class=\"otp-field\"]").click();
@@ -45,11 +45,12 @@ public class AppSignupPage extends PWBasePage {
         page.keyboard().up("Control");
         page.locator("ion-checkbox").click();
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Verify and login")).click();
-
+    } catch (InterruptedException ignored) {}
         return signupPage;
     }
 
     public AppSignupPage logOutFromApp() {
+
         page.locator("div").filter(new Locator.FilterOptions().setHasText("Logout")).click();
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Logout")).click();
         return signupPage;

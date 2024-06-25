@@ -1,4 +1,5 @@
 package org.shikshalokam.frontend;
+
 import org.shikshalokam.backend.MentorEDBaseTest;
 import org.shikshalokam.uiPageObjects.AppAllPages;
 import org.shikshalokam.uiPageObjects.Robot;
@@ -9,7 +10,7 @@ public class TestMenteeSignUp extends MentorEDBaseTest {
 
     @BeforeTest
     public void init() {
-        loginToMentorED("jubedhashaik029@gmail.com","PAssword@@123$");
+        loginToMentorED("jubedhashaik029@gmail.com", "PAssword@@123$");
         deleteMenteeByGivenName("UserSignup");
     }
 

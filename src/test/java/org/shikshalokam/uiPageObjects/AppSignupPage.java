@@ -33,10 +33,13 @@ public class AppSignupPage extends PWBasePage {
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Validate OTP")).click();
 
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Generate OTP")).click();
+
+
         try {
             TimeUnit.SECONDS.sleep(5);
         } catch (InterruptedException e) {
-            logger.info("Exception from the sleep mentod "+ e.getMessage());
+            logger.info("Exception from the sleep method "+ e.getMessage());
+
         }
         String script = "navigator.clipboard.writeText('"+ GmailAPI.getOTP("Your OTP to sign-up on MentorED")+"')";
         System.out.println(script);
@@ -45,7 +48,11 @@ public class AppSignupPage extends PWBasePage {
         try {
             TimeUnit.SECONDS.sleep(5);
         } catch (InterruptedException e) {
-            logger.info("Exception from the sleep mentod "+ e.getMessage());
+
+            logger.info("Exception from the sleep method "+ e.getMessage());
+
+            
+
         }
         page.keyboard().down("Control");
         page.keyboard().press("KeyV");

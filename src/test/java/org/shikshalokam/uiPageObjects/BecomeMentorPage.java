@@ -19,6 +19,7 @@ public class BecomeMentorPage extends PWBasePage{
 	        this.mentorPage=this;
 	    }
 
+<<<<<<< Updated upstream
 	public void  becomeMentor() throws InterruptedException {
         this.validPage();
 	     page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Become a Mentor")).click();
@@ -37,6 +38,21 @@ public class BecomeMentorPage extends PWBasePage{
         this.validPage();
 		 page.getByRole(AriaRole.NAVIGATION).getByText("Mentor", new Locator.GetByTextOptions()).isVisible();
 	}
+=======
+	public BecomeMentorPage  requestToBeAMentor()  {
+        this.validPage();
+	     page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Request to be a Mentor")).click();
+	     try {
+	            TimeUnit.SECONDS.sleep(10);
+		 } catch (InterruptedException e) {
+			 logger.info("Exception from the sleep method "+ e.getMessage());
+		 }
+		 return mentorPage;
+		 
+		 
+	}
+  
+>>>>>>> Stashed changes
 }
 
 	

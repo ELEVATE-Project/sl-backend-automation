@@ -19,10 +19,14 @@ public class AppLoginPage extends PWBasePage {
         this.loginPage=this;
     }
 
-    public AppLoginPage  loginToApp(String userName, String password) throws InterruptedException {
+    public AppLoginPage  loginToApp(String userName, String password) {
         this.validPage();
         Locator loginbutton = page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("mail outline Login"));
-        TimeUnit.SECONDS.sleep(5);
+        try {
+            TimeUnit.SECONDS.sleep(5);
+        } catch (InterruptedException e) {
+            logger.info("Exception from the sleep method "+ e.getMessage());
+        }
         if (loginbutton.isVisible()) {
             loginbutton.click();
             System.out.println("Login Button clicked.");
@@ -48,7 +52,4 @@ public class AppLoginPage extends PWBasePage {
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Logout")).click();
         return loginPage;
     }
-
-
-
 }

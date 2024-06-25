@@ -7,14 +7,14 @@ import org.testng.annotations.Test;
 
 public class TestMenteeSignUp extends MentorEDBaseTest {
 
-@BeforeTest
+    @BeforeTest
     public void init() {
         loginToMentorED("jubedhashaik029@gmail.com","PAssword@@123$");
         deleteMenteeByGivenName("UserSignup");
     }
 
     @Test
-    public void AppSignupTest() throws InterruptedException {
+    public void AppSignupTest()  {
         Robot robot = new Robot();
         robot.openApp();
         robot.sees(AppAllPages.loginPage).signUp();

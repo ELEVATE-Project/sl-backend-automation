@@ -12,7 +12,7 @@ public class TestBecomeAMentor {
         robot.sees(AppAllPages.loginPage).loginToApp("slautoraj@gmail.com", "PassworD@@@123");
         robot.sees(AppAllPages.welcomePage).becomeMentor();
         robot.sees(AppAllPages.welcomePage).updateButton();
-        robot.sees(AppAllPages.updateProfilePage).updateProfilePage();
+        robot.sees(AppAllPages.updateProfilePage).updateProfile();
         robot.sees(AppAllPages.welcomePage).becomeMentor();
         robot.sees(AppAllPages.mentorPage).requestToBeAMentor();
         robot.sees(AppAllPages.welcomePage).logOutFromApp();

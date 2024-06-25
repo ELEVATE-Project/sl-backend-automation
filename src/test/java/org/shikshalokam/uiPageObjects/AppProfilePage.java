@@ -18,7 +18,7 @@ public class AppProfilePage extends PWBasePage {
         this.updateProfilePage = this;
     }
 
-    public AppProfilePage updateProfilePage() {
+    public AppProfilePage updateProfile() {
         this.validPage();
         page.getByText("Block education officer").click();
         page.getByText("Andhra PradeshArunachal").click();

@@ -16,7 +16,7 @@ public class AppSignupPage extends PWBasePage {
         super(givenTitleName);
         this.signupPage = this;
     }
-    public AppSignupPage SignupToApp(String Name, String Email, String password) throws InterruptedException {
+    public AppSignupPage SignupToApp(String Name, String Email, String password)  {
         this.validPage();
 
         page.getByLabel("Name *").click();
@@ -34,7 +34,7 @@ public class AppSignupPage extends PWBasePage {
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Validate OTP")).click();
 
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Generate OTP")).click();
-        TimeUnit.SECONDS.sleep(10);
+
         try {
             TimeUnit.SECONDS.sleep(5);
         } catch (InterruptedException e) {
@@ -44,7 +44,6 @@ public class AppSignupPage extends PWBasePage {
         System.out.println(script);
         page.locator("//div[@class=\"otp-field\"]").click();
         page.evaluate(script);
-        TimeUnit.SECONDS.sleep(5);
         try {
             TimeUnit.SECONDS.sleep(5);
         } catch (InterruptedException e) {

@@ -17,7 +17,6 @@ public class AppSignupPage extends PWBasePage {
         this.signupPage = this;
     }
     public AppSignupPage SignupToApp(String Name, String Email, String password)  {
-        try {
         this.validPage();
         page.getByLabel("Name *").click();
         page.getByLabel("Name *").fill(Name);
@@ -34,18 +33,26 @@ public class AppSignupPage extends PWBasePage {
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Validate OTP")).click();
 
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Generate OTP")).click();
-        TimeUnit.SECONDS.sleep(5);
+        try {
+            TimeUnit.SECONDS.sleep(5);
+        } catch (InterruptedException e) {
+            logger.info("Exception from the sleep mentod "+ e.getMessage());
+        }
         String script = "navigator.clipboard.writeText('"+ GmailAPI.getOTP("Your OTP to sign-up on MentorED")+"')";
         System.out.println(script);
         page.locator("//div[@class=\"otp-field\"]").click();
         page.evaluate(script);
-        TimeUnit.SECONDS.sleep(5);
+        try {
+            TimeUnit.SECONDS.sleep(5);
+        } catch (InterruptedException e) {
+            logger.info("Exception from the sleep mentod "+ e.getMessage());
+        }
         page.keyboard().down("Control");
         page.keyboard().press("KeyV");
         page.keyboard().up("Control");
         page.locator("ion-checkbox").click();
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Verify and login")).click();
-    } catch (InterruptedException ignored) {}
+
         return signupPage;
     }
 

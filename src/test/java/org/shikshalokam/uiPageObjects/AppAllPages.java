@@ -12,4 +12,11 @@ public class AppAllPages {
     public static AppWelcomePage welcomePage =new AppWelcomePage("MentorED");
     public static AppWorkspacePage workspacePage =new AppWorkspacePage("MentorED");
     public static AppProfilePage ProfileDetailsPage =new AppProfilePage("MentorED");
+    public static AppResetPasswordPage resetPasswordPage =new AppResetPasswordPage("MentorED");
+
 }
+
+
+
+
+

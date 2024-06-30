@@ -1,0 +1,17 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="SampleSuite">
+    <test name="SampleTest1">
+        <classes>
+            <class name="org.shikshalokam.frontend.SampleUITest"/>
+
+        </classes>
+    </test>
+
+    <test name="SampleTest2" depends-on="SampleTest1">
+        <classes>
+            <class name="org.shikshalokam.frontend.SampleUITest2"/>
+
+
+        </classes>
+    </test>
+</suite>

@@ -7,7 +7,7 @@ import org.shikshalokam.backend.PropertyLoader;
 public class Robot {
 
     public  void openApp()
-    {
+    {   PWBasePage.reInitializePage();
         PWBasePage.page.navigate(PropertyLoader.PROP_LIST.getProperty("mentor.qa.portal.url"));
     }
     private static final Logger logger = LogManager.getLogger(Robot.class);
@@ -15,7 +15,7 @@ public class Robot {
     {
         PWBasePage.browserContext.close();
         PWBasePage.browser.close();
-        PWBasePage.playwright.close();
+        //PWBasePage.playwright.close();
 
     }
 

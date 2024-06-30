@@ -21,9 +21,11 @@ public class PWBasePage extends MentorEDBaseTest {
     public static Browser browser;
     private String pwTitle;
 
+    public static Boolean headless;
+
     static {
 
-        Boolean headless = true;
+        headless = true;
         if (PropertyLoader.PROP_LIST.getProperty("mentor.qa.browser.setHeadless").equals("false")) {
             headless = false;
         }
@@ -75,6 +77,13 @@ public class PWBasePage extends MentorEDBaseTest {
         assertThat(PWBasePage.page).hasTitle(this.pwTitle);
 
 
+    }
+
+    public static void reInitializePage()
+    {
+        browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(headless));
+        browserContext = browser.newContext(new Browser.NewContextOptions().setViewportSize(null));
+        page = browserContext.newPage();
     }
 
 }

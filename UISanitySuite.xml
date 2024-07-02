@@ -1,17 +1,28 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="SampleSuite">
-    <test name="SampleTest1">
+    <test name="Test">
         <classes>
-            <class name="org.shikshalokam.frontend.SampleUITest"/>
+
+            <class name="org.shikshalokam.frontend.SampleUITest">
+                <methods>
+                    <include name="testUI"/>
+                </methods>
+            </class>
+
+            <class name="org.shikshalokam.frontend.TestMenteeSignUp">
+                <methods>
+                    <include name="AppSignupTest"/>
+                </methods>
+            </class>
+
+            <class name="org.shikshalokam.frontend.TestBecomeAMentor">
+                <methods>
+                    <include name="becomeMentor"/>
+                </methods>
+            </class>
 
         </classes>
-    </test>
-
-    <test name="SampleTest2" depends-on="SampleTest1">
-        <classes>
-            <class name="org.shikshalokam.frontend.SampleUITest2"/>
+    </test> <!-- Test -->
+</suite> <!-- Suite -->
 
 
-        </classes>
-    </test>
-</suite>

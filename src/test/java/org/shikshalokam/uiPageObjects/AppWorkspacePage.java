@@ -21,7 +21,15 @@ public class AppWorkspacePage extends PWBasePage{
 		 page.locator("ion-card-content").filter(new Locator.FilterOptions().setHasText("Manage user")).click();
 		 page.locator("//td[text()='UserSignup']/..//td[4]//ion-button[1]").click();
 		 page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Yes")).click();
+         verifyToastMessage("Organisation request approved successfully");
 		 return workspacePage;
+
+    }
+
+    public AppWorkspacePage manageSession() {
+        this.validPage();
+        page.locator("ion-card-content").filter(new Locator.FilterOptions().setHasText("Manage session")).click();
+        return workspacePage;
 
     }
 	

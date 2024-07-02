@@ -12,11 +12,13 @@ import java.util.concurrent.TimeUnit;
 public class AppSignupPage extends PWBasePage {
     private AppSignupPage signupPage;
     private static final Logger logger = LogManager.getLogger(AppSignupPage.class);
+
     public AppSignupPage(String givenTitleName) {
         super(givenTitleName);
         this.signupPage = this;
     }
-    public AppSignupPage SignupToApp(String Name, String Email, String password)  {
+
+    public AppSignupPage SignupToApp(String Name, String Email, String password) {
         this.validPage();
         page.getByLabel("Name *").click();
         page.getByLabel("Name *").fill(Name);
@@ -33,15 +35,15 @@ public class AppSignupPage extends PWBasePage {
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Validate OTP")).click();
 
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Generate OTP")).click();
-
+        verifyToastMessage("OTP has been sent to your registered email ID. Please enter the otp to complete the registration process.");
 
         try {
             TimeUnit.SECONDS.sleep(5);
         } catch (InterruptedException e) {
-            logger.info("Exception from the sleep method "+ e.getMessage());
+            logger.info("Exception from the sleep method " + e.getMessage());
 
         }
-        String script = "navigator.clipboard.writeText('"+ GmailAPI.getOTP("Your OTP to sign-up on MentorED")+"')";
+        String script = "navigator.clipboard.writeText('" + GmailAPI.getOTP("Your OTP to sign-up on MentorED") + "')";
         System.out.println(script);
         page.locator("//div[@class=\"otp-field\"]").click();
         page.evaluate(script);
@@ -49,9 +51,8 @@ public class AppSignupPage extends PWBasePage {
             TimeUnit.SECONDS.sleep(5);
         } catch (InterruptedException e) {
 
-            logger.info("Exception from the sleep method "+ e.getMessage());
+            logger.info("Exception from the sleep method " + e.getMessage());
 
-            
 
         }
         page.keyboard().down("Control");

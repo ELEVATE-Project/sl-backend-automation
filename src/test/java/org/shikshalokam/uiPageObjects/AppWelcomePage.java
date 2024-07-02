@@ -47,4 +47,10 @@ public class AppWelcomePage extends PWBasePage {
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Update")).click();
         return welcomePage;
     }
+
+    public AppWelcomePage requestToChangePassword() {
+        this.validPage();
+        page.getByText("Change password").click();
+        return welcomePage;
+    }
 }

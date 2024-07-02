@@ -11,6 +11,7 @@ import org.shikshalokam.backend.PropertyLoader;
 import com.microsoft.playwright.*;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
+import static org.testng.Assert.assertEquals;
 
 public class PWBasePage extends MentorEDBaseTest {
     private static final Logger logger = LogManager.getLogger(PWBasePage.class);
@@ -79,14 +80,29 @@ public class PWBasePage extends MentorEDBaseTest {
 
     }
 
-    public static void reInitializePage()
-    {
+    public static void reInitializePage() {
         browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(headless));
         browserContext = browser.newContext(new Browser.NewContextOptions().setViewportSize(null));
         page = browserContext.newPage();
     }
 
+    public void verifyToastMessage(String expectedText) {
+        page.waitForSelector("div.toast-message");
+        boolean isVisible = page.isVisible("div.toast-message");
+        if (!isVisible) {
+            throw new AssertionError("Toast message is not visible!");
+        }
+        String actualText = page.locator("div.toast-message").textContent();
+        logger.info("Toast-Message:{}", actualText);
+        assertEquals(expectedText, actualText, "Text does not match!");
+    }
+
+    public static String fetchProperty(String key) {
+        return PropertyLoader.PROP_LIST.getProperty(key);
+    }
 }
+
+
 
 
 

@@ -52,6 +52,11 @@ public class AppLoginPage extends PWBasePage {
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("mail outline Sign up")).click();
         return loginPage;
     }
+    public AppLoginPage userForgetsPassword() {
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("mail outline Login")).click();
+        page.locator("div").filter(new Locator.FilterOptions().setHasText("Forgot password?")).nth(2).click();
+        return loginPage;
+    }
 
     public AppLoginPage logOutFromApp() {
         page.locator("div").filter(new Locator.FilterOptions().setHasText("Logout")).click();

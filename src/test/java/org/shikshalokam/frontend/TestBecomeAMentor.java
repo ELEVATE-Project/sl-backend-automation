@@ -17,7 +17,7 @@ public class TestBecomeAMentor {
                 fetchProperty("gmailsignup.userPassword"));
         robot.sees(AppAllPages.welcomePage).becomeMentor();
         robot.sees(AppAllPages.welcomePage).requestForProfileUpdate();
-        robot.sees(AppAllPages.ProfileDetailsPage).updateProfile();
+        robot.sees(AppAllPages.profileDetailsPage).updateProfile();
         robot.sees(AppAllPages.welcomePage).becomeMentor();
         robot.sees(AppAllPages.mentorPage).requestToBeAMentor();
         robot.sees(AppAllPages.welcomePage).logOutFromApp();

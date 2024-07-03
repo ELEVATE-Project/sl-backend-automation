@@ -18,12 +18,12 @@ public class TestMenteeSignUp extends MentorEDBaseTest {
         deleteMentorByGivenName("UserSignup");
     }
 
-    @Test()
+    @Test
     public void AppSignupTest() {
         Robot robot = new Robot();
         robot.openApp();
         robot.sees(AppAllPages.loginPage).signUp();
-        robot.sees(AppAllPages.SignupPage).SignupToApp(fetchProperty("gmailsignup.userName"),
+        robot.sees(AppAllPages.signupPage).SignupToApp(fetchProperty("gmailsignup.userName"),
                 fetchProperty("gmailsignup.userEmail"),
                 fetchProperty("gmailsignup.userPassword")).logOutFromApp();
         robot.sees(AppAllPages.loginPage).loginToApp(fetchProperty("gmailsignup.userEmail"),

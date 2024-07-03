@@ -10,12 +10,12 @@ import com.microsoft.playwright.options.AriaRole;
 
 public class AppProfilePage extends PWBasePage {
 
-    private AppProfilePage ProfileDetailsPage;
+    private AppProfilePage profileDetailsPage;
     private static final Logger logger = LogManager.getLogger(AppProfilePage.class);
 
     public AppProfilePage(String givenTitleName) {
         super(givenTitleName);
-        this.ProfileDetailsPage = this;
+        this.profileDetailsPage = this;
     }
 
     public AppProfilePage updateProfile() {
@@ -34,6 +34,6 @@ public class AppProfilePage extends PWBasePage {
         page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("English")).click();
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Submit")).click();
         verifyToastMessage("Profile Updated Successfully");
-        return ProfileDetailsPage;
+        return profileDetailsPage;
     }
 }

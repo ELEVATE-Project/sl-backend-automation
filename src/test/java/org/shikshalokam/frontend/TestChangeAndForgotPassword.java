@@ -9,7 +9,7 @@ import static org.shikshalokam.uiPageObjects.PWBasePage.fetchProperty;
 
 public class TestChangeAndForgotPassword extends MentorEDBaseTest {
 
-    @Test
+    @Test(dependsOnMethods = {"org.shikshalokam.frontend.TestMenteeSignUp.AppSignupTest"})
     public void changePassword() {
         Robot robot = new Robot();
         robot.openApp();

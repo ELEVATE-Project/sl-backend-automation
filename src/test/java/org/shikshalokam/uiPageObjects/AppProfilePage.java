@@ -20,10 +20,10 @@ public class AppProfilePage extends PWBasePage {
 
     public AppProfilePage updateProfile() {
         this.validPage();
-        page.getByText("Block education officer").click();
         page.getByText("Andhra PradeshArunachal").click();
-        page.getByRole(AriaRole.RADIO, new Page.GetByRoleOptions().setName("Assam")).click();
+        page.getByRole(AriaRole.RADIO, new Page.GetByRoleOptions().setName("Andhra Pradesh")).click();
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Ok")).click();
+        page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("Block education officer")).click();
         page.getByLabel("Your experience in years *").click();
         page.getByLabel("Your experience in years *").fill("5");
         page.getByLabel("Tell us about yourself *").click();

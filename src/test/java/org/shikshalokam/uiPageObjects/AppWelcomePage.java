@@ -42,9 +42,9 @@ public class AppWelcomePage extends PWBasePage {
         return welcomePage;
     }
 
-    public AppWelcomePage requestForProfileUpdate() {
+    public AppWelcomePage continueToSetupProfile() {
         this.validPage();
-        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Update")).click();
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Continue")).click();
         return welcomePage;
     }
 

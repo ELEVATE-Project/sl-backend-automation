@@ -25,9 +25,13 @@ public class TestMenteeSignUp extends MentorEDBaseTest {
         robot.sees(AppAllPages.loginPage).signUp();
         robot.sees(AppAllPages.signupPage).SignupToApp(fetchProperty("gmailsignup.userName"),
                 fetchProperty("gmailsignup.userEmail"),
-                fetchProperty("gmailsignup.userPassword")).logOutFromApp();
+                fetchProperty("gmailsignup.userPassword"));
+        robot.sees(AppAllPages.welcomePage).continueToSetupProfile();
+        robot.sees(AppAllPages.profileDetailsPage).updateProfile();
+        robot.sees(AppAllPages.welcomePage).logOutFromApp();
         robot.sees(AppAllPages.loginPage).loginToApp(fetchProperty("gmailsignup.userEmail"),
-                PropertyLoader.PROP_LIST.getProperty("gmailsignup.userPassword")).logOutFromApp();
+                fetchProperty("gmailsignup.userPassword"));
+        robot.sees(AppAllPages.welcomePage).logOutFromApp();
         robot.quitAppBrowser();
 
     }

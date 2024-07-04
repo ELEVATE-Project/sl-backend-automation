@@ -28,7 +28,8 @@ public class AppResetPasswordPage extends PWBasePage {
         page.getByLabel("Confirm new password *").click();
         page.getByLabel("Confirm new password *").fill(password);
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Validate OTP")).click();
-        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Generate OTP")).dblclick();
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Generate OTP")).click();
+        verifyToastMessage("OTP has been sent to your registered email ID. Please enter the number to update your password.");
         try {
             TimeUnit.SECONDS.sleep(5);
         } catch (InterruptedException e) {
@@ -47,6 +48,7 @@ public class AppResetPasswordPage extends PWBasePage {
         page.keyboard().press("KeyV");
         page.keyboard().up("Control");
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Verify and login")).click();
+        verifyToastMessage("Password reset successfully.");
         return resetPasswordPage;
     }
 

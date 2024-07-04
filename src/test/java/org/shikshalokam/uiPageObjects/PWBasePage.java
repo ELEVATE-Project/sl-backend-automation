@@ -88,11 +88,13 @@ public class PWBasePage extends MentorEDBaseTest {
 
     public void verifyToastMessage(String expectedText) {
         page.waitForSelector("div.toast-message");
-        boolean isVisible = page.isVisible("div.toast-message");
+        // Locate the first visible toast message (or specify the exact one if necessary)
+        Locator toastMessage = page.locator("div.toast-message").first();
+        boolean isVisible = toastMessage.isVisible();
         if (!isVisible) {
             throw new AssertionError("Toast message is not visible!");
         }
-        String actualText = page.locator("div.toast-message").textContent();
+        String actualText = toastMessage.textContent();
         logger.info("Toast-Message:{}", actualText);
         assertEquals(expectedText, actualText, "Text does not match!");
     }

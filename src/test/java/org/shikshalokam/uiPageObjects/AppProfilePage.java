@@ -10,20 +10,20 @@ import com.microsoft.playwright.options.AriaRole;
 
 public class AppProfilePage extends PWBasePage {
 
-    private AppProfilePage ProfileDetailsPage;
+    private AppProfilePage profileDetailsPage;
     private static final Logger logger = LogManager.getLogger(AppProfilePage.class);
 
     public AppProfilePage(String givenTitleName) {
         super(givenTitleName);
-        this.ProfileDetailsPage = this;
+        this.profileDetailsPage = this;
     }
 
     public AppProfilePage updateProfile() {
         this.validPage();
-        page.getByText("Block education officer").click();
         page.getByText("Andhra PradeshArunachal").click();
-        page.getByRole(AriaRole.RADIO, new Page.GetByRoleOptions().setName("Assam")).click();
+        page.getByRole(AriaRole.RADIO, new Page.GetByRoleOptions().setName("Andhra Pradesh")).click();
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Ok")).click();
+        page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("Block education officer")).click();
         page.getByLabel("Your experience in years *").click();
         page.getByLabel("Your experience in years *").fill("5");
         page.getByLabel("Tell us about yourself *").click();
@@ -34,6 +34,6 @@ public class AppProfilePage extends PWBasePage {
         page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("English")).click();
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Submit")).click();
         verifyToastMessage("Profile Updated Successfully");
-        return ProfileDetailsPage;
+        return profileDetailsPage;
     }
 }

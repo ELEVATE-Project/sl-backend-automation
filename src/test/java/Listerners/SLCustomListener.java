@@ -6,8 +6,8 @@ import org.testng.*;
 
 import static org.shikshalokam.uiPageObjects.PWBasePage.captureScreenshot;
 
-public class TestListener implements ITestListener {
-    private static final Logger logger = LogManager.getLogger(TestListener.class);
+public class SLCustomListener implements ITestListener {
+    private static final Logger logger = LogManager.getLogger(SLCustomListener.class);
 
     @Override
     public void onTestStart(ITestResult result) {

@@ -10,8 +10,18 @@ import org.shikshalokam.backend.MentorEDBaseTest;
 import org.shikshalokam.backend.PropertyLoader;
 import com.microsoft.playwright.*;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static org.testng.Assert.assertEquals;
+
 
 public class PWBasePage extends MentorEDBaseTest {
     private static final Logger logger = LogManager.getLogger(PWBasePage.class);
@@ -102,7 +112,35 @@ public class PWBasePage extends MentorEDBaseTest {
     public static String fetchProperty(String key) {
         return PropertyLoader.PROP_LIST.getProperty(key);
     }
+
+    public static void captureScreenshot(String testName, Exception exception) {
+        try {
+            File screenshotsDir = new File("target/screenshots");
+            if (!screenshotsDir.exists()) {
+                screenshotsDir.mkdirs();
+            }
+            Path screenshotPath = Paths.get("target/screenshots", testName + ".png");
+            page.screenshot(new Page.ScreenshotOptions().setPath(screenshotPath));
+            BufferedImage image = ImageIO.read(screenshotPath.toFile());
+            Graphics2D g = image.createGraphics();
+            // Set the font and color for the text
+            g.setFont(new Font("Arial", Font.BOLD, 14));
+            g.setColor(Color.RED);
+            // Draw the exception message onto the image
+            String exceptionMessage = exception.getMessage();
+            int x = 10;
+            int y = image.getHeight() - 10; // Bottom of the image
+            g.drawString(exceptionMessage, x, y);
+            // Dispose of the graphics context and save the new image
+            g.dispose();
+            ImageIO.write(image, "png", screenshotPath.toFile());
+            System.out.println("Screenshot with exception saved to: " + screenshotPath.toString());
+        } catch (Exception e) {
+            System.err.println("Failed to capture screenshot with exception: " + e.getMessage());
+        }
+    }
 }
+
 
 
 

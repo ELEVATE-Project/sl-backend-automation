@@ -1,4 +1,4 @@
-package Listerners;
+package org.shikshalokam.Listerners;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -6,7 +6,7 @@ import org.testng.*;
 
 import static org.shikshalokam.uiPageObjects.PWBasePage.captureScreenshot;
 
-public class SLCustomListener implements ITestListener {
+public class SLCustomListener implements ITestListener  {
     private static final Logger logger = LogManager.getLogger(SLCustomListener.class);
 
     @Override
@@ -22,9 +22,9 @@ public class SLCustomListener implements ITestListener {
 
     public void onTestFailure(ITestResult result) {
         String testName = result.getName();
-        Throwable exception = result.getThrowable();
-        logger.error("Test failed: " + testName, exception);
-        captureScreenshot(testName, (Exception) exception);
+        Throwable throwable = result.getThrowable();
+        logger.error("Test failed: " + testName, throwable);
+        captureScreenshot(testName, throwable);
     }
 
     @Override

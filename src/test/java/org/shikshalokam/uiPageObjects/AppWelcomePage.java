@@ -7,6 +7,10 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 
+import java.util.concurrent.TimeUnit;
+
+import static org.shikshalokam.uiPageObjects.AppAllPages.createSessionPage;
+
 public class AppWelcomePage extends PWBasePage {
 
     private AppWelcomePage welcomePage;
@@ -51,6 +55,44 @@ public class AppWelcomePage extends PWBasePage {
     public AppWelcomePage requestToChangePassword() {
         this.validPage();
         page.getByText("Change password").click();
+        return welcomePage;
+    }
+
+    public AppWelcomePage myMentoringSessionTab() {
+        this.validPage();
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("My mentoring sessions")).click();
+        return welcomePage;
+    }
+
+    public AppWelcomePage createSession() {
+        this.validPage();
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Create session add circle")).click();
+        return welcomePage;
+    }
+
+    public AppWelcomePage sessionSearch(String session) {
+        this.validPage();
+        page.getByPlaceholder("Search for sessions").fill(session);
+        page.getByPlaceholder("Search for sessions").press("Enter");
+        try {
+            TimeUnit.SECONDS.sleep(3);
+        } catch (InterruptedException e) {
+            logger.info("Exception from the sleep method " + e.getMessage());
+        }
+        Locator noSessionsAvailableMessage = page.locator("//div[@class='title' and text()=' No sessions available']");
+        if (noSessionsAvailableMessage.isVisible()) {
+            page.reload();
+            logger.info("Page reloaded because 'No sessions available' Message showed up.");
+        } else {
+            logger.info("No need to reload the page as searched Session is available");
+        }
+        page.getByRole(AriaRole.HEADING, new Page.GetByRoleOptions().setName(session)).click();
+        return welcomePage;
+    }
+
+    public AppWelcomePage selectcreatedSession(String session) {
+        this.validPage();
+        page.getByRole(AriaRole.HEADING, new Page.GetByRoleOptions().setName(session)).click();
         return welcomePage;
     }
 }

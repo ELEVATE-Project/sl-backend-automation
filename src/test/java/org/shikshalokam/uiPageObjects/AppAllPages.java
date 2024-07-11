@@ -14,6 +14,8 @@ public class AppAllPages {
     public static AppProfilePage profileDetailsPage =new AppProfilePage("MentorED");
     public static AppChangePasswordPage changePasswordPage =new AppChangePasswordPage("MentorED");
     public static AppResetPasswordPage resetPasswordPage =new AppResetPasswordPage("MentorED");
+    public static AppCreateSessionPage createSessionPage =new AppCreateSessionPage("MentorED");
+    public static AppSessionDetailsPage sessionDeatilsPage =new AppSessionDetailsPage("MentorED");
 
 
 }

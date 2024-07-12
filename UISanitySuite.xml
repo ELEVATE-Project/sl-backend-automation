@@ -31,10 +31,10 @@
                 </methods>
             </class>
 
-            <class name="org.shikshalokam.frontend.TestMentorSession">
+            <class name="org.shikshalokam.frontend.TestMentorSessionCreation">
                 <methods>
-                    <include name="mentorSessionBBB"/>
-                    <include name="mentorSessionGmeetMenteeCount"/>
+                    <include name="testMentorSessionBBB"/>
+                    <include name="testMentorSessionGmeetMenteeCount"/>
                 </methods>
             </class>
 

@@ -8,8 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.concurrent.TimeUnit;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
+import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
 public class AppSessionDetailsPage extends PWBasePage {
     private AppSessionDetailsPage sessionDeatilsPage;
@@ -86,24 +85,16 @@ public class AppSessionDetailsPage extends PWBasePage {
         this.validPage();
         page.locator("app-star-rating svg").nth(4).click();
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Submit Feedback")).click();
+        verifyToastMessage("Feedback submitted successfully.");
         return sessionDeatilsPage;
     }
 
-    public AppSessionDetailsPage verifyMenteeCountOne() {
+    public AppSessionDetailsPage verifyMenteeCount(int count) {
         this.validPage();
-        Locator menteecount = page.locator("//p[@class='mentee-count' and text()='1']");
-        menteecount.isVisible();
-        String count = menteecount.textContent();
-        logger.info("mentee count:{}", count);
-        return sessionDeatilsPage;
-    }
-
-    public AppSessionDetailsPage verifyMenteeCountZero() {
-        this.validPage();
-        Locator menteecount = page.locator("//p[@class='mentee-count' and text()='0']");
-        menteecount.isVisible();
-        String count = menteecount.textContent();
-        logger.info("mentee count:{}", count);
+        Locator menteeCount = page.locator("//p[@class='mentee-count']");
+        String actualCount = menteeCount.textContent();
+        logger.info("mentee count:{}", actualCount);
+        assertThat(menteeCount).containsText(String.valueOf(count));
         return sessionDeatilsPage;
     }
 
@@ -111,10 +102,9 @@ public class AppSessionDetailsPage extends PWBasePage {
         this.validPage();
         page.locator("//ion-button[text()='View list']").click();
         Locator menteeOnList = page.locator("//td[@class='mat-cell cdk-cell cell-container cdk-column-email mat-column-email ng-star-inserted']");
-        menteeOnList.isVisible();
-        String actualEnrolledMentee = menteeOnList.textContent().trim();
-        logger.info("Enrolled Mentee in the List :{}", actualEnrolledMentee);
-        assertEquals(expectedEnrolledMentee, actualEnrolledMentee, "Enrolled Mentee Email doesn't match in the Mentee List");
+        String menteeEmail = menteeOnList.textContent();
+        logger.info("Enrolled Mentee in the List :{}", menteeEmail);
+        assertThat(menteeOnList).hasText(expectedEnrolledMentee);
         page.getByLabel("close").locator("path").click();
         return sessionDeatilsPage;
     }

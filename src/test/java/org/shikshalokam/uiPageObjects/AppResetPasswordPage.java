@@ -30,11 +30,6 @@ public class AppResetPasswordPage extends PWBasePage {
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Validate OTP")).click();
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Generate OTP")).click();
         verifyToastMessage("OTP has been sent to your registered email ID. Please enter the number to update your password.");
-        try {
-            TimeUnit.SECONDS.sleep(5);
-        } catch (InterruptedException e) {
-            logger.info("Exception from the sleep method " + e.getMessage());
-        }
         String script = "navigator.clipboard.writeText('" + GmailAPI.getOTP("MentorED - Reset Otp") + "')";
         System.out.println(script);
         page.locator("//div[@class=\"otp-field\"]").click();

@@ -21,9 +21,10 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
-import static org.testng.Assert.assertEquals;
+
 
 
 public class PWBasePage extends MentorEDBaseTest {
@@ -110,7 +111,13 @@ public class PWBasePage extends MentorEDBaseTest {
         }
         String actualText = toastMessage.textContent();
         logger.info("Toast-Message:{}", actualText);
-        assertEquals(expectedText, actualText, "Text does not match!");
+        assertThat(toastMessage).hasText(expectedText);
+        try {
+            TimeUnit.SECONDS.sleep(7);
+        } catch (InterruptedException e) {
+
+            logger.info("Exception from the sleep method " + e.getMessage());
+        }
     }
 
     public static String fetchProperty(String key) {

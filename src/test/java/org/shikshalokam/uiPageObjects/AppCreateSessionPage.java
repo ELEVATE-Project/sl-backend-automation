@@ -34,18 +34,8 @@ public class AppCreateSessionPage extends PWBasePage {
         page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("English")).click();
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Publish and Add link")).click();
         verifyToastMessage("Session created and shared with the community.");
-        try {
-            TimeUnit.SECONDS.sleep(7);
-        } catch (InterruptedException e) {
-            logger.info("Exception from the sleep method " + e.getMessage());
-        }
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Submit")).click();
         verifyToastMessage("Your session details have been updated.");
-        try {
-            TimeUnit.SECONDS.sleep(5);
-        } catch (InterruptedException e) {
-            logger.info("Exception from the sleep method " + e.getMessage());
-        }
         page.getByLabel("back").click();
         return createSessionPage;
     }
@@ -64,18 +54,8 @@ public class AppCreateSessionPage extends PWBasePage {
         page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("English")).click();
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Publish and Add link")).click();
         verifyToastMessage("Session created and shared with the community.");
-        try {
-            TimeUnit.SECONDS.sleep(7);
-        } catch (InterruptedException e) {
-            logger.info("Exception from the sleep method " + e.getMessage());
-        }
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Submit")).click();
         verifyToastMessage("Your session details have been updated.");
-        try {
-            TimeUnit.SECONDS.sleep(5);
-        } catch (InterruptedException e) {
-            logger.info("Exception from the sleep method " + e.getMessage());
-        }
         page.getByLabel("create outline").getByRole(AriaRole.IMG).click();
         page.getByText("2Meeting link").click();
         page.getByText("BigBlueButton (Default) Google meet Zoom WhatsApp BigBlueButton (Default)").click();

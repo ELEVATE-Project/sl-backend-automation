@@ -14,8 +14,6 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -124,7 +122,7 @@ public class PWBasePage extends MentorEDBaseTest {
         return PropertyLoader.PROP_LIST.getProperty(key);
     }
 
-    public static void captureScreenshot(String testName, Throwable throwable) {
+    public static void captureScreenshot(String testName, String stackTrace) {
         try {
             File screenshotsDir = new File("target/screenshots");
             if (!screenshotsDir.exists()) {
@@ -138,16 +136,10 @@ public class PWBasePage extends MentorEDBaseTest {
             g.setFont(new Font("Arial", Font.BOLD, 14));
             g.setColor(Color.RED);
 
-            // Convert the throwable stack trace to a string
-            StringWriter sw = new StringWriter();
-            PrintWriter pw = new PrintWriter(sw);
-            throwable.printStackTrace(pw);
-            String throwableStackTrace = sw.toString();
-
             // Split the stack trace into lines
-            String[] throwableLines = throwableStackTrace.split("\n");
+            String[] throwableLines = stackTrace.split("\n");
 
-            // Find the Call log: line and include the next line
+            // Find the "Call log:" line and include the next line
             StringBuilder relevantLines = new StringBuilder();
             boolean foundRelevantLine = false;
 
@@ -162,6 +154,7 @@ public class PWBasePage extends MentorEDBaseTest {
                     break;
                 }
             }
+
             if (!foundRelevantLine) {
                 // If no relevant line found, include the first two lines of the stack trace
                 for (int i = 0; i < Math.min(2, throwableLines.length); i++) {
@@ -180,7 +173,7 @@ public class PWBasePage extends MentorEDBaseTest {
             int y = image.getHeight() - (lineHeight * totalLines) - 20;
 
             // Draw the test name centered at the bottom
-            String testNameText = "TestName: " + testName;
+            String testNameText = "Test: " + testName;
             int testNameWidth = g.getFontMetrics().stringWidth(testNameText);
             int centerX = (image.getWidth() - testNameWidth) / 2;
             g.drawString(testNameText, centerX, y);
@@ -188,16 +181,18 @@ public class PWBasePage extends MentorEDBaseTest {
 
             // Draw each relevant line centered at the bottom
             for (String line : relevantLinesArray) {
-                g.drawString(line, 10, y); // Left-align the text at x = 10
+                int lineWidth = g.getFontMetrics().stringWidth(line);
+                centerX = (image.getWidth() - lineWidth) / 2;
+                g.drawString(line, centerX, y);
                 y += lineHeight; // Move down for the next line
             }
 
             // Dispose of the graphics context and save the new image
             g.dispose();
             ImageIO.write(image, "png", screenshotPath.toFile());
-            System.out.println("Screenshot with exception saved to: " + screenshotPath);
+            logger.info("Screenshot with exception saved to: " + screenshotPath);
         } catch (Exception e) {
-            System.err.println("Failed to capture screenshot with exception: " + e.getMessage());
+            logger.info("Failed to capture screenshot with exception: " + e.getMessage(), e);
         }
     }
 

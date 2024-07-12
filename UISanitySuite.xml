@@ -14,20 +14,20 @@
 
             <class name="org.shikshalokam.frontend.TestMenteeSignUp">
                 <methods>
-                    <include name="AppSignupTest"/>
+                    <include name="testSignup"/>
                 </methods>
             </class>
 
             <class name="org.shikshalokam.frontend.TestBecomeAMentor">
                 <methods>
-                    <include name="becomeMentor"/>
+                    <include name="testBecomeMentor"/>
                 </methods>
             </class>
 
             <class name="org.shikshalokam.frontend.TestChangeAndForgotPassword">
                 <methods>
-                    <include name="changePassword"/>
-                    <include name="forgotPassword"/>
+                    <include name="testChangePassword"/>
+                    <include name="testForgotPassword"/>
                 </methods>
             </class>
 

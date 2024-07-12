@@ -47,8 +47,8 @@ public class AppCreateSessionPage extends PWBasePage {
         page.getByLabel("Session title *").fill(menteeCountSessionTitle);
         page.getByLabel("Description *").click();
         page.getByLabel("Description *").fill("my session");
-        page.locator("#mat-input-0").fill(getFutureDateTime(15));
-        page.locator("#mat-input-1").fill(getFutureDateTime(55));
+        page.locator("#mat-input-0").fill(getFutureDateTime(40));
+        page.locator("#mat-input-1").fill(getFutureDateTime(75));
         page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("Block education officer")).click();
         page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("Communication")).click();
         page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("English")).click();

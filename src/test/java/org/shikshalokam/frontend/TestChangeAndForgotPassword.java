@@ -9,8 +9,8 @@ import static org.shikshalokam.uiPageObjects.PWBasePage.fetchProperty;
 
 public class TestChangeAndForgotPassword extends MentorEDBaseTest {
 
-    @Test(dependsOnMethods = {"org.shikshalokam.frontend.TestMenteeSignUp.AppSignupTest"})
-    public void changePassword() {
+    @Test(dependsOnMethods = {"org.shikshalokam.frontend.TestMenteeSignUp.testSignup"})
+    public void testChangePassword() {
         Robot robot = new Robot();
         robot.openApp();
         robot.sees(AppAllPages.loginPage).loginToApp(fetchProperty("gmailsignup.userEmail"), fetchProperty("gmailsignup.userPassword"));
@@ -22,8 +22,8 @@ public class TestChangeAndForgotPassword extends MentorEDBaseTest {
 
     }
 
-    @Test(dependsOnMethods = {"changePassword"})
-    public void forgotPassword() {
+    @Test(dependsOnMethods = {"testChangePassword"})
+    public void testForgotPassword() {
         Robot robot = new Robot();
         robot.openApp();
         robot.sees(AppAllPages.loginPage).userForgetsPassword();

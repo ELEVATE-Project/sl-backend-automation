@@ -45,36 +45,29 @@ public class AppSessionDetailsPage extends PWBasePage {
     public AppSessionDetailsPage joinSession() {
         this.validPage();
         page.locator("//ion-button[text()='Join']").click();
-        try {
-            TimeUnit.SECONDS.sleep(2);
-        } catch (InterruptedException e) {
-            logger.info("Exception from the sleep method " + e.getMessage());
-        }
-        page.locator("(//ion-button[text()='Join'])[2]").click();
+        Locator joinButtonOnPopUp = page.locator("(//ion-button[text()='Join'])[2]");
+        joinButtonOnPopUp.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+        joinButtonOnPopUp.click();
+
+        return sessionDeatilsPage;
+    }
+
+    public AppSessionDetailsPage bbbSessionOptions() {
+        Locator closeButton = page.locator("[data-test=\"closeModal\"]");
+        // Wait for the locator to be visible and then click
+        closeButton.waitFor(new Locator.WaitForOptions().setTimeout(10000));
+        closeButton.click();
+        page.locator("[data-test=\"optionsButton\"]").click();
         return sessionDeatilsPage;
     }
 
     public AppSessionDetailsPage leaveSession() {
-        try {
-            TimeUnit.SECONDS.sleep(5);
-        } catch (InterruptedException e) {
-            logger.info("Exception from the sleep method " + e.getMessage());
-        }
-        page.locator("[data-test=\"closeModal\"]").click();
-        page.locator("[data-test=\"optionsButton\"]").click();
         page.locator("[data-test=\"logout\"]").click();
         page.getByLabel("OK").click();
         return sessionDeatilsPage;
     }
 
     public AppSessionDetailsPage terminateSession() {
-        try {
-            TimeUnit.SECONDS.sleep(5);
-        } catch (InterruptedException e) {
-            logger.info("Exception from the sleep method " + e.getMessage());
-        }
-        page.locator("[data-test=\"closeModal\"]").click();
-        page.locator("[data-test=\"optionsButton\"]").click();
         page.getByRole(AriaRole.MENUITEM, new Page.GetByRoleOptions().setName(" End meeting Terminates the")).click();
         page.locator("[data-test=\"confirmEndMeeting\"]").click();
         page.getByLabel("OK").click();
@@ -89,12 +82,12 @@ public class AppSessionDetailsPage extends PWBasePage {
         return sessionDeatilsPage;
     }
 
-    public AppSessionDetailsPage verifyMenteeCount(int count) {
+    public AppSessionDetailsPage verifyMenteeCount(String count) {
         this.validPage();
         Locator menteeCount = page.locator("//p[@class='mentee-count']");
         String actualCount = menteeCount.textContent();
         logger.info("mentee count:{}", actualCount);
-        assertThat(menteeCount).containsText(String.valueOf(count));
+        assertThat(menteeCount).containsText(count);
         return sessionDeatilsPage;
     }
 

@@ -9,7 +9,7 @@ import static org.shikshalokam.uiPageObjects.PWBasePage.fetchProperty;
 
 public class TestMentorSessionCreation {
 
-    @Test(description = "Mentor creates BBB session ,Mentee enroll's & joins the session, Mentor Ends the session and feedback is submitted by both.")
+    @Test
     public void testMentorSessionBBB() {
         Robot robot = new Robot();
         robot.openApp();
@@ -55,7 +55,7 @@ public class TestMentorSessionCreation {
 
     }
 
-    @Test(description = "Mentor initially creates BBB session & updates session link to Gmeet ,Mentee enroll's & Unenroll ,Mentee count & List is verified")
+    @Test
     public void testMentorSessionGmeetMenteeCount() {
         Robot robot = new Robot();
         robot.openApp();

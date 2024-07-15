@@ -1,12 +1,16 @@
-package Listerners;
+package org.shikshalokam.Listerners;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.*;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 import static org.shikshalokam.uiPageObjects.PWBasePage.captureScreenshot;
 
-public class SLCustomListener implements ITestListener {
+
+public class SLCustomListener implements ITestListener  {
     private static final Logger logger = LogManager.getLogger(SLCustomListener.class);
 
     @Override
@@ -22,9 +26,15 @@ public class SLCustomListener implements ITestListener {
 
     public void onTestFailure(ITestResult result) {
         String testName = result.getName();
-        Throwable exception = result.getThrowable();
-        logger.error("Test failed: " + testName, exception);
-        captureScreenshot(testName, (Exception) exception);
+        Throwable throwable = result.getThrowable();
+        logger.info("Test failed: " + testName, throwable);
+
+        // Convert the throwable stack trace to a string
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        throwable.printStackTrace(pw);
+        String stackTrace = sw.toString();
+        captureScreenshot(testName, stackTrace);
     }
 
     @Override

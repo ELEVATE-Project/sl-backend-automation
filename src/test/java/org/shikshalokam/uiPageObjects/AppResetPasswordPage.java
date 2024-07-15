@@ -6,7 +6,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.shikshalokam.backend.GmailAPI;
 
-import java.util.concurrent.TimeUnit;
 
 public class AppResetPasswordPage extends PWBasePage {
     private AppResetPasswordPage resetPasswordPage;
@@ -30,20 +29,11 @@ public class AppResetPasswordPage extends PWBasePage {
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Validate OTP")).click();
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Generate OTP")).click();
         verifyToastMessage("OTP has been sent to your registered email ID. Please enter the number to update your password.");
-        try {
-            TimeUnit.SECONDS.sleep(5);
-        } catch (InterruptedException e) {
-            logger.info("Exception from the sleep method " + e.getMessage());
-        }
         String script = "navigator.clipboard.writeText('" + GmailAPI.getOTP("MentorED - Reset Otp") + "')";
-        System.out.println(script);
+        logger.info(script);
         page.locator("//div[@class=\"otp-field\"]").click();
         page.evaluate(script);
-        try {
-            TimeUnit.SECONDS.sleep(5);
-        } catch (InterruptedException e) {
-            logger.info("Exception from the sleep method " + e.getMessage());
-        }
+        page.waitForTimeout(5000);
         page.keyboard().down("Control");
         page.keyboard().press("KeyV");
         page.keyboard().up("Control");

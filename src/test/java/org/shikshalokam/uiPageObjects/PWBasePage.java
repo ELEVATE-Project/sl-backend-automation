@@ -14,13 +14,14 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
-import static org.testng.Assert.assertEquals;
 
 
 public class PWBasePage extends MentorEDBaseTest {
@@ -31,6 +32,7 @@ public class PWBasePage extends MentorEDBaseTest {
     public static Playwright playwright = Playwright.create();
     public static Browser browser;
     private String pwTitle;
+
 
     public static Boolean headless;
 
@@ -106,14 +108,15 @@ public class PWBasePage extends MentorEDBaseTest {
         }
         String actualText = toastMessage.textContent();
         logger.info("Toast-Message:{}", actualText);
-        assertEquals(expectedText, actualText, "Text does not match!");
+        assertThat(toastMessage).hasText(expectedText);
+        page.waitForTimeout(7000);
     }
 
     public static String fetchProperty(String key) {
         return PropertyLoader.PROP_LIST.getProperty(key);
     }
 
-    public static void captureScreenshot(String testName, Exception exception) {
+    public static void captureScreenshot(String testName, String stackTrace) {
         try {
             File screenshotsDir = new File("target/screenshots");
             if (!screenshotsDir.exists()) {
@@ -126,19 +129,84 @@ public class PWBasePage extends MentorEDBaseTest {
             // Set the font and color for the text
             g.setFont(new Font("Arial", Font.BOLD, 14));
             g.setColor(Color.RED);
-            // Draw the exception message onto the image
-            String exceptionMessage = exception.getMessage();
-            int x = 10;
-            int y = image.getHeight() - 10; // Bottom of the image
-            g.drawString(exceptionMessage, x, y);
+
+            // Split the stack trace into lines
+            String[] throwableLines = stackTrace.split("\n");
+
+            // Find the "Call log:" line and include the next line
+            StringBuilder relevantLines = new StringBuilder();
+            boolean foundRelevantLine = false;
+
+            for (int i = 0; i < throwableLines.length; i++) {
+                if (throwableLines[i].contains("Call log:")) {
+                    foundRelevantLine = true;
+                    // Include the relevant line and the next line
+                    relevantLines.append(throwableLines[i]).append("\n");
+                    if (i + 1 < throwableLines.length) {
+                        relevantLines.append(throwableLines[i + 1]).append("\n");
+                    }
+                    break;
+                }
+            }
+
+            if (!foundRelevantLine) {
+                // If no relevant line found, include the first two lines of the stack trace
+                for (int i = 0; i < Math.min(2, throwableLines.length); i++) {
+                    relevantLines.append(throwableLines[i]).append("\n");
+                }
+            }
+
+            // Split the relevant lines into an array
+            String[] relevantLinesArray = relevantLines.toString().split("\n");
+
+            // Calculate the total number of lines to print (test name + relevant lines)
+            int totalLines = relevantLinesArray.length + 1; // +1 for the test name
+
+            // Calculate the starting Y position to print the lines at the bottom
+            int lineHeight = g.getFontMetrics().getHeight();
+            int y = image.getHeight() - (lineHeight * totalLines) - 20;
+
+            // Draw the test name centered at the bottom
+            String testNameText = "Test: " + testName;
+            int testNameWidth = g.getFontMetrics().stringWidth(testNameText);
+            int centerX = (image.getWidth() - testNameWidth) / 2;
+            g.drawString(testNameText, centerX, y);
+            y += lineHeight; // Move down for the next line
+
+            // Draw each relevant line centered at the bottom
+            for (String line : relevantLinesArray) {
+                int lineWidth = g.getFontMetrics().stringWidth(line);
+                centerX = (image.getWidth() - lineWidth) / 2;
+                g.drawString(line, centerX, y);
+                y += lineHeight; // Move down for the next line
+            }
+
             // Dispose of the graphics context and save the new image
             g.dispose();
             ImageIO.write(image, "png", screenshotPath.toFile());
-            System.out.println("Screenshot with exception saved to: " + screenshotPath.toString());
+            logger.info("Screenshot with exception saved to: " + screenshotPath);
         } catch (Exception e) {
-            System.err.println("Failed to capture screenshot with exception: " + e.getMessage());
+            logger.info("Failed to capture screenshot with exception: " + e.getMessage(), e);
         }
     }
+
+    public String getCurrentDateTime() {
+        Date now = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("MMMM d, yyyy hh:mm a");
+        return formatter.format(now);
+    }
+
+    // Method to get the date formatted after adding minutes
+    public String getFutureDateTime(int minutes) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.MINUTE, minutes);
+        Date futureDate = calendar.getTime();
+        SimpleDateFormat formatter = new SimpleDateFormat("MMMM d, yyyy hh:mm a");
+        return formatter.format(futureDate);
+    }
+
+
 }
 
 

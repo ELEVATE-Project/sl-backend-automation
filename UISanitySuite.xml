@@ -1,7 +1,7 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="SanitySuite">
     <listeners>
-        <listener class-name="Listerners.SLCustomListener"/>
+        <listener class-name="org.shikshalokam.Listerners.SLCustomListener"/>
     </listeners>
     <test name="Test">
         <classes>
@@ -14,20 +14,27 @@
 
             <class name="org.shikshalokam.frontend.TestMenteeSignUp">
                 <methods>
-                    <include name="AppSignupTest"/>
+                    <include name="testSignup"/>
                 </methods>
             </class>
 
             <class name="org.shikshalokam.frontend.TestBecomeAMentor">
                 <methods>
-                    <include name="becomeMentor"/>
+                    <include name="testBecomeMentor"/>
                 </methods>
             </class>
 
             <class name="org.shikshalokam.frontend.TestChangeAndForgotPassword">
                 <methods>
-                    <include name="changePassword"/>
-                    <include name="forgotPassword"/>
+                    <include name="testChangePassword"/>
+                    <include name="testForgotPassword"/>
+                </methods>
+            </class>
+
+            <class name="org.shikshalokam.frontend.TestMentorSessionCreation">
+                <methods>
+                    <include name="testMentorSessionBBB"/>
+                    <include name="testMentorSessionGmeetMenteeCount"/>
                 </methods>
             </class>
 

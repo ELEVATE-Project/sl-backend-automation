@@ -19,7 +19,7 @@ public class TestMenteeSignUp extends MentorEDBaseTest {
     }
 
     @Test
-    public void AppSignupTest() {
+    public void testSignup() {
         Robot robot = new Robot();
         robot.openApp();
         robot.sees(AppAllPages.loginPage).signUp();

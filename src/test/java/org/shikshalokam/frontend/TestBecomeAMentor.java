@@ -9,8 +9,8 @@ import static org.shikshalokam.uiPageObjects.PWBasePage.fetchProperty;
 
 public class TestBecomeAMentor {
 
-    @Test(dependsOnMethods = {"org.shikshalokam.frontend.TestMenteeSignUp.AppSignupTest"})
-    public void becomeMentor() {
+    @Test(dependsOnMethods = {"org.shikshalokam.frontend.TestMenteeSignUp.testSignup"})
+    public void testBecomeMentor() {
         Robot robot = new Robot();
         robot.openApp();
         robot.sees(AppAllPages.loginPage).loginToApp(fetchProperty("gmailsignup.userEmail"),

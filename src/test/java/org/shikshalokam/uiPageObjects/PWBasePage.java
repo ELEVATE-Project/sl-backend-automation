@@ -24,7 +24,6 @@ import java.util.concurrent.TimeUnit;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
 
-
 public class PWBasePage extends MentorEDBaseTest {
     private static final Logger logger = LogManager.getLogger(PWBasePage.class);
     public static BrowserContext browserContext;
@@ -110,12 +109,7 @@ public class PWBasePage extends MentorEDBaseTest {
         String actualText = toastMessage.textContent();
         logger.info("Toast-Message:{}", actualText);
         assertThat(toastMessage).hasText(expectedText);
-        try {
-            TimeUnit.SECONDS.sleep(7);
-        } catch (InterruptedException e) {
-
-            logger.info("Exception from the sleep method " + e.getMessage());
-        }
+        page.waitForTimeout(7000);
     }
 
     public static String fetchProperty(String key) {

@@ -6,8 +6,6 @@ import com.microsoft.playwright.options.AriaRole;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.concurrent.TimeUnit;
-
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
 public class AppSessionDetailsPage extends PWBasePage {

@@ -1,13 +1,11 @@
 package org.shikshalokam.uiPageObjects;
 
-import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.shikshalokam.backend.GmailAPI;
 
-import java.util.concurrent.TimeUnit;
 
 public class AppSignupPage extends PWBasePage {
     private AppSignupPage signupPage;
@@ -36,25 +34,12 @@ public class AppSignupPage extends PWBasePage {
 
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Generate OTP")).click();
         verifyToastMessage("OTP has been sent to your registered email ID. Please enter the otp to complete the registration process.");
-
-        try {
-            TimeUnit.SECONDS.sleep(5);
-        } catch (InterruptedException e) {
-            logger.info("Exception from the sleep method " + e.getMessage());
-
-        }
+        page.waitForTimeout(5000);
         String script = "navigator.clipboard.writeText('" + GmailAPI.getOTP("Your OTP to sign-up on MentorED") + "')";
-        System.out.println(script);
+        logger.info(script);
         page.locator("//div[@class=\"otp-field\"]").click();
         page.evaluate(script);
-        try {
-            TimeUnit.SECONDS.sleep(5);
-        } catch (InterruptedException e) {
-
-            logger.info("Exception from the sleep method " + e.getMessage());
-
-
-        }
+        page.waitForTimeout(5000);
         page.keyboard().down("Control");
         page.keyboard().press("KeyV");
         page.keyboard().up("Control");
@@ -64,11 +49,5 @@ public class AppSignupPage extends PWBasePage {
         return signupPage;
     }
 
-    public AppSignupPage logOutFromApp() {
-
-        page.locator("div").filter(new Locator.FilterOptions().setHasText("Logout")).click();
-        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Logout")).click();
-        return signupPage;
-    }
 }
 

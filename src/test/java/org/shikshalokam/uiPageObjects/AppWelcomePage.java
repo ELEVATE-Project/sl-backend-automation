@@ -7,9 +7,6 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 
-import java.util.concurrent.TimeUnit;
-
-import static org.shikshalokam.uiPageObjects.AppAllPages.createSessionPage;
 
 public class AppWelcomePage extends PWBasePage {
 
@@ -74,11 +71,7 @@ public class AppWelcomePage extends PWBasePage {
         this.validPage();
         page.getByPlaceholder("Search for sessions").fill(session);
         page.getByPlaceholder("Search for sessions").press("Enter");
-        try {
-            TimeUnit.SECONDS.sleep(3);
-        } catch (InterruptedException e) {
-            logger.info("Exception from the sleep method " + e.getMessage());
-        }
+        page.waitForTimeout(3000);
         Locator noSessionsAvailableMessage = page.locator("//div[@class='title' and text()=' No sessions available']");
         if (noSessionsAvailableMessage.isVisible()) {
             page.reload();

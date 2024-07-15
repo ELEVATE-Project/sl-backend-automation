@@ -32,12 +32,6 @@ public class AppBecomeMentorPage extends PWBasePage {
         return mentorPage;
     }
 
-    public AppBecomeMentorPage becomeMentorSuccessfull() {
-        this.validPage();
-        page.getByRole(AriaRole.NAVIGATION).getByText("Mentor", new Locator.GetByTextOptions()).isVisible();
-        return mentorPage;
-    }
-
     public AppBecomeMentorPage requestToBeAMentor() {
         this.validPage();
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Request to be a Mentor")).click();

@@ -37,6 +37,11 @@ public class PWBasePage extends MentorEDBaseTest {
         if (PropertyLoader.PROP_LIST.getProperty("mentor.qa.browser.setHeadless").equals("false")) {
             headless = false;
         }
+        initializeBrowser();
+    }
+
+
+    public static void initializeBrowser() {
         switch (PropertyLoader.PROP_LIST.getProperty("mentor.qa.browser")) {
             case "chromium":
                 logger.info("Using Chromium browser for Test suite ");
@@ -53,14 +58,14 @@ public class PWBasePage extends MentorEDBaseTest {
                 page = browserContext.newPage();
                 break;
             case "firefox":
-                logger.info("Using firefox browser for Test suite");
+                logger.info("Using Firefox browser for Test suite");
                 PWBasePage.PWBrowser = PWBrowser.firefox;
                 browser = playwright.firefox().launch(new BrowserType.LaunchOptions().setHeadless(headless));
                 browserContext = browser.newContext();
                 page = browserContext.newPage();
                 break;
             case "webkit":
-                logger.info("Using Safri browser for Test suite");
+                logger.info("Using Safari browser for Test suite");
                 PWBasePage.PWBrowser = PWBrowser.webkit;
                 browser = playwright.webkit().launch(new BrowserType.LaunchOptions().setHeadless(headless));
                 browserContext = browser.newContext();
@@ -112,9 +117,10 @@ public class PWBasePage extends MentorEDBaseTest {
     }
 
     public static void reInitializePage() {
-        browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(headless));
-        browserContext = browser.newContext(new Browser.NewContextOptions().setViewportSize(null));
-        page = browserContext.newPage();
+        browser.close();
+        playwright.close();
+        playwright = Playwright.create();
+        initializeBrowser();
     }
 
     public void verifyToastMessage(String expectedText) {
@@ -227,11 +233,3 @@ public class PWBasePage extends MentorEDBaseTest {
 
 
 }
-
-
-
-
-
-
-
-

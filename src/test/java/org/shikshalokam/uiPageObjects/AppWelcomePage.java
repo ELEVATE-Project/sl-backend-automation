@@ -38,6 +38,10 @@ public class AppWelcomePage extends PWBasePage {
 
     public AppWelcomePage logOutFromApp() {
         this.validPage();
+        if (PWBasePage.PWBrowser == PWBrowser.chromeIPadMini || PWBasePage.PWBrowser == PWBrowser.msedgeIpadMini) {
+            System.out.println("\n\nIPad Mini Browser detected, clicking on menu button.");
+            page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("menu")).click();
+        }
         page.locator("div").filter(new Locator.FilterOptions().setHasText("Logout")).click();
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Logout")).click();
         return welcomePage;

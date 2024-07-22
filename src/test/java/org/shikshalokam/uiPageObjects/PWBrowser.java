@@ -6,6 +6,6 @@ public enum PWBrowser {
     msedge,
     firefox,
     webkit,
-    chromiumIPadMini,
+    chromeIPadMini,
     msedgeIpadMini
 }

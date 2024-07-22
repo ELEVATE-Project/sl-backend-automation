@@ -73,7 +73,7 @@ public class PWBasePage extends MentorEDBaseTest {
                 break;
             case "chromeIPadMini":
                 logger.info("Using Chrome browser for Test suite with iPad Mini emulation");
-                PWBasePage.PWBrowser = PWBrowser.chromiumIPadMini;
+                PWBasePage.PWBrowser = PWBrowser.chromeIPadMini;
                 browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(headless));
                 browserContext = browser.newContext(new Browser.NewContextOptions()
                         .setUserAgent("Mozilla/5.0 (iPad; CPU OS 7_0 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Version/7.0 Mobile/11A465 Safari/9537.53")

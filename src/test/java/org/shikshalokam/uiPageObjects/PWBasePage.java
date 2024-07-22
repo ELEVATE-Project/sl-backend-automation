@@ -1,14 +1,10 @@
 package org.shikshalokam.uiPageObjects;
 
-import com.microsoft.playwright.Browser;
-import com.microsoft.playwright.BrowserContext;
-import com.microsoft.playwright.BrowserType;
-import com.microsoft.playwright.Page;
+import com.microsoft.playwright.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.shikshalokam.backend.MentorEDBaseTest;
 import org.shikshalokam.backend.PropertyLoader;
-import com.microsoft.playwright.*;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -19,7 +15,6 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
@@ -42,6 +37,11 @@ public class PWBasePage extends MentorEDBaseTest {
         if (PropertyLoader.PROP_LIST.getProperty("mentor.qa.browser.setHeadless").equals("false")) {
             headless = false;
         }
+        initializeBrowser();
+    }
+
+
+    public static void initializeBrowser() {
         switch (PropertyLoader.PROP_LIST.getProperty("mentor.qa.browser")) {
             case "chromium":
                 logger.info("Using Chromium browser for Test suite ");
@@ -58,17 +58,41 @@ public class PWBasePage extends MentorEDBaseTest {
                 page = browserContext.newPage();
                 break;
             case "firefox":
-                logger.info("Using firefox browser for Test suite");
+                logger.info("Using Firefox browser for Test suite");
                 PWBasePage.PWBrowser = PWBrowser.firefox;
                 browser = playwright.firefox().launch(new BrowserType.LaunchOptions().setHeadless(headless));
                 browserContext = browser.newContext();
                 page = browserContext.newPage();
                 break;
             case "webkit":
-                logger.info("Using Safri browser for Test suite");
+                logger.info("Using Safari browser for Test suite");
                 PWBasePage.PWBrowser = PWBrowser.webkit;
                 browser = playwright.webkit().launch(new BrowserType.LaunchOptions().setHeadless(headless));
                 browserContext = browser.newContext();
+                page = browserContext.newPage();
+                break;
+            case "chromeIPadMini":
+                logger.info("Using Chrome browser for Test suite with iPad Mini emulation");
+                PWBasePage.PWBrowser = PWBrowser.chromeIPadMini;
+                browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(headless));
+                browserContext = browser.newContext(new Browser.NewContextOptions()
+                        .setUserAgent("Mozilla/5.0 (iPad; CPU OS 7_0 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Version/7.0 Mobile/11A465 Safari/9537.53")
+                        .setViewportSize(768, 1024)
+                        .setDeviceScaleFactor(2)
+                        .setIsMobile(true)
+                        .setHasTouch(true));
+                page = browserContext.newPage();
+                break;
+            case "msedgeIPadMini":
+                logger.info("Using Chrome browser for Test suite with iPad Mini emulation");
+                PWBasePage.PWBrowser = PWBrowser.msedgeIpadMini;
+                browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setChannel("msedge").setHeadless(headless));
+                browserContext = browser.newContext(new Browser.NewContextOptions()
+                        .setUserAgent("Mozilla/5.0 (iPad; CPU OS 7_0 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Version/7.0 Mobile/11A465 Safari/9537.53")
+                        .setViewportSize(768, 1024)
+                        .setDeviceScaleFactor(2)
+                        .setIsMobile(true)
+                        .setHasTouch(true));
                 page = browserContext.newPage();
                 break;
             // Add cases for other supported browser types as needed
@@ -93,9 +117,10 @@ public class PWBasePage extends MentorEDBaseTest {
     }
 
     public static void reInitializePage() {
-        browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(headless));
-        browserContext = browser.newContext(new Browser.NewContextOptions().setViewportSize(null));
-        page = browserContext.newPage();
+        browser.close();
+        playwright.close();
+        playwright = Playwright.create();
+        initializeBrowser();
     }
 
     public void verifyToastMessage(String expectedText) {
@@ -208,11 +233,3 @@ public class PWBasePage extends MentorEDBaseTest {
 
 
 }
-
-
-
-
-
-
-
-

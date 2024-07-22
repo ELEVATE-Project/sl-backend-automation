@@ -7,7 +7,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
-
 public class AppLoginPage extends PWBasePage {
 
     private AppLoginPage loginPage;
@@ -50,6 +49,10 @@ public class AppLoginPage extends PWBasePage {
     }
 
     public AppLoginPage logOutFromApp() {
+        if (PWBasePage.PWBrowser == PWBrowser.chromeIPadMini || PWBasePage.PWBrowser == PWBrowser.msedgeIpadMini) {
+            System.out.println("\n\nIPad Mini Browser detected, clicking on menu button.");
+            page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("menu")).click();
+        }
         page.locator("div").filter(new Locator.FilterOptions().setHasText("Logout")).click();
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Logout")).click();
         return loginPage;

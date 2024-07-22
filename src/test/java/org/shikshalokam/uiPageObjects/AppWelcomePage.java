@@ -38,8 +38,8 @@ public class AppWelcomePage extends PWBasePage {
 
     public AppWelcomePage logOutFromApp() {
         this.validPage();
-        if (PWBasePage.PWBrowser == PWBrowser.chromeIPadMini || PWBasePage.PWBrowser == PWBrowser.msedgeIpadMini) {
-            System.out.println("\n\nIPad Mini Browser detected, clicking on menu button.");
+        if (PWBasePage.PWBrowser == PWBrowser.chromePixel4a || PWBasePage.PWBrowser == PWBrowser.msedgePixel4a) {
+            logger.info(" Pixel 4a interface detected, clicking on menu button.");
             page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("menu")).click();
         }
         page.locator("div").filter(new Locator.FilterOptions().setHasText("Logout")).click();

@@ -71,26 +71,28 @@ public class PWBasePage extends MentorEDBaseTest {
                 browserContext = browser.newContext();
                 page = browserContext.newPage();
                 break;
-            case "chromeIPadMini":
-                logger.info("Using Chrome browser for Test suite with iPad Mini emulation");
-                PWBasePage.PWBrowser = PWBrowser.chromeIPadMini;
+            case "chromePixel4a":
+                logger.info("Using Chrome browser for Test suite with Pixel 4a emulation");
+                PWBasePage.PWBrowser = PWBrowser.chromePixel4a;
                 browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(headless));
                 browserContext = browser.newContext(new Browser.NewContextOptions()
-                        .setUserAgent("Mozilla/5.0 (iPad; CPU OS 7_0 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Version/7.0 Mobile/11A465 Safari/9537.53")
-                        .setViewportSize(768, 1024)
-                        .setDeviceScaleFactor(2)
+                        .setUserAgent(PropertyLoader.PROP_LIST.getProperty("mentor.qa.emulation.userAgent"))
+                        .setViewportSize(Integer.parseInt(PropertyLoader.PROP_LIST.getProperty("mentor.qa.emulation.viewport.width")),
+                                Integer.parseInt(PropertyLoader.PROP_LIST.getProperty("mentor.qa.emulation.viewport.height")))
+                        .setDeviceScaleFactor(Double.parseDouble(PropertyLoader.PROP_LIST.getProperty("mentor.qa.emulation.deviceScaleFactor")))
                         .setIsMobile(true)
                         .setHasTouch(true));
                 page = browserContext.newPage();
                 break;
-            case "msedgeIPadMini":
-                logger.info("Using Chrome browser for Test suite with iPad Mini emulation");
-                PWBasePage.PWBrowser = PWBrowser.msedgeIpadMini;
+            case "msedgePixel4a":
+                logger.info("Using Edge browser for Test suite with Pixel 4a emulation");
+                PWBasePage.PWBrowser = PWBrowser.msedgePixel4a;
                 browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setChannel("msedge").setHeadless(headless));
                 browserContext = browser.newContext(new Browser.NewContextOptions()
-                        .setUserAgent("Mozilla/5.0 (iPad; CPU OS 7_0 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Version/7.0 Mobile/11A465 Safari/9537.53")
-                        .setViewportSize(768, 1024)
-                        .setDeviceScaleFactor(2)
+                        .setUserAgent(PropertyLoader.PROP_LIST.getProperty("mentor.qa.emulation.userAgent"))
+                        .setViewportSize(Integer.parseInt(PropertyLoader.PROP_LIST.getProperty("mentor.qa.emulation.viewport.width")),
+                                Integer.parseInt(PropertyLoader.PROP_LIST.getProperty("mentor.qa.emulation.viewport.height")))
+                        .setDeviceScaleFactor(Double.parseDouble(PropertyLoader.PROP_LIST.getProperty("mentor.qa.emulation.deviceScaleFactor")))
                         .setIsMobile(true)
                         .setHasTouch(true));
                 page = browserContext.newPage();

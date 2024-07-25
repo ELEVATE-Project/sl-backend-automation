@@ -1,7 +1,6 @@
 package org.shikshalokam.backend;
 
 import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,6 +10,7 @@ import java.net.URISyntaxException;
 import java.util.Base64;
 
 import static io.restassured.RestAssured.given;
+import static org.apache.logging.log4j.core.util.Assert.isEmpty;
 
 
 public class MentorEDBaseTest extends MentorBase {
@@ -51,11 +51,15 @@ public class MentorEDBaseTest extends MentorBase {
     {
         String menteeUserId=null;
         String encodedString = Base64.getEncoder().encodeToString(name.getBytes());
-        searchMenteeEndPoint =  new StringBuilder(searchMenteeEndPoint).append(encodedString).toString();
+        searchMenteeEndPoint = searchMenteeEndPoint + encodedString;
         Response responce = given().header("X-auth-token", "bearer " + X_AUTH_TOKEN).when().get(searchMenteeEndPoint);
         if (responce.getStatusCode()==200)
         {
 
+            if (isEmpty(responce.getBody().jsonPath().get("result.data.values.id"))) {
+                logger.info("User not found for the given username :" +name);
+                return;
+            }
             menteeUserId=responce.getBody().jsonPath().get("result.data.values.id" ).toString().split("\\[\\[|\\]\\]")[1];
             loginToMentorED("adminmaster@admin.com","password");
             try {
@@ -79,11 +83,14 @@ public class MentorEDBaseTest extends MentorBase {
     {
         String mentorUserID=null;
         String encodedString = Base64.getEncoder().encodeToString(name.getBytes());
-        searchMentorEndPoint =  new StringBuilder(searchMentorEndPoint).append(encodedString).toString();
+        searchMentorEndPoint = searchMentorEndPoint + encodedString;
         Response responce = given().header("X-auth-token", "bearer " + X_AUTH_TOKEN).when().get(searchMentorEndPoint);
         if (responce.getStatusCode()==200)
         {
-
+            if (isEmpty(responce.getBody().jsonPath().get("result.data.values.id"))) {
+                logger.info("User not found for the given username :" +name);
+                return;
+            }
             mentorUserID=responce.getBody().jsonPath().get("result.data.values.id" ).toString().split("\\[\\[|\\]\\]")[1];
             loginToMentorED("adminmaster@admin.com","password");
             try {

@@ -21,6 +21,7 @@ public class AppSessionDetailsPage extends PWBasePage {
 
     public AppSessionDetailsPage enrollSession() {
         this.validPage();
+        page.waitForTimeout(2000);
         page.locator("//ion-button[text()='Enroll']").click();
         verifyToastMessage("You have enrolled for this session successfully.");
         return sessionDeatilsPage;
@@ -28,6 +29,7 @@ public class AppSessionDetailsPage extends PWBasePage {
 
     public AppSessionDetailsPage unEnrollSession() {
         this.validPage();
+        page.waitForTimeout(2000);
         page.locator("//ion-button[text()='Unenroll']").click();
         page.locator("//span[normalize-space()='Unenroll']").click();
         verifyToastMessage("You have un-enrolled for this session successfully.");

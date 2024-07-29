@@ -31,6 +31,7 @@ public class AppCreateSessionPage extends PWBasePage {
         page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("Block education officer")).click();
         page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("Communication")).click();
         page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("English")).click();
+        page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("female")).click();
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Publish and Add link")).click();
         verifyToastMessage("Session created and shared with the community.");
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Submit")).click();
@@ -51,6 +52,7 @@ public class AppCreateSessionPage extends PWBasePage {
         page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("Block education officer")).click();
         page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("Communication")).click();
         page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("English")).click();
+        page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("female")).click();
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Publish and Add link")).click();
         verifyToastMessage("Session created and shared with the community.");
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Submit")).click();

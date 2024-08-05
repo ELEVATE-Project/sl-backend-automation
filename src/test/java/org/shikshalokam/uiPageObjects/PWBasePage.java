@@ -28,6 +28,8 @@ public class PWBasePage extends MentorEDBaseTest {
     public static Browser browser;
     private String pwTitle;
 
+    private static String browserType = PropertyLoader.PROP_LIST.getProperty("mentor.qa.browser");
+
 
     public static Boolean headless;
 
@@ -37,12 +39,12 @@ public class PWBasePage extends MentorEDBaseTest {
         if (PropertyLoader.PROP_LIST.getProperty("mentor.qa.browser.setHeadless").equals("false")) {
             headless = false;
         }
-        initializeBrowser();
+        initializeBrowser(browserType);
     }
 
 
-    public static void initializeBrowser() {
-        switch (PropertyLoader.PROP_LIST.getProperty("mentor.qa.browser")) {
+    public static void initializeBrowser(String browserType) {
+        switch (browserType) {
             case "chromium":
                 logger.info("Using Chromium browser for Test suite ");
                 PWBasePage.PWBrowser = PWBrowser.chromium;
@@ -111,6 +113,14 @@ public class PWBasePage extends MentorEDBaseTest {
 
     }
 
+    public static void setBrowserType(String browserType) {
+        PWBasePage.browserType = browserType;
+    }
+
+    public static void setDefaultBrowserType() {
+        browserType = PropertyLoader.PROP_LIST.getProperty("mentor.qa.browser");
+    }
+
     public void validPage() {
 
         assertThat(PWBasePage.page).hasTitle(this.pwTitle);
@@ -122,7 +132,7 @@ public class PWBasePage extends MentorEDBaseTest {
         browser.close();
         playwright.close();
         playwright = Playwright.create();
-        initializeBrowser();
+        initializeBrowser(browserType);
     }
 
     public void verifyToastMessage(String expectedText) {

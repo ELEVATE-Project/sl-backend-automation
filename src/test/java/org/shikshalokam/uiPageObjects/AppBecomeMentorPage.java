@@ -34,6 +34,7 @@ public class AppBecomeMentorPage extends PWBasePage {
 
     public AppBecomeMentorPage requestToBeAMentor() {
         this.validPage();
+        page.waitForTimeout(2000);
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Request to be a Mentor")).click();
         verifyToastMessage("Admin has received your request. Further information will be received through Email.");
         return mentorPage;

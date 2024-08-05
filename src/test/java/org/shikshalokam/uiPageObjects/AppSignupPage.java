@@ -37,7 +37,7 @@ public class AppSignupPage extends PWBasePage {
         page.waitForTimeout(5000);
         String script = "navigator.clipboard.writeText('" + GmailAPI.getOTP("Your OTP to sign-up on MentorED") + "')";
         logger.info(script);
-        page.locator("//div[@class=\"otp-field\"]").click();
+        page.locator("input.otp-input").nth(0).click();
         page.evaluate(script);
         page.waitForTimeout(5000);
         page.keyboard().down("Control");

@@ -32,8 +32,9 @@ public class AppProfilePage extends PWBasePage {
         page.getByLabel("Education qualification *").click();
         page.getByLabel("Education qualification *").fill("BE");
         page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("English")).click();
+        page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("female")).click();
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Submit")).click();
-        verifyToastMessage("Profile Updated Successfully");
+        verifyToastMessage("Please update your profile with all the mandatory fields");
         return profileDetailsPage;
     }
 }

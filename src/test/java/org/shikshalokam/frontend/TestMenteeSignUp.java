@@ -1,7 +1,6 @@
 package org.shikshalokam.frontend;
 
 import org.shikshalokam.backend.MentorEDBaseTest;
-import org.shikshalokam.backend.PropertyLoader;
 import org.shikshalokam.uiPageObjects.AppAllPages;
 import org.shikshalokam.uiPageObjects.Robot;
 import org.testng.annotations.BeforeTest;

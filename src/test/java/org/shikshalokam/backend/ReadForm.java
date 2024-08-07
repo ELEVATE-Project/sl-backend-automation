@@ -17,11 +17,11 @@ import static io.restassured.RestAssured.given;
 
 public class ReadForm extends MentorEDBaseTest {
     private static final Logger logger = LogManager.getLogger(ReadForm.class);
-    private String reaFormEndpoint = "mentoring/v1/form/read";
+    private static String reaFormEndpoint = "mentoring/v1/form/read";
 
     // PreCreate the entity needed with name=label=entityType with same name , example "Location" and pass the same as "entityName"
     // if want to add entity pass true , else false to parameter  "addEentity"
-    public JSONObject readForm(String orgAdminUser, String password, String formType, String formSubType, String entityName, boolean addEntity) {
+    public static JSONObject readForm(String orgAdminUser, String password, String formType, String formSubType, String entityName, boolean addEntity) {
         logger.info("Started calling the readForm:");
         URI reaFormEndpointURI = null;
         JSONObject jsonObject = new JSONObject();
@@ -88,7 +88,7 @@ public class ReadForm extends MentorEDBaseTest {
     }
 
     // PreCreate the entity needed with name=label=entityType with same name , example "Location"
-    public JSONObject entityJsonObject(String entityName) {
+    public static JSONObject entityJsonObject(String entityName) {
         String input = "{\n" +
                 "                        \"name\": \"{REPLACE}\",\n" +
                 "                        \"label\": \"{REPLACE}\",\n" +
@@ -132,7 +132,6 @@ public class ReadForm extends MentorEDBaseTest {
             jsonObject.put("label", entityName);
             JSONObject meta = (JSONObject) jsonObject.get("meta");
             meta.put("entityType", entityName);
-
 
             // Print the modified JSONObject
             System.out.println("Modified JSON: " + jsonObject.toString());

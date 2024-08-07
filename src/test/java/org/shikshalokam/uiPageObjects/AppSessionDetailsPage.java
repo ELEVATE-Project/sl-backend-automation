@@ -91,7 +91,16 @@ public class AppSessionDetailsPage extends PWBasePage {
         return sessionDeatilsPage;
     }
 
-    public AppSessionDetailsPage viewAndVerifyList(String expectedEnrolledMentee) {
+    public AppSessionDetailsPage verifyAddedMentorName(String mentorName ) {
+        this.validPage();
+        Locator mentor = page.locator("//p[text()='Mentor']/..//div/p");
+        String actualMentor = mentor.textContent();
+        logger.info("mentor Name:{}", actualMentor);
+        assertThat(mentor).containsText(mentorName);
+        return sessionDeatilsPage;
+    }
+
+    public AppSessionDetailsPage verifyMenteeListEmail(String expectedEnrolledMentee) {
         this.validPage();
         page.locator("//ion-button[text()='View list']").click();
         Locator menteeOnList = page.locator("//td[@class='mat-cell cdk-cell cell-container cdk-column-email mat-column-email ng-star-inserted']");
@@ -102,11 +111,29 @@ public class AppSessionDetailsPage extends PWBasePage {
         return sessionDeatilsPage;
     }
 
-    public AppSessionDetailsPage deleteSession() {
+    public AppSessionDetailsPage verifyMenteeListName(String expectedEnrolledMentee) {
+        this.validPage();
+        page.locator("//ion-button[text()='View list']").click();
+        Locator menteeOnList = page.locator("(//td//div[@class='cell-text session-name'])[6]");
+        String menteeName = menteeOnList.textContent();
+        logger.info("Enrolled Mentee in the List :{}", menteeName);
+        assertThat(menteeOnList).hasText(expectedEnrolledMentee);
+        page.getByLabel("close").locator("path").click();
+        return sessionDeatilsPage;
+    }
+
+        public AppSessionDetailsPage deleteSession() {
         this.validPage();
         page.getByLabel("trash outline").locator("svg").click();
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Yes delete")).click();
         verifyToastMessage("Session deleted. This session is no longer available.");
         return sessionDeatilsPage;
     }
+
+    public AppSessionDetailsPage editSession() {
+        this.validPage();
+        page.getByLabel("create outline").getByRole(AriaRole.IMG).click();
+        return sessionDeatilsPage;
+    }
+
 }

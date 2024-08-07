@@ -69,6 +69,13 @@ public class AppWelcomePage extends PWBasePage {
         return welcomePage;
     }
 
+    public AppWelcomePage enrolledSession() {
+        this.validPage();
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Enrolled sessions")).click();
+        return welcomePage;
+    }
+
+
     public AppWelcomePage createSession() {
         this.validPage();
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Create session add circle")).click();
@@ -78,6 +85,7 @@ public class AppWelcomePage extends PWBasePage {
     public AppWelcomePage sessionSearch(String session) {
         this.validPage();
         page.getByPlaceholder("Search for sessions").fill(session);
+        page.waitForTimeout(1000);
         page.getByPlaceholder("Search for sessions").press("Enter");
         page.waitForTimeout(3000);
         Locator noSessionsAvailableMessage = page.locator("//div[@class='title' and text()=' No sessions available']");
@@ -95,5 +103,50 @@ public class AppWelcomePage extends PWBasePage {
         this.validPage();
         page.getByRole(AriaRole.HEADING, new Page.GetByRoleOptions().setName(session)).click();
         return welcomePage;
+    }
+
+    public AppWelcomePage verifyTags(String session, String tags) {
+        this.validPage();
+        String sessionAndTag = String.format("//div/h5[text()='%s']/../../../../..//span[text()=' %s ']", session, tags);
+        page.locator(sessionAndTag).isVisible();
+        String tag = page.locator(sessionAndTag).textContent();
+        logger.info(tag);
+        return welcomePage;
+
+    }
+
+    public AppWelcomePage selectSessionFromList(String session) {
+        this.validPage();
+        page.getByText(session).click();
+        return welcomePage;
+    }
+
+    public AppWelcomePage profile() {
+        this.validPage();
+        page.getByRole(AriaRole.NAVIGATION).getByText("Profile").click();
+        return welcomePage;
+    }
+
+    public AppWelcomePage viewRoles() {
+        this.validPage();
+        page.getByRole(AriaRole.NAVIGATION).getByText("View roles").click();
+        return welcomePage;
+    }
+
+    public AppWelcomePage mentors() {
+        this.validPage();
+        page.locator("ion-item").filter(new Locator.FilterOptions().setHasText("Mentors")).click();
+        return welcomePage;
+    }
+
+    public AppWelcomePage verifyRoles( String... expectedRoles) {
+        this.validPage();
+        page.getByText("Roles", new Page.GetByTextOptions().setExact(true)).isVisible();
+        for (String expectedRole : expectedRoles) {
+            page.locator("//ion-item[contains(text(),'" + expectedRole + "')]").isVisible();
+            logger.info("Role '" + expectedRole + "' is on the Role list.");
+        }
+        page.locator("//ion-label[text()='Close']").click();
+            return welcomePage;
     }
 }

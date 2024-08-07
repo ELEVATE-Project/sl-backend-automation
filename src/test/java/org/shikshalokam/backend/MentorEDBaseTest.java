@@ -22,7 +22,7 @@ public class MentorEDBaseTest extends MentorBase {
     private String deleteUseruserEndPoint="user/v1/admin/deleteUser/";
 
     private String deleteUserMentorEndPoint ="/mentoring/v1/admin/userDelete?userId=";
-    public void loginToMentorED(String loginId, String password) {
+    public static void loginToMentorED(String loginId, String password) {
 
         try {
 

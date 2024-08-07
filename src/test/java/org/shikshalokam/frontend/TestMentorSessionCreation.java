@@ -52,6 +52,7 @@ public class TestMentorSessionCreation {
                 fetchProperty("default.mentee.password"));
         robot.sees(AppAllPages.sessionDeatilsPage).submitFeedback();
         robot.sees(AppAllPages.welcomePage).logOutFromApp();
+        robot.quitAppBrowser();
 
     }
 
@@ -75,7 +76,7 @@ public class TestMentorSessionCreation {
         robot.sees(AppAllPages.welcomePage).myMentoringSessionTab();
         robot.sees(AppAllPages.welcomePage).selectcreatedSession(createSessionPage.menteeCountSessionTitle);
         robot.sees(AppAllPages.sessionDeatilsPage).verifyMenteeCount("1");
-        robot.sees(AppAllPages.sessionDeatilsPage).viewAndVerifyList(fetchProperty("default.mentee.user"));
+        robot.sees(AppAllPages.sessionDeatilsPage).verifyMenteeListEmail(fetchProperty("default.mentee.user"));
         robot.sees(AppAllPages.welcomePage).logOutFromApp();
         robot.sees(AppAllPages.loginPage).loginToApp(fetchProperty("default.mentee.user"),
                 fetchProperty("default.mentee.password"));
@@ -89,6 +90,7 @@ public class TestMentorSessionCreation {
         robot.sees(AppAllPages.sessionDeatilsPage).verifyMenteeCount("0");
         robot.sees(AppAllPages.sessionDeatilsPage).deleteSession();
         robot.sees(AppAllPages.welcomePage).logOutFromApp();
+        robot.quitAppBrowser();
 
     }
 }

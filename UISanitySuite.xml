@@ -38,6 +38,36 @@
                 </methods>
             </class>
 
+            <class name="org.shikshalokam.frontend.TestSessionManagerSessionCreation">
+                <methods>
+                    <include name="testPrivateSessionCreation"/>
+                    <include name="testPublicSessionCreation"/>
+                </methods>
+            </class>
+
+            <class name="org.shikshalokam.frontend.TestCustomEntity">
+                <methods>
+                    <include name="testEditProfileFormWithAddedCustomEntity"/>
+                    <include name="testEditProfileFormWithRemovedCustomEntity"/>
+                    <include name="testManagersSessionFormWithAddedCustomEntity"/>
+                    <include name="testManagersSessionFormWithRemovedCustomEntity"/>
+                    <include name="testMentorsSessionFormWithAddedCustomEntity"/>
+                    <include name="testMentorsSessionFormWithRemovedCustomEntity"/>
+                </methods>
+            </class>
+
+            <class name="org.shikshalokam.frontend.TestOtherOptionOnProfile">
+                <methods>
+                    <include name="testOtherOption"/>
+                </methods>
+            </class>
+
+            <class name="org.shikshalokam.frontend.TestUserAndOtherUsersAssignedRoles">
+                <methods>
+                    <include name="testUserAndOtherUsersAssignedRoles"/>
+                </methods>
+            </class>
+
         </classes>
     </test> <!-- Test -->
 </suite> <!-- Suite -->

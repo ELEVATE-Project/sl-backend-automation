@@ -23,9 +23,9 @@ public class AppLoginPage extends PWBasePage {
         page.waitForTimeout(3000);
         if (loginbutton.isVisible()) {
             loginbutton.click();
-            System.out.println("Login Button clicked.");
+            logger.info("Login Button clicked.");
         } else {
-            System.out.println("Login Button not found, skipping click.");
+            logger.info("Login Button not found, skipping click.");
         }
         page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Email *")).click();
         page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Email *")).fill(userName);

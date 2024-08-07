@@ -14,9 +14,9 @@ import static io.restassured.RestAssured.given;
 public class UpdateForm extends MentorEDBaseTest{
 
     private static final Logger logger = LogManager.getLogger(UpdateForm.class);
-    private String updateFormEndpoint = "mentoring/v1/form/update";
+    private static String updateFormEndpoint = "mentoring/v1/form/update";
 
-    public void updateForm (String orgAdminUser, String password,JSONObject readFormPayload)
+    public static void updateForm(String orgAdminUser, String password, JSONObject readFormPayload)
     {
         logger.info("Started calling the UpdateForm:");
         loginToMentorED(orgAdminUser, password);

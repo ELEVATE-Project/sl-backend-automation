@@ -7,9 +7,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-
-
-
 public class AppCreateSessionPage extends PWBasePage {
 
     private AppCreateSessionPage createSessionPage;
@@ -19,7 +16,6 @@ public class AppCreateSessionPage extends PWBasePage {
         super(givenTitleName);
         this.createSessionPage = this;
     }
-
 
     public String bbbSessionTitle = "bbbsession" + RandomStringUtils.randomAlphabetic(3);
 
@@ -31,15 +27,7 @@ public class AppCreateSessionPage extends PWBasePage {
         page.getByLabel("Description *").fill("my session");
         page.locator("#mat-input-0").fill(getCurrentDateTime());
         page.locator("#mat-input-1").fill(getFutureDateTime(32));
-        page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("Block education officer")).click();
-        page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("Communication")).click();
-        page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("English")).click();
-
-        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Publish and Add link")).click();
-        verifyToastMessage("Session created and shared with the community.");
-        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Submit")).click();
-        verifyToastMessage("Your session details have been updated.");
-        page.getByLabel("back").click();
+        genericSessionCreationFields();
         return createSessionPage;
     }
 
@@ -53,21 +41,18 @@ public class AppCreateSessionPage extends PWBasePage {
         page.getByLabel("Description *").fill("my session");
         page.locator("#mat-input-0").fill(getFutureDateTime(40));
         page.locator("#mat-input-1").fill(getFutureDateTime(75));
-        page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("Block education officer")).click();
-        page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("Communication")).click();
-        page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("English")).click();
+        genericSessionCreationFields();
+        return createSessionPage;
+    }
 
-        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Publish and Add link")).click();
-        verifyToastMessage("Session created and shared with the community.");
-        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Submit")).click();
-        verifyToastMessage("Your session details have been updated.");
-        //Editing & Updating the Created Session with Gmeet link
-        page.getByLabel("create outline").getByRole(AriaRole.IMG).click();
+    //Editing & Updating the Created Session with Gmeet link
+    public AppCreateSessionPage updateCreatedSessionWithGmeetPlatform() {
+        this.validPage();
         page.getByText("2Meeting link").click();
         page.getByText("BigBlueButton (Default) Google meet Zoom WhatsApp BigBlueButton (Default)").click();
         page.locator("ion-radio").filter(new Locator.FilterOptions().setHasText("Google meet")).click();
         page.getByPlaceholder("Eg: https://meet.google.com/").click();
-        page.getByPlaceholder("Eg: https://meet.google.com/").fill(fetchProperty("gmeetLink"));//"https://meet.google.com/pqr-gfwc-jsn");
+        page.getByPlaceholder("Eg: https://meet.google.com/").fill(fetchProperty("gmeetLink"));
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Submit")).click();
         verifyToastMessage("Your session details have been updated.");
         return createSessionPage;
@@ -76,6 +61,7 @@ public class AppCreateSessionPage extends PWBasePage {
     public String addMenteeName = "AutoDefaultMentee";
     public String addMentorName = "AutoDefaultMentor";
     public String privateSessionTitle = "PrivateSession" + RandomStringUtils.randomAlphabetic(3);
+
     public AppCreateSessionPage creatingPrivateSession() {
         this.validPage();
         page.getByLabel("Session title *").click();
@@ -91,7 +77,7 @@ public class AppCreateSessionPage extends PWBasePage {
         page.getByPlaceholder("Search for mentor").press("Enter");
         String mentorAdd = String.format("//td//div[text()=' %s']/../..//td[6]/div//div/ion-button[contains(text(),' Add ')]", addMentorName);
         page.locator(mentorAdd).first().click();
-        page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("Add mentee")).click();
+        page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("Add New Mentee")).click();
         page.getByPlaceholder("Search for mentee").click();
         page.getByPlaceholder("Search for mentee").fill(addMenteeName);
         page.getByPlaceholder("Search for mentee").press("Enter");
@@ -101,17 +87,12 @@ public class AppCreateSessionPage extends PWBasePage {
         page.waitForTimeout(2000);
         page.locator("#mat-input-0").fill(getFutureDateTime(100));
         page.locator("#mat-input-1").fill(getFutureDateTime(135));
-        page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("Block education officer")).click();
-        page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("Communication")).click();
-        page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("English")).click();
-        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Publish and Add link")).click();
-        verifyToastMessage("Session created and shared with the community.");
-        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Submit")).click();
-        verifyToastMessage("Your session details have been updated.");
+        genericSessionCreationFields();
         return createSessionPage;
     }
 
     public String publicSessionTitle = "PublicSession" + RandomStringUtils.randomAlphabetic(3);
+
     public AppCreateSessionPage creatingPublicSession() {
         this.validPage();
         page.getByLabel("Session title *").click();
@@ -130,9 +111,21 @@ public class AppCreateSessionPage extends PWBasePage {
         page.waitForTimeout(2000);
         page.locator("#mat-input-0").fill(getFutureDateTime(150));
         page.locator("#mat-input-1").fill(getFutureDateTime(185));
-        page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("Block education officer")).click();
-        page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("Communication")).click();
-        page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("English")).click();
+        genericSessionCreationFields();
+        return createSessionPage;
+    }
+
+    public AppCreateSessionPage genericSessionCreationFields() {
+        this.validPage();
+        page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("Recommended for")).click();
+        page.locator("ion-checkbox").filter(new Locator.FilterOptions().setHasText("Block education officer")).click();
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Save")).click();
+        page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("Categories")).click();
+        page.locator("ion-checkbox").filter(new Locator.FilterOptions().setHasText("Communication")).click();
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Save")).click();
+        page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("Select medium")).click();
+        page.locator("ion-checkbox").filter(new Locator.FilterOptions().setHasText("English")).click();
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Save")).click();
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Publish and Add link")).click();
         verifyToastMessage("Session created and shared with the community.");
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Submit")).click();
@@ -140,9 +133,10 @@ public class AppCreateSessionPage extends PWBasePage {
         return createSessionPage;
     }
 
+
     public AppCreateSessionPage addMentee() {
         this.validPage();
-        page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("Add mentee")).click();
+        page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("Add New Mentee")).click();
         page.getByPlaceholder("Search for mentee").click();
         page.getByPlaceholder("Search for mentee").fill(addMenteeName);
         page.getByPlaceholder("Search for mentee").press("Enter");

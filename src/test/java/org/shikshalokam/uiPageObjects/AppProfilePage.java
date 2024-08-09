@@ -97,9 +97,10 @@ public class AppProfilePage extends PWBasePage {
 
     public AppProfilePage verifyAddedOptionIsSelectedAndUnselect(String value) {
         this.validPage();
-        Locator element = page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText(value));
+        Locator element = page.locator("form ion-chip").filter(new Locator.FilterOptions().setHasText(value));
         assertThat(element).isVisible();
         assertThat(element).hasClass("selected-chip md ion-activatable hydrated");
+        //unselect
         element.click();
         return profileDetailsPage;
 

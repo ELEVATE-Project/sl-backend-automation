@@ -117,7 +117,8 @@ public class AppWelcomePage extends PWBasePage {
 
     public AppWelcomePage selectSessionFromList(String session) {
         this.validPage();
-        page.getByText(session).click();
+        page.getByRole(AriaRole.CELL, new Page.GetByRoleOptions().setName(session)).locator("div").click();
+        //page.getByText(session).click();
         return welcomePage;
     }
 

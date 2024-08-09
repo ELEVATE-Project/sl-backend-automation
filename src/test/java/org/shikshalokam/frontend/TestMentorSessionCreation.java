@@ -65,6 +65,8 @@ public class TestMentorSessionCreation {
         robot.sees(AppAllPages.welcomePage).myMentoringSessionTab();
         robot.sees(AppAllPages.welcomePage).createSession();
         robot.sees(createSessionPage).menteeCountSessionCreation();
+        robot.sees(AppAllPages.sessionDeatilsPage).editSession();
+        robot.sees(createSessionPage).updateCreatedSessionWithGmeetPlatform();
         robot.sees(AppAllPages.welcomePage).logOutFromApp();
         robot.sees(AppAllPages.loginPage).loginToApp(fetchProperty("default.mentee.user"),
                 fetchProperty("default.mentee.password"));

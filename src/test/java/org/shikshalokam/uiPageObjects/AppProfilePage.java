@@ -36,7 +36,7 @@ public class AppProfilePage extends PWBasePage {
         page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("English")).click();
         page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("female")).click();
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Submit")).click();
-        verifyToastMessage("Please update your profile with all the mandatory fields");
+        verifyToastMessage("Profile Updated Successfully");
         return profileDetailsPage;
     }
 

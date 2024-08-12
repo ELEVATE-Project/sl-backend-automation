@@ -24,6 +24,12 @@ public class AppWelcomePage extends PWBasePage {
         return welcomePage;
     }
 
+    public AppWelcomePage backToWorkSpace() {
+        this.validPage();
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("back")).click();
+        return welcomePage;
+    }
+
     public AppWelcomePage workspace() {
         this.validPage();
         if (PWBasePage.PWBrowser == PWBrowser.chromePixel4a || PWBasePage.PWBrowser == PWBrowser.msedgePixel4a) {

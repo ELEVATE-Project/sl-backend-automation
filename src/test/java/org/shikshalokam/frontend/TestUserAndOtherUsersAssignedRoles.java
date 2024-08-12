@@ -1,6 +1,8 @@
 package org.shikshalokam.frontend;
 
 import org.shikshalokam.uiPageObjects.AppAllPages;
+import org.shikshalokam.uiPageObjects.PWBasePage;
+import org.shikshalokam.uiPageObjects.PWBrowser;
 import org.shikshalokam.uiPageObjects.Robot;
 import org.testng.annotations.Test;
 
@@ -25,6 +27,9 @@ public class TestUserAndOtherUsersAssignedRoles {
         robot.sees(AppAllPages.mentorsPage).searchMentor("team");
         robot.sees(AppAllPages.mentorsPage).viewRoles();
         robot.sees(AppAllPages.welcomePage).verifyRoles("Mentee","Mentor");
+        if (PWBasePage.PWBrowser == PWBrowser.chromePixel4a || PWBasePage.PWBrowser == PWBrowser.msedgePixel4a) {
+            robot.sees(AppAllPages.welcomePage).backToWorkSpace();
+        }
         robot.sees(AppAllPages.welcomePage).logOutFromApp();
         robot.quitAppBrowser();
 

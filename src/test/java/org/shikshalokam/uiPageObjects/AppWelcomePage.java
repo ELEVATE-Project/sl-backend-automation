@@ -130,19 +130,35 @@ public class AppWelcomePage extends PWBasePage {
 
     public AppWelcomePage profile() {
         this.validPage();
-        page.getByRole(AriaRole.NAVIGATION).getByText("Profile").click();
+        if (PWBasePage.PWBrowser == PWBrowser.chromePixel4a || PWBasePage.PWBrowser == PWBrowser.msedgePixel4a) {
+            if (!page.locator("div").filter(new Locator.FilterOptions().setHasText("Logout")).isVisible()) {
+                page.locator("ion-tab-button").filter(new Locator.FilterOptions().setHasText("Profile")).click();
+            }
+        }
+        else {
+            page.getByRole(AriaRole.NAVIGATION).getByText("Profile").click();
+        }
         return welcomePage;
     }
 
     public AppWelcomePage viewRoles() {
         this.validPage();
+        if (PWBasePage.PWBrowser == PWBrowser.chromePixel4a || PWBasePage.PWBrowser == PWBrowser.msedgePixel4a) {
+            logger.info(" Pixel 4a interface detected, clicking on menu button.");
+            page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("menu")).click();
+        }
         page.getByRole(AriaRole.NAVIGATION).getByText("View roles").click();
         return welcomePage;
     }
 
     public AppWelcomePage mentors() {
         this.validPage();
-        page.locator("ion-item").filter(new Locator.FilterOptions().setHasText("Mentors")).click();
+        if (PWBasePage.PWBrowser == PWBrowser.chromePixel4a || PWBasePage.PWBrowser == PWBrowser.msedgePixel4a) {
+            page.locator("ion-tab-button").filter(new Locator.FilterOptions().setHasText("Mentors")).click();
+        }
+        else {
+            page.locator("ion-item").filter(new Locator.FilterOptions().setHasText("Mentors")).click();
+        }
         return welcomePage;
     }
 

@@ -1,6 +1,8 @@
 package org.shikshalokam.frontend;
 
 import org.shikshalokam.uiPageObjects.AppAllPages;
+import org.shikshalokam.uiPageObjects.PWBasePage;
+import org.shikshalokam.uiPageObjects.PWBrowser;
 import org.shikshalokam.uiPageObjects.Robot;
 import org.testng.annotations.Test;
 
@@ -29,6 +31,9 @@ public class TestOtherOptionOnProfile {
         robot.sees(AppAllPages.profileDetailsPage).editProfile();
         robot.sees(AppAllPages.profileDetailsPage).verifyAddedOptionIsRemoved("Principle");
         robot.sees(AppAllPages.profileDetailsPage).verifyAddedOptionIsRemoved("Management");
+        if (PWBasePage.PWBrowser == PWBrowser.chromePixel4a || PWBasePage.PWBrowser == PWBrowser.msedgePixel4a) {
+            robot.sees(AppAllPages.welcomePage).backToWorkSpace();
+        }
         robot.sees(AppAllPages.welcomePage).logOutFromApp();
         robot.quitAppBrowser();
     }

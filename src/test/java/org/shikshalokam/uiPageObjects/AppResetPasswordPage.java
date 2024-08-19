@@ -31,7 +31,7 @@ public class AppResetPasswordPage extends PWBasePage {
         verifyToastMessage("OTP has been sent to your registered email ID. Please enter the number to update your password.");
         String script = "navigator.clipboard.writeText('" + GmailAPI.getOTP("MentorED - Reset Otp") + "')";
         logger.info(script);
-        page.locator("//div[@class=\"otp-field\"]").click();
+        page.locator("input.otp-input").nth(0).click();
         page.evaluate(script);
         page.waitForTimeout(5000);
         page.keyboard().down("Control");

@@ -100,13 +100,13 @@ public class TestCustomEntity {
     //-------------------MentorsSessionForm----------------------------//
     public void removeMentorsSessionCustomEnity() {
         JSONObject object = ReadForm.readForm(fetchProperty("mentor.qa.admin.login.user"),
-                fetchProperty("mentor.qa.admin.login.password"), "session", "sessionForm", "GRADE", false);
+                fetchProperty("mentor.qa.admin.login.password"), "session", "sessionForm", "grade", false);
         UpdateForm.updateForm("adithya@shikshalokam.org", "Welcome@123", object);
     }
 
     public void addMentorsSessionCustomEnity() {
         JSONObject object = ReadForm.readForm(fetchProperty("mentor.qa.admin.login.user"),
-                fetchProperty("mentor.qa.admin.login.password"), "session", "sessionForm", "GRADE", true);
+                fetchProperty("mentor.qa.admin.login.password"), "session", "sessionForm", "grade", true);
         UpdateForm.updateForm("adithya@shikshalokam.org", "Welcome@123", object);
     }
 
@@ -119,7 +119,7 @@ public class TestCustomEntity {
                 fetchProperty("sl.mentor.password"));
         robot.sees(AppAllPages.welcomePage).myMentoringSessionTab();
         robot.sees(AppAllPages.welcomePage).createSession();
-        robot.sees(AppAllPages.profileDetailsPage).verifyRemovedCustomEntity("GRADE");
+        robot.sees(AppAllPages.profileDetailsPage).verifyRemovedCustomEntity("grade");
         robot.sees(AppAllPages.welcomePage).logOutFromApp();
         robot.quitAppBrowser();
     }
@@ -133,7 +133,7 @@ public class TestCustomEntity {
                 fetchProperty("sl.mentor.password"));
         robot.sees(AppAllPages.welcomePage).myMentoringSessionTab();
         robot.sees(AppAllPages.welcomePage).createSession();
-        robot.sees(AppAllPages.profileDetailsPage).verifyAddedCustomEntity("GRADE");
+        robot.sees(AppAllPages.profileDetailsPage).verifyAddedCustomEntity("grade");
         robot.sees(AppAllPages.welcomePage).logOutFromApp();
         robot.quitAppBrowser();
     }

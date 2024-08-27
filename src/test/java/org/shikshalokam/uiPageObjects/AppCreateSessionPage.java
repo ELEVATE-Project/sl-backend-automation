@@ -77,7 +77,7 @@ public class AppCreateSessionPage extends PWBasePage {
         page.getByPlaceholder("Search for mentor").press("Enter");
         String mentorAdd = String.format("//td//div[text()=' %s']/../..//td[6]/div//div/ion-button[contains(text(),' Add ')]", addMentorName);
         page.locator(mentorAdd).first().click();
-        page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("Add New Mentee")).click();
+        page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("Add Mentee")).click();
         page.getByPlaceholder("Search for mentee").click();
         page.getByPlaceholder("Search for mentee").fill(addMenteeName);
         page.getByPlaceholder("Search for mentee").press("Enter");
@@ -136,7 +136,7 @@ public class AppCreateSessionPage extends PWBasePage {
 
     public AppCreateSessionPage addMentee() {
         this.validPage();
-        page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("Add New Mentee")).click();
+        page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("Add Mentee")).click();
         page.getByPlaceholder("Search for mentee").click();
         page.getByPlaceholder("Search for mentee").fill(addMenteeName);
         page.getByPlaceholder("Search for mentee").press("Enter");

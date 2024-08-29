@@ -17,7 +17,7 @@ public class AppAllPages {
     public static AppCreateSessionPage createSessionPage =new AppCreateSessionPage("MentorED");
     public static AppSessionDetailsPage sessionDeatilsPage =new AppSessionDetailsPage("MentorED");
     public static AppMentorsPage mentorsPage =new AppMentorsPage("MentorED");
-
+    public static AppManageSessionPage manageSessionPage =new AppManageSessionPage("MentorED");
 
 }
 

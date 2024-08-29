@@ -68,6 +68,12 @@
                 </methods>
             </class>
 
+            <class name="org.shikshalokam.frontend.TestBulkUploadSession">
+                <methods>
+                    <include name="sessionCreationViaBulkUpload"/>
+                </methods>
+            </class>
+
         </classes>
     </test> <!-- Test -->
 </suite> <!-- Suite -->

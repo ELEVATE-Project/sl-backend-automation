@@ -18,9 +18,9 @@ public class TestSessionManagerSessionCreation {
         robot.sees(AppAllPages.workspacePage).manageSession();
         robot.sees(AppAllPages.welcomePage).createSession();
         robot.sees(AppAllPages.createSessionPage).creatingPrivateSession();
-        robot.sees(AppAllPages.sessionDeatilsPage).verifyAddedMentorName(createSessionPage.addMentorName);
+        robot.sees(AppAllPages.sessionDeatilsPage).verifyAddedMentorName(fetchProperty("addMentorName"));
         robot.sees(AppAllPages.sessionDeatilsPage).verifyMenteeCount("1");
-        robot.sees(AppAllPages.sessionDeatilsPage).verifyMenteeListName(createSessionPage.addMenteeName);
+        robot.sees(AppAllPages.sessionDeatilsPage).verifyMenteeListName(fetchProperty("addMenteeName"));
         robot.sees(AppAllPages.welcomePage).logOutFromApp();
 
         robot.sees(AppAllPages.loginPage).loginToApp(fetchProperty("default.mentor.user"),
@@ -56,7 +56,7 @@ public class TestSessionManagerSessionCreation {
         robot.sees(AppAllPages.workspacePage).manageSession();
         robot.sees(AppAllPages.welcomePage).createSession();
         robot.sees(AppAllPages.createSessionPage).creatingPublicSession();
-        robot.sees(AppAllPages.sessionDeatilsPage).verifyAddedMentorName(createSessionPage.addMentorName);
+        robot.sees(AppAllPages.sessionDeatilsPage).verifyAddedMentorName(fetchProperty("addMentorName"));
         robot.sees(AppAllPages.sessionDeatilsPage).verifyMenteeCount("0");
         robot.sees(AppAllPages.welcomePage).logOutFromApp();
 
@@ -74,7 +74,7 @@ public class TestSessionManagerSessionCreation {
         robot.sees(AppAllPages.sessionDeatilsPage).editSession();
         robot.sees(AppAllPages.createSessionPage).addMentee();
         robot.sees(AppAllPages.sessionDeatilsPage).verifyMenteeCount("1");
-        robot.sees(AppAllPages.sessionDeatilsPage).verifyMenteeListName(createSessionPage.addMenteeName);
+        robot.sees(AppAllPages.sessionDeatilsPage).verifyMenteeListName(fetchProperty("addMenteeName"));
         robot.sees(AppAllPages.welcomePage).logOutFromApp();
 
         robot.sees(AppAllPages.loginPage).loginToApp(fetchProperty("default.mentee.user"),

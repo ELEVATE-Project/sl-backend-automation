@@ -58,8 +58,7 @@ public class AppCreateSessionPage extends PWBasePage {
         return createSessionPage;
     }
 
-    public String addMenteeName = "AutoDefaultMentee";
-    public String addMentorName = "AutoDefaultMentor";
+
     public String privateSessionTitle = "PrivateSession" + RandomStringUtils.randomAlphabetic(3);
 
     public AppCreateSessionPage creatingPrivateSession() {
@@ -71,17 +70,17 @@ public class AppCreateSessionPage extends PWBasePage {
         page.getByText("PrivatePublic Session type *").click();
         page.getByRole(AriaRole.RADIO, new Page.GetByRoleOptions().setName("Private")).click();
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Ok")).click();
-        page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("Add mentor")).click();
+        page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("Add Mentor")).click();
         page.getByPlaceholder("Search for mentor").click();
-        page.getByPlaceholder("Search for mentor").fill(addMentorName);
+        page.getByPlaceholder("Search for mentor").fill(fetchProperty("addMentorName"));
         page.getByPlaceholder("Search for mentor").press("Enter");
-        String mentorAdd = String.format("//td//div[text()=' %s']/../..//td[6]/div//div/ion-button[contains(text(),' Add ')]", addMentorName);
+        String mentorAdd = String.format("//td//div[text()=' %s']/../..//td[6]/div//div/ion-button[contains(text(),' Add ')]", (fetchProperty("addMentorName")));
         page.locator(mentorAdd).first().click();
         page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("Add Mentee")).click();
         page.getByPlaceholder("Search for mentee").click();
-        page.getByPlaceholder("Search for mentee").fill(addMenteeName);
+        page.getByPlaceholder("Search for mentee").fill(fetchProperty("addMenteeName"));
         page.getByPlaceholder("Search for mentee").press("Enter");
-        String menteeAdd = String.format("//td//div[text()=' %s']/../..//td[6]/div//div/ion-button[contains(text(),' Add ')]", addMenteeName);
+        String menteeAdd = String.format("//td//div[text()=' %s']/../..//td[6]/div//div/ion-button[contains(text(),' Add ')]", (fetchProperty("addMenteeName")));
         page.locator(menteeAdd).first().click();
         page.getByLabel("close outline").getByRole(AriaRole.IMG).click();
         page.waitForTimeout(2000);
@@ -104,9 +103,9 @@ public class AppCreateSessionPage extends PWBasePage {
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Ok")).click();
         page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("Add mentor")).click();
         page.getByPlaceholder("Search for mentor").click();
-        page.getByPlaceholder("Search for mentor").fill(addMentorName);
+        page.getByPlaceholder("Search for mentor").fill(fetchProperty("addMentorName"));
         page.getByPlaceholder("Search for mentor").press("Enter");
-        String mentorAdd = String.format("//td//div[text()=' %s']/../..//td[6]/div//div/ion-button[contains(text(),' Add ')]", addMentorName);
+        String mentorAdd = String.format("//td//div[text()=' %s']/../..//td[6]/div//div/ion-button[contains(text(),' Add ')]", (fetchProperty("addMentorName")));
         page.locator(mentorAdd).first().click();
         page.waitForTimeout(2000);
         page.locator("#mat-input-0").fill(getFutureDateTime(150));
@@ -138,9 +137,9 @@ public class AppCreateSessionPage extends PWBasePage {
         this.validPage();
         page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("Add Mentee")).click();
         page.getByPlaceholder("Search for mentee").click();
-        page.getByPlaceholder("Search for mentee").fill(addMenteeName);
+        page.getByPlaceholder("Search for mentee").fill(fetchProperty("addMenteeName"));
         page.getByPlaceholder("Search for mentee").press("Enter");
-        String menteeAdd = String.format("//td//div[text()=' %s']/../..//td[6]/div//div/ion-button[contains(text(),' Add ')]", addMenteeName);
+        String menteeAdd = String.format("//td//div[text()=' %s']/../..//td[6]/div//div/ion-button[contains(text(),' Add ')]", (fetchProperty("addMenteeName")));
         page.locator(menteeAdd).first().click();
         page.getByLabel("close outline").getByRole(AriaRole.IMG).click();
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Save")).click();

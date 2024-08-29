@@ -1,0 +1,49 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="SanitySuite">
+    <listeners>
+        <listener class-name="org.shikshalokam.Listerners.SLCustomListener"/>
+    </listeners>
+    <test name="Test">
+        <classes>
+
+            <class name="org.shikshalokam.frontend.TestMenteeSignUp">
+                <methods>
+                    <include name="testSignup"/>
+                </methods>
+            </class>
+
+            <class name="org.shikshalokam.frontend.TestBecomeAMentor">
+                <methods>
+                    <include name="testBecomeMentor"/>
+                </methods>
+            </class>
+
+            <class name="org.shikshalokam.frontend.TestChangeAndForgotPassword">
+                <methods>
+                    <include name="testChangePassword"/>
+                    <include name="testForgotPassword"/>
+                </methods>
+            </class>
+
+            <class name="org.shikshalokam.frontend.TestMentorSessionCreation">
+                <methods>
+                    <include name="testMentorSessionBBB"/>
+                    <include name="testMentorSessionGmeetMenteeCount"/>
+                </methods>
+            </class>
+
+            <class name="org.shikshalokam.frontend.TestOtherOptionOnProfile">
+                <methods>
+                    <include name="testOtherOption"/>
+                </methods>
+            </class>
+
+            <class name="org.shikshalokam.frontend.TestUserAndOtherUsersAssignedRoles">
+                <methods>
+                    <include name="testUserAndOtherUsersAssignedRoles"/>
+                </methods>
+            </class>
+
+        </classes>
+    </test> <!-- Test -->
+</suite> <!-- Suite -->

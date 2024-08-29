@@ -137,11 +137,11 @@ public class AppWelcomePage extends PWBasePage {
         if (PWBasePage.PWBrowser == PWBrowser.chromePixel4a || PWBasePage.PWBrowser == PWBrowser.msedgePixel4a) {
             if (!page.locator("div").filter(new Locator.FilterOptions().setHasText("Logout")).isVisible()) {
                 page.locator("ion-tab-button").filter(new Locator.FilterOptions().setHasText("Profile")).click();
+                return welcomePage;
             }
         }
-        else {
-            page.getByRole(AriaRole.NAVIGATION).getByText("Profile").click();
-        }
+        page.getByRole(AriaRole.NAVIGATION).getByText("Profile").click();
+
         return welcomePage;
     }
 

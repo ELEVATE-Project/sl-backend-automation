@@ -28,16 +28,7 @@ public class TestBulkUploadSession extends SMsampleCSVBulkPuload {
         robot.sees(AppAllPages.welcomePage).workspace();
         robot.sees(AppAllPages.workspacePage).manageSession();
         robot.sees(AppAllPages.manageSessionPage).bulkUploadTab();
-        // Specify the desired folder and filename
-        String folderName = "bulksession_files";
-        String desiredFilename = "bulk_session_creation.csv";
-        // Perform actions that involve downloads
-        // Downloads will be saved to "target/fileUpload/bulk_session_creation.csv"
-        Download download = page.waitForDownload(() -> {
-            page.click("ion-button:text('Download sample CSV')");
-        });
-        // Handle the download with the specified filename
-        handleDownload(download, folderName, desiredFilename);
+        robot.sees(AppAllPages.manageSessionPage).downloadSampleCsv("bulksession_files","bulk_session_creation.csv");
     }
 
 

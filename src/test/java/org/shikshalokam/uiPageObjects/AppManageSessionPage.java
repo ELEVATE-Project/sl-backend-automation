@@ -1,5 +1,6 @@
 package org.shikshalokam.uiPageObjects;
 
+import com.microsoft.playwright.Download;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
@@ -21,6 +22,16 @@ public class AppManageSessionPage extends PWBasePage {
     public AppManageSessionPage bulkUploadTab() {
         this.validPage();
         page.locator("ion-segment-button").filter(new Locator.FilterOptions().setHasText("Bulk upload")).click();
+        return manageSessionPage;
+    }
+    public AppManageSessionPage downloadSampleCsv(String folderName,String desiredFilename) {
+        this.validPage();
+        // Specify the desired folder and filename
+        Download download = page.waitForDownload(() -> {
+            page.click("ion-button:text('Download sample CSV')");
+        });
+        // Handle the download with the specified filename
+        handleDownload(download, folderName, desiredFilename);
         return manageSessionPage;
     }
 

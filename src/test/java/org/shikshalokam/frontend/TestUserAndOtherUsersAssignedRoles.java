@@ -24,7 +24,7 @@ public class TestUserAndOtherUsersAssignedRoles {
         robot.sees(AppAllPages.welcomePage).verifyRoles("Mentee","Mentor","Org Admin","Session Manager");
 
         robot.sees(AppAllPages.welcomePage).mentors();
-        robot.sees(AppAllPages.mentorsPage).searchMentor("team");
+        robot.sees(AppAllPages.mentorsPage).searchMentor(fetchProperty("search.mentor"));
         robot.sees(AppAllPages.mentorsPage).viewRoles();
         robot.sees(AppAllPages.welcomePage).verifyRoles("Mentee","Mentor");
         if (PWBasePage.PWBrowser == PWBrowser.chromePixel4a || PWBasePage.PWBrowser == PWBrowser.msedgePixel4a) {

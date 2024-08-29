@@ -117,7 +117,7 @@ public class SMsampleCSVBulkPuload extends MentorEDBaseTest {
 
         if (responce.getStatusCode() == 200) {
 
-            logger.info(" upladed the file to Cloud   :" + responce.getStatusCode());
+            logger.info(" uploaded the file to Cloud   :" + responce.getStatusCode());
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("file_path", signedUrl[1]);
             RestAssured.baseURI = PropertyLoader.PROP_LIST.get("mentor.qa.api.base.url").toString();

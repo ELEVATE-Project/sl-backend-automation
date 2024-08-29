@@ -10,6 +10,8 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -104,6 +106,27 @@ public class PWBasePage extends MentorEDBaseTest {
                 logger.info("Unsupported browser type for Test suite hence terminating the suite runs ");
                 System.exit(1);
         }
+    }
+
+    // Method to handle download and save to "target/{folderName}/{desiredFilename}"
+    public static void handleDownload(Download download, String folderName, String desiredFilename) {
+        // Define the base target download folder path
+        Path downloadBasePath = Paths.get("target");
+        // Construct the full download folder path using the folderName passed from the test
+        Path downloadFolderPath = downloadBasePath.resolve(folderName);
+        // Ensure the target directory exists
+        try {
+            if (!Files.exists(downloadFolderPath)) {
+                Files.createDirectories(downloadFolderPath);
+            }
+        } catch (IOException e) {
+            System.err.println("Failed to create directory: " + e.getMessage());
+            return;
+        }
+        // Save the file to the target folder with the specified name
+        Path downloadPath = downloadFolderPath.resolve(desiredFilename);
+        download.saveAs(downloadPath);
+        System.out.println("File downloaded and saved to: " + downloadPath.toString());
     }
 
     public PWBasePage(String givenTitleName) {

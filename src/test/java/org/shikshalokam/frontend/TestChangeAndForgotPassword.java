@@ -9,7 +9,10 @@ import static org.shikshalokam.uiPageObjects.PWBasePage.fetchProperty;
 
 public class TestChangeAndForgotPassword extends MentorEDBaseTest {
 
-    @Test(dependsOnMethods = {"org.shikshalokam.frontend.TestMenteeSignUp.testSignup"})
+    @Test(
+            dependsOnMethods = {"org.shikshalokam.frontend.TestMenteeSignUp.testSignup"},
+            description = "Verifies that a user can change their password successfully and then log in with the new password."
+    )
     public void testChangePassword() {
         Robot robot = new Robot();
         robot.openApp();
@@ -22,7 +25,10 @@ public class TestChangeAndForgotPassword extends MentorEDBaseTest {
 
     }
 
-    @Test(dependsOnMethods = {"testChangePassword"})
+    @Test(
+            dependsOnMethods = {"testChangePassword"},
+            description = "Checks if the 'Forgot Password' functionality allows a user to reset their password and log back in."
+    )
     public void testForgotPassword() {
         Robot robot = new Robot();
         robot.openApp();

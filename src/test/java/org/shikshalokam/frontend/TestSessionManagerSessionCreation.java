@@ -8,7 +8,7 @@ import static org.shikshalokam.uiPageObjects.AppAllPages.createSessionPage;
 import static org.shikshalokam.uiPageObjects.PWBasePage.fetchProperty;
 
 public class TestSessionManagerSessionCreation {
-    @Test
+    @Test(description = "Verify creation, verification, and deletion of a private session.")
     public void testPrivateSessionCreation() {
         Robot robot = new Robot();
         robot.openApp();
@@ -46,7 +46,7 @@ public class TestSessionManagerSessionCreation {
 
     }
 
-    @Test
+    @Test(description = "Verify creation, verification, and deletion of a public session.")
     public void testPublicSessionCreation() {
         Robot robot = new Robot();
         robot.openApp();

@@ -17,7 +17,7 @@ public class TestMenteeSignUp extends MentorEDBaseTest {
         deleteMentorByGivenName("UserSignup");
     }
 
-    @Test
+    @Test(description = "Verifies the sign-up process for a new mentee, including profile setup and logout.")
     public void testSignup() {
         Robot robot = new Robot();
         robot.openApp();

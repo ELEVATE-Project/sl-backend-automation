@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 import static org.shikshalokam.uiPageObjects.PWBasePage.fetchProperty;
 
 public class TestOtherOptionOnProfile {
-    @Test
+    @Test(description = "Verify adding, selecting, and removing custom profile options.")
     public void testOtherOption() {
         Robot robot = new Robot();
         robot.openApp();

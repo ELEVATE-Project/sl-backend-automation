@@ -16,10 +16,8 @@ public class TestMenteeSignUp extends MentorEDBaseTest {
 
     @BeforeTest
     public void init() {
-        loginToMentorED(fetchProperty("gmailsignup.userEmail"),
+        deleteUser(fetchProperty("gmailsignup.userEmail"),
                 fetchProperty("gmailsignup.userPassword"));
-        logger.info("User id :" + User_ID);
-        deleteUserByID(User_ID);
     }
 
     @Test

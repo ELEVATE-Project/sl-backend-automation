@@ -98,24 +98,33 @@ public class MentorEDBaseTest extends MentorBase {
         }
     }
 
-    public void deleteUserByID(String userId) {
-        if (userId == null || userId.isEmpty()) {
+    public void deleteUser(String userEmail, String userPassword) {
+        loginToMentorED(userEmail, userPassword);
+        String deleteUserId = User_ID;
+        logger.info("user id :"+deleteUserId);
+
+        // Check if deleteUserId is null or empty
+        if (deleteUserId == null || deleteUserId.isEmpty()) {
             logger.info("User ID is null or empty. Cannot proceed with deletion.");
             return;
         }
         // Perform the deletion from both services
         loginToMentorED("adminmaster@admin.com", "password");
         try {
-            Response response = given().header("X-auth-token", "bearer " + X_AUTH_TOKEN).when().delete(new URI(deleteUseruserEndPoint + userId));
-            logger.info(" User deleted from the User service status: " + response.getStatusCode());
+            Response response = given().header("X-auth-token", "bearer " + X_AUTH_TOKEN)
+                    .when().delete(new URI(deleteUseruserEndPoint + deleteUserId));
+            logger.info("User deleted from the User service status: " + response.getStatusCode());
 
-            response = given().header("X-auth-token", "bearer " + X_AUTH_TOKEN).when().delete(new URI(deleteUserMentorEndPoint + userId));
-            logger.info(" User deleted from the Mentor service status: " + response.getStatusCode());
+            response = given().header("X-auth-token", "bearer " + X_AUTH_TOKEN)
+                    .when().delete(new URI(deleteUserMentorEndPoint + deleteUserId));
+            logger.info("User deleted from the Mentor service status: " + response.getStatusCode());
         } catch (URISyntaxException e) {
             logger.info("User deletion flow URI is not defined properly");
         }
     }
-}
+
+    }
+
 
 
 

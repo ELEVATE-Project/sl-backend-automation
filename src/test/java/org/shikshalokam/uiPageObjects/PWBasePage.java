@@ -176,14 +176,13 @@ public class PWBasePage extends MentorEDBaseTest {
         return PropertyLoader.PROP_LIST.getProperty(key);
     }
 
-    public static void captureScreenshot(String testName, String stackTrace) {
+    public static String captureScreenshot(String testName, String stackTrace) {
         try {
             File screenshotsDir = new File("target/screenshots");
             if (!screenshotsDir.exists()) {
                 screenshotsDir.mkdirs();
             }
             Path screenshotPath = Paths.get("target/screenshots", testName + ".png");
-            page.screenshot(new Page.ScreenshotOptions().setPath(screenshotPath));
             BufferedImage image = ImageIO.read(screenshotPath.toFile());
             Graphics2D g = image.createGraphics();
             // Set the font and color for the text
@@ -245,8 +244,10 @@ public class PWBasePage extends MentorEDBaseTest {
             g.dispose();
             ImageIO.write(image, "png", screenshotPath.toFile());
             logger.info("Screenshot with exception saved to: " + screenshotPath);
+            return screenshotPath.toString();
         } catch (Exception e) {
-            logger.info("Failed to capture screenshot with exception: " + e.getMessage(), e);
+            logger.error("Failed to capture screenshot with exception: " + e.getMessage(), e);
+            return null;
         }
     }
 

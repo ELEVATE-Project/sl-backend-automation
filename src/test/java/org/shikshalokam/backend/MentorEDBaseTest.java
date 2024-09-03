@@ -28,7 +28,9 @@ public class MentorEDBaseTest extends MentorBase {
         try {
 
             RestAssured.baseURI = PropertyLoader.PROP_LIST.get("mentor.qa.api.base.url").toString();
-            Response responce = given().contentType("application/x-www-form-urlencoded; charset=utf-8").params("email", loginId, "password", password).post(new URI(PropertyLoader.PROP_LIST.get("mentor.login.endpoint").toString()));
+            Response responce = given().contentType("application/x-www-form-urlencoded; charset=utf-8")
+                    .params("email", loginId, "password", password)
+                    .post(new URI(PropertyLoader.PROP_LIST.get("mentor.login.endpoint").toString()));
             if (responce.getStatusCode() != 200) {
                 logger.info("Login to the application failed ");
             } else {

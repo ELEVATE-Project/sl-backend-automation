@@ -1,5 +1,7 @@
 package org.shikshalokam.frontend;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.shikshalokam.backend.MentorEDBaseTest;
 import org.shikshalokam.uiPageObjects.AppAllPages;
 import org.shikshalokam.uiPageObjects.Robot;
@@ -10,11 +12,14 @@ import static org.shikshalokam.uiPageObjects.PWBasePage.fetchProperty;
 
 
 public class TestMenteeSignUp extends MentorEDBaseTest {
+    private static final Logger logger = LogManager.getLogger(TestMenteeSignUp.class);
 
     @BeforeTest
     public void init() {
-        loginToMentorED("jubedhashaik029@gmail.com", "PAssword@@123$");
-        deleteMentorByGivenName("UserSignup");
+        loginToMentorED(fetchProperty("gmailsignup.userEmail"),
+                fetchProperty("gmailsignup.userPassword"));
+        logger.info("User id :" + User_ID);
+        deleteUserByID(User_ID);
     }
 
     @Test

@@ -183,6 +183,7 @@ public class PWBasePage extends MentorEDBaseTest {
                 screenshotsDir.mkdirs();
             }
             Path screenshotPath = Paths.get("target/screenshots", testName + ".png");
+            page.screenshot(new Page.ScreenshotOptions().setPath(screenshotPath));
             BufferedImage image = ImageIO.read(screenshotPath.toFile());
             Graphics2D g = image.createGraphics();
             // Set the font and color for the text

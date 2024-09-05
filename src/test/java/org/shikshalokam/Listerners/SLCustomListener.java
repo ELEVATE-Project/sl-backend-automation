@@ -76,10 +76,6 @@ public class SLCustomListener implements ITestListener, ISuiteListener {
         logger.info("Test succeeded: " + testName + " (Duration: " + duration + " ms)");
         test.get().pass("Test passed (Duration: " + duration + " ms)");
 
-        // Capture screenshot on success
-        String screenshotPath = captureScreenshot(result.getMethod().getMethodName(), "success");
-        test.get().addScreenCaptureFromPath(screenshotPath);
-
         // Capture and log system logs
         String systemLogs = getSystemLogs();
         test.get().info("System Logs:\n" + systemLogs);

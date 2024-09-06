@@ -136,4 +136,9 @@ public class AppSessionDetailsPage extends PWBasePage {
         return sessionDeatilsPage;
     }
 
+    public AppSessionDetailsPage backbutton() {
+        this.validPage();
+    page.getByLabel("back").click();
+        return sessionDeatilsPage;
+    }
 }

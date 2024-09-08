@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import static org.shikshalokam.uiPageObjects.PWBasePage.PWBrowser;
 import static org.shikshalokam.uiPageObjects.PWBasePage.captureScreenshot;
 
 public class SLCustomListener implements ITestListener, ISuiteListener {
@@ -31,8 +32,7 @@ public class SLCustomListener implements ITestListener, ISuiteListener {
 
         extent = new ExtentReports();
         extent.attachReporter(htmlReporter);
-        extent.setSystemInfo("Browser", "Chrome");
-        extent.setSystemInfo("Browser Version", "92.0");
+        extent.setSystemInfo("Browser", String.valueOf(PWBrowser));
         extent.setSystemInfo("OS", System.getProperty("os.name"));
         extent.setSystemInfo("OS Version", System.getProperty("os.version"));
         extent.setSystemInfo("Java Version", System.getProperty("java.version"));

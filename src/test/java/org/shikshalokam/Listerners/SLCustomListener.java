@@ -8,10 +8,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.*;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
 import static org.shikshalokam.uiPageObjects.PWBasePage.PWBrowser;
 import static org.shikshalokam.uiPageObjects.PWBasePage.captureScreenshot;
 
@@ -75,11 +71,6 @@ public class SLCustomListener implements ITestListener, ISuiteListener {
         String testName = result.getMethod().getMethodName();
         logger.info("Test succeeded: " + testName + " (Duration: " + duration + " ms)");
         test.get().pass("Test passed (Duration: " + duration + " ms)");
-
-        // Capture and log system logs
-        String systemLogs = getSystemLogs();
-        test.get().info("System Logs:\n" + systemLogs);
-
     }
 
     @Override
@@ -99,10 +90,6 @@ public class SLCustomListener implements ITestListener, ISuiteListener {
         // Capture screenshot on failure
         String screenshotPath = captureScreenshot(result.getMethod().getMethodName(), throwable.toString());
         test.get().addScreenCaptureFromPath(screenshotPath);
-
-        // Capture and log system logs
-        String systemLogs = getSystemLogs();
-        test.get().info("System Logs:\n" + systemLogs);
     }
 
     @Override
@@ -110,17 +97,6 @@ public class SLCustomListener implements ITestListener, ISuiteListener {
         String testName = result.getMethod().getMethodName();
         logger.warn("Test skipped: " + testName);
         test.get().skip("Test skipped");
-    }
-
-
-    private String getSystemLogs() {
-        String logFilePath = "logs/app.log";
-        try {
-            return new String(Files.readAllBytes(Paths.get(logFilePath)));
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "Error fetching logs.";
-        }
     }
 
     @Override

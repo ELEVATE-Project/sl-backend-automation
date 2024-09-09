@@ -11,7 +11,7 @@ import static org.shikshalokam.uiPageObjects.PWBasePage.fetchProperty;
 
 public class TestMentorSessionCreation {
 
-    @Test
+    @Test(description = "Tests the creation of a BBB session by a mentor, including logging in, creating, enrolling, and managing the session as both mentor and mentee.")
     public void testMentorSessionBBB() {
         Robot robot = new Robot();
         robot.openApp();
@@ -64,7 +64,7 @@ public class TestMentorSessionCreation {
 
     }
 
-    @Test
+    @Test(description = "Tests the creation and management of a session with mentee count validation, including session creation, enrollment, and updating session details.")
     public void testMentorSessionGmeetMenteeCount() {
         Robot robot = new Robot();
         robot.openApp();

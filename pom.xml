@@ -124,6 +124,13 @@
       <artifactId>google-http-client-jackson2</artifactId>
       <version>1.39.2</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/com.aventstack/extentreports -->
+    <dependency>
+      <groupId>com.aventstack</groupId>
+      <artifactId>extentreports</artifactId>
+      <version>5.1.2</version>
+    </dependency>
+
 
   </dependencies>
 </project>

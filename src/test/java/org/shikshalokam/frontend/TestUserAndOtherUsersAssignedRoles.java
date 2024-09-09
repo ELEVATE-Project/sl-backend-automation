@@ -10,6 +10,8 @@ import static org.shikshalokam.uiPageObjects.PWBasePage.fetchProperty;
 
 @Test
 public class TestUserAndOtherUsersAssignedRoles {
+
+    @Test(description = "Verify the assigned roles for the logged-in user and other users within the application.")
     public void testUserAndOtherUsersAssignedRoles() {
         Robot robot = new Robot();
         robot.openApp();

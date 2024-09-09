@@ -10,7 +10,10 @@ import static org.shikshalokam.uiPageObjects.PWBasePage.fetchProperty;
 
 public class TestBecomeAMentor {
 
-    @Test(dependsOnMethods = {"org.shikshalokam.frontend.TestMenteeSignUp.testSignup"})
+    @Test(
+            description = "Verifies the process of a user requesting to become a mentor, including admin approval for different browser types.",
+            dependsOnMethods = {"org.shikshalokam.frontend.TestMenteeSignUp.testSignup"}
+    )
     public void testBecomeMentor() {
         Robot robot = new Robot();
         robot.openApp();

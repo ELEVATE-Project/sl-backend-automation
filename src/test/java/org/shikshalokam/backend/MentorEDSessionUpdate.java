@@ -80,19 +80,15 @@ public class MentorEDSessionUpdate extends MentorBase {
         loginToMentorED("jubedhashaik029@gmail.com", "PAssword@@123$");
 
         // Define paths to your JSON files
-        String jsonFilePath1 = "src/main/resources/managersession_update_payload1.json";
-        String jsonFilePath2 = "src/main/resources/managersession_update_payload2.json";
-
-        // Fetch session IDs from multiple JSON files
-        List<String> fetchedSessionIdsFromFile1 = updateSessions(jsonFilePath1);
-        List<String> fetchedSessionIdsFromFile2 = updateSessions(jsonFilePath2);
-        // Combine session IDs from both files
+        String[] jsonFilePaths = {"src/main/resources/managersession_update_payload1.json", "src/main/resources/managersession_update_payload2.json"
+        };
+        // Fetch session IDs from multiple JSON files and combine them
         List<String> allFetchedSessionIds = new ArrayList<>();
-        allFetchedSessionIds.addAll(fetchedSessionIdsFromFile1);
-        allFetchedSessionIds.addAll(fetchedSessionIdsFromFile2);
+        for (String jsonFilePath : jsonFilePaths) {
+            allFetchedSessionIds.addAll(updateSessions(jsonFilePath));
+        }
         // Update CSV files with the combined session IDs
         updateCSVWithSessionIds(allFetchedSessionIds, "src/main/resources/bulk_session_edit.csv", "target/bulksession_files/session_edit.csv");
         updateCSVWithSessionIds(allFetchedSessionIds, "src/main/resources/bulk_session_delete.csv", "target/bulksession_files/session_delete.csv");
     }
-
 }

@@ -55,7 +55,7 @@ public class AppProfilePage extends PWBasePage {
     public AppProfilePage submit() {
         this.validPage();
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Submit")).click();
-        page.waitForTimeout(2000);
+        verifyToastMessage("Profile Updated Successfully");
         return profileDetailsPage;
     }
 

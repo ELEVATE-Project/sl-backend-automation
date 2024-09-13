@@ -26,7 +26,8 @@ public class TestCustomEntity {
         UpdateForm.updateForm("adithya@shikshalokam.org", "Welcome@123", object);
     }
 
-    @Test(dependsOnMethods = {"testEditProfileFormWithAddedCustomEntity"})
+    @Test(description = "Removing the custom Entity from Profile and verifying it.",
+            dependsOnMethods = {"testEditProfileFormWithAddedCustomEntity"})
     public void testEditProfileFormWithRemovedCustomEntity() {
         removeEditProfileCustomEnity();
         Robot robot = new Robot();
@@ -40,7 +41,7 @@ public class TestCustomEntity {
         robot.quitAppBrowser();
     }
 
-    @Test
+    @Test(description = "Adding the custom Entity to Profile form and verifying it.")
     public void testEditProfileFormWithAddedCustomEntity() {
         addEditProfileCustomEnity();
         Robot robot = new Robot();
@@ -67,7 +68,8 @@ public class TestCustomEntity {
         UpdateForm.updateForm("adithya@shikshalokam.org", "Welcome@123", object);
     }
 
-    @Test(dependsOnMethods = {"testManagersSessionFormWithAddedCustomEntity"})
+    @Test(description = "Removing the custom Entity from managersSession form and verifying it.",
+            dependsOnMethods = {"testManagersSessionFormWithAddedCustomEntity"})
     public void testManagersSessionFormWithRemovedCustomEntity() {
         removeManagersSessionCustomEnity();
         Robot robot = new Robot();
@@ -82,7 +84,7 @@ public class TestCustomEntity {
         robot.quitAppBrowser();
     }
 
-    @Test
+    @Test(description = "Adding the custom Entity to managersSession form and verifying it.")
     public void testManagersSessionFormWithAddedCustomEntity() {
         addManagersSessionCustomEnity();
         Robot robot = new Robot();
@@ -110,7 +112,8 @@ public class TestCustomEntity {
         UpdateForm.updateForm("adithya@shikshalokam.org", "Welcome@123", object);
     }
 
-    @Test(dependsOnMethods = {"testMentorsSessionFormWithAddedCustomEntity"})
+    @Test(description = "Removing the custom Entity from session form and verifying it.",
+            dependsOnMethods = {"testMentorsSessionFormWithAddedCustomEntity"})
     public void testMentorsSessionFormWithRemovedCustomEntity() {
         removeMentorsSessionCustomEnity();
         Robot robot = new Robot();
@@ -124,7 +127,7 @@ public class TestCustomEntity {
         robot.quitAppBrowser();
     }
 
-    @Test
+    @Test(description = "Adding the custom Entity to session form and verifying it.")
     public void testMentorsSessionFormWithAddedCustomEntity() {
         addMentorsSessionCustomEnity();
         Robot robot = new Robot();

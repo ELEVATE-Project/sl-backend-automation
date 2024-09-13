@@ -70,7 +70,10 @@
 
             <class name="org.shikshalokam.frontend.TestBulkUploadSession">
                 <methods>
+                    <include name="downloadSampleCSV"/>
                     <include name="sessionCreationViaBulkUpload"/>
+                    <include name="sessionEditViaBulkUpload"/>
+                    <include name="sessionDeleteViaBulkUpload"/>
                 </methods>
             </class>
 

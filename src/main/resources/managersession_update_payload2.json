@@ -1,0 +1,22 @@
+{
+  "title": "AutoPrivateSession",
+  "description": "session description",
+  "type": "PRIVATE",
+  "mentor_id": "514",
+  "categories": [
+    "educational_leadership"
+  ],
+  "start_date": "1912138200",
+  "end_date": "1912140600",
+  "image": [],
+  "medium": [
+    "en_in"
+  ],
+  "mentees": [
+    "1446"
+  ],
+  "recommended_for": [
+    "te"
+  ],
+  "time_zone": "Asia/Calcutta"
+}

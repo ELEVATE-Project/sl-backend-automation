@@ -48,6 +48,15 @@ public class AppManageSessionPage extends PWBasePage {
         logger.info(createdsession +" Session created Successfully");
         return manageSessionPage;
     }
+    public AppManageSessionPage verifyDeletedSessions(String deletedSession) {
+        this.validPage();
+        Locator element =page.getByRole(AriaRole.CELL, new Page.GetByRoleOptions().setName(deletedSession)).locator("div");
+        if (element.isVisible()) {
+            throw new AssertionError("Deleted Session '" + deletedSession + "' is unexpectedly visible on the page.");
+        }
+        logger.info(deletedSession + " Session Deleted Successfully");
+        return manageSessionPage;
+    }
     public AppManageSessionPage uploadSessionCreationCsv() {
         this.validPage();
         String currentWorkingDirectory = System.getProperty("user.dir");
@@ -59,4 +68,28 @@ public class AppManageSessionPage extends PWBasePage {
         page.reload();
         return manageSessionPage;
     }
+    public AppManageSessionPage uploadEditedCsv() {
+        this.validPage();
+        String currentWorkingDirectory = System.getProperty("user.dir");
+        Path filePath = Paths.get(currentWorkingDirectory, "target","bulksession_files", "session_edit.csv");
+        logger.info("File Path: " + filePath.toString());
+        // Set the file to upload on the input[type="file"]
+        page.setInputFiles("//input[@type='file']", filePath);
+        verifyToastMessage("Bulk Session Creation CSV Uploaded Successfully");
+        page.reload();
+        return manageSessionPage;
+    }
+    public AppManageSessionPage uploadDeleteCsv() {
+        this.validPage();
+        String currentWorkingDirectory = System.getProperty("user.dir");
+        Path filePath = Paths.get(currentWorkingDirectory, "target","bulksession_files", "session_delete.csv");
+        logger.info("File Path: " + filePath.toString());
+        // Set the file to upload on the input[type="file"]
+        page.setInputFiles("//input[@type='file']", filePath);
+        verifyToastMessage("Bulk Session Creation CSV Uploaded Successfully");
+        page.reload();
+        return manageSessionPage;
+    }
 }
+
+

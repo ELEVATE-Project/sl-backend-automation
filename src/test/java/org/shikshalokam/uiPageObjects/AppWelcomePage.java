@@ -39,6 +39,14 @@ public class AppWelcomePage extends PWBasePage {
         page.getByText("Workspace").click();
         return welcomePage;
     }
+    public AppWelcomePage menu() {
+        this.validPage();
+        if (PWBasePage.PWBrowser == PWBrowser.chromePixel4a || PWBasePage.PWBrowser == PWBrowser.msedgePixel4a) {
+            logger.info(" Pixel 4a interface detected, clicking on menu button.");
+            page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("menu")).click();
+        }
+        return welcomePage;
+    }
 
     public AppWelcomePage verifiedUserAsaMentor() {
         this.validPage();

@@ -34,12 +34,20 @@ public class PWBasePage extends MentorEDBaseTest {
 
 
     public static Boolean headless;
+    public static Boolean recordVideo;
 
     static {
+        // Set default values
+        headless = true;    // Default is headless mode
+        recordVideo = false; // Default is no video recording
 
-        headless = true;
+        // Check the properties file for headless mode
         if (PropertyLoader.PROP_LIST.getProperty("mentor.qa.browser.setHeadless").equals("false")) {
             headless = false;
+        }
+        // Check the properties file for video recording
+        if (PropertyLoader.PROP_LIST.getProperty("mentor.qa.browser.recordVideo").equals("true")) {
+            recordVideo = true;
         }
         initializeBrowser(browserType);
     }
@@ -48,10 +56,22 @@ public class PWBasePage extends MentorEDBaseTest {
     public static void initializeBrowser(String browserType) {
         switch (browserType) {
             case "chromium":
-                logger.info("Using Chromium browser for Test suite ");
-                PWBasePage.PWBrowser = PWBrowser.chromium;
-                browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(headless));
-                browserContext = browser.newContext(new Browser.NewContextOptions().setViewportSize(null));
+                logger.info("Using Chromium browser for Test suite");
+                PWBasePage.PWBrowser = PWBasePage.PWBrowser.chromium;
+                BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions().setHeadless(headless);
+                // Set slowMo if recording is enabled
+                if (recordVideo) {
+                    launchOptions.setSlowMo(1500); // Adjust the delay as needed
+                }
+                // Launch the browser
+                browser = playwright.chromium().launch(launchOptions);
+                // Define context options with viewport size
+                Browser.NewContextOptions contextOptions = new Browser.NewContextOptions().setViewportSize(null);
+                // Set video recording directory if recording is enabled
+                if (recordVideo) {
+                    contextOptions.setRecordVideoDir(Paths.get("target", "videos"));
+                }
+                browserContext = browser.newContext(contextOptions);
                 page = browserContext.newPage();
                 break;
             case "msedge":

@@ -54,11 +54,11 @@ public class TestMentorSessionCreation {
         robot.sees(AppAllPages.sessionDeatilsPage).startSession();
         robot.sees(AppAllPages.sessionDeatilsPage).bbbSessionOptions();
         robot.sees(AppAllPages.sessionDeatilsPage).terminateSession();
-        robot.sees(AppAllPages.sessionDeatilsPage).submitFeedback();
+        robot.sees(AppAllPages.sessionDeatilsPage).submitFeedbackMentor();
         robot.sees(AppAllPages.welcomePage).logOutFromApp();
         robot.sees(AppAllPages.loginPage).loginToApp(fetchProperty("default.mentee.user"),
                 fetchProperty("default.mentee.password"));
-        robot.sees(AppAllPages.sessionDeatilsPage).submitFeedback();
+        robot.sees(AppAllPages.sessionDeatilsPage).submitFeedbackMentee();
         robot.sees(AppAllPages.welcomePage).logOutFromApp();
         robot.quitAppBrowser();
 

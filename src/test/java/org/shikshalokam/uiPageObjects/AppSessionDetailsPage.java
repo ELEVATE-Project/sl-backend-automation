@@ -74,9 +74,22 @@ public class AppSessionDetailsPage extends PWBasePage {
         return sessionDeatilsPage;
     }
 
-    public AppSessionDetailsPage submitFeedback() {
+    public AppSessionDetailsPage submitFeedbackMentor() {
         this.validPage();
         page.locator("app-star-rating svg").nth(4).click();
+        page.locator("app-star-rating svg").nth(5).click();
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Submit Feedback")).click();
+        verifyToastMessage("Feedback submitted successfully.");
+        return sessionDeatilsPage;
+    }
+    public AppSessionDetailsPage submitFeedbackMentee() {
+        this.validPage();
+        page.locator("app-star-rating svg").nth(4).click();
+        page.locator("app-star-rating svg").nth(9).click();
+        page.locator("app-star-rating svg").nth(13).click();
+        page.locator("app-star-rating svg").nth(17).click();
+        page.locator("app-star-rating svg").nth(21).click();
+        page.locator("app-star-rating svg").nth(25).click();
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Submit Feedback")).click();
         verifyToastMessage("Feedback submitted successfully.");
         return sessionDeatilsPage;

@@ -49,7 +49,9 @@ public class AppCreateSessionPage extends PWBasePage {
     public AppCreateSessionPage updateCreatedSessionWithGmeetPlatform() {
         this.validPage();
         page.getByText("2Meeting link").click();
+        page.waitForTimeout(1000);
         page.getByText("BigBlueButton (Default) Google meet Zoom WhatsApp BigBlueButton (Default)").click();
+        page.waitForTimeout(1000);
         page.locator("ion-radio").filter(new Locator.FilterOptions().setHasText("Google meet")).click();
         page.getByPlaceholder("Eg: https://meet.google.com/").click();
         page.getByPlaceholder("Eg: https://meet.google.com/").fill(fetchProperty("gmeetLink"));

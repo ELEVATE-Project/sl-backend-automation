@@ -17,6 +17,7 @@ import java.util.List;
 
 import static org.shikshalokam.backend.MentorEDBaseTest.X_AUTH_TOKEN;
 import static org.shikshalokam.backend.MentorEDBaseTest.loginToMentorED;
+import static org.shikshalokam.uiPageObjects.PWBasePage.fetchProperty;
 
 public class MentorEDSessionUpdate extends MentorBase {
     private static final Logger logger = LogManager.getLogger(MentorEDSessionUpdate.class);
@@ -77,7 +78,8 @@ public class MentorEDSessionUpdate extends MentorBase {
 
     public static void sessionCreationAndFetchId() {
         logger.info("Logging into the application:");
-        loginToMentorED("jubedhashaik029@gmail.com", "PAssword@@123$");
+        loginToMentorED(fetchProperty("defaultorgadmin.user"),
+                fetchProperty("defaultorgadmin.password"));
 
         // Define paths to your JSON files
         String[] jsonFilePaths = {"src/main/resources/managersession_update_payload1.json", "src/main/resources/managersession_update_payload2.json"

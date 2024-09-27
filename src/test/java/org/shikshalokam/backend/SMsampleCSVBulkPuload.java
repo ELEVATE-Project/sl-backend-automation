@@ -13,18 +13,22 @@ import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 
-
 public class SMsampleCSVBulkPuload extends MentorEDBaseTest {
 
     private static final Logger logger = LogManager.getLogger(SMsampleCSVBulkPuload.class);
-    private static String readSignedUrl = "/mentoring/v1/cloud-services/getSignedUrl?fileName=bulk_session_creation_auto.csv";
+    private static String readSignedUrl;
     public static String[] signedUrl = new String[2];
 
     public static File sampleFile;
     public static Response signedURLResponse;
 
-    private static String[] GetSignedUrlDetails() {
+    // Determine environment (QA or Production)
+    private static boolean isQAEnvironment() {
+        String environment = PropertyLoader.PROP_LIST.get("environment").toString();
+        return environment.equalsIgnoreCase("QA");
+    }
 
+    private static String[] GetSignedUrlDetails() {
         logger.info("Started calling the GetSignedUrlDetails:");
         URI endpoint;
         try {
@@ -32,121 +36,126 @@ public class SMsampleCSVBulkPuload extends MentorEDBaseTest {
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
-        Response responce = given().log().all().header("X-auth-token", "bearer " + X_AUTH_TOKEN).when().get(endpoint);
-        signedURLResponse = responce;
-        logger.info("GetSignedUrlDetails    :::" + responce.getBody().asString());
-        if (responce.getStatusCode() == 200) {
-
-            signedUrl[0] = responce.jsonPath().getString("result.signedUrl");
-            signedUrl[1] = responce.jsonPath().getString("result.filePath");
-
-
+        Response response = given().log().all().header("X-auth-token", "bearer " + X_AUTH_TOKEN).when().get(endpoint);
+        signedURLResponse = response;
+        logger.info("GetSignedUrlDetails :::" + response.getBody().asString());
+        if (response.getStatusCode() == 200) {
+            signedUrl[0] = response.jsonPath().getString("result.signedUrl");
+            signedUrl[1] = response.jsonPath().getString("result.filePath");
         } else {
-
-            logger.info("Getting Signed url requestfailed  :" + responce.getBody().asString());
+            logger.info("Getting Signed URL request failed: " + response.getBody().asString());
         }
-
-
         return signedUrl;
     }
 
-
     public static void uploadSampleFileToCloud() {
+        // Set file name and signed URL based on environment
+        String fileName;
+        if (isQAEnvironment()) {
+            fileName = "bulk_session_creation_auto_Qa.csv";
+            readSignedUrl = "/mentoring/v1/cloud-services/getSignedUrl?fileName=" + fileName;
+        } else {
+            fileName = "bulk_session_creation_auto_Prod.csv";
+            readSignedUrl = "/mentoring/v1/cloud-services/getSignedUrl?fileName=" + fileName;
+        }
 
         signedUrl = GetSignedUrlDetails();
-        sampleFile = new File("./src/main/resources/bulk_session_creation_auto.csv");
-        URI signedURI = null;
-        String filePath = null;
-        Map<String, String> stringMap = new HashMap<String, String>();
+        sampleFile = new File("./src/main/resources/" + fileName);
 
-        String GoogleAccessId = null;
-        String Expires = null;
-        String Signature = null;
-        String baseUrl = null;
+        String filePath;
+        Map<String, String> stringMap = new HashMap<>();
 
         try {
             filePath = sampleFile.getCanonicalPath();
-            logger.info("Sample File Path :" + filePath);
-            logger.info("File exists status : " + sampleFile.exists());
-            logger.info("singnedUrl :" + signedUrl[0]);
-            logger.info("File singnedUrl :" + signedUrl[1]);
-
-
+            logger.info("Sample File Path: " + filePath);
+            logger.info("File exists status: " + sampleFile.exists());
+            logger.info("Signed URL: " + signedUrl[0]);
+            logger.info("File signed URL: " + signedUrl[1]);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        try {
+        String GoogleAccessId = null;
+        String Expires = null;
+        String Signature = null;
+        String baseUrl;
 
+        try {
             String[] urlParts = signedUrl[0].split("\\?");
             baseUrl = urlParts[0];
             String query = urlParts.length > 1 ? urlParts[1] : "";
             stringMap = splitQuery(query);
 
+            if (isQAEnvironment()) {
+                // Google Cloud (QA)
+                GoogleAccessId = stringMap.get("GoogleAccessId");
+                Expires = stringMap.get("Expires");
+                Signature = stringMap.get("Signature");
+            } else {
+                // AWS S3 (Production)
+                baseUrl = signedUrl[0]; // Use full URL directly for S3
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        URI signedURI;
+        try {
             signedURI = new URI(baseUrl);
-            logger.info("singnedUrl as string  :" + signedURI.toString());
-
-
-            GoogleAccessId = stringMap.get("GoogleAccessId");
-            Expires = stringMap.get("Expires");
-            Signature = stringMap.get("Signature");
-
-            System.out.println(GoogleAccessId);
-            System.out.println(Expires);
-            System.out.println(Signature);
-
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
 
-        RestAssured.baseURI = "";
-        Response responce = null;
-        responce = RestAssured
-                .given()
-                .urlEncodingEnabled(false)
-                .log().all()
-                .header("Content-Type", "multipart/form-data")
-                .header("Accept-Encoding", "gzip, deflate, br")
-                .header("Accept-Encoding", "gzip, deflate, br")
-                .queryParam("GoogleAccessId", GoogleAccessId)
-                .queryParam("Expires", Expires)
-                .queryParam("Signature", Signature)
-                .body(sampleFile)
-                .when().put(signedURI);
+        // Perform upload based on environment
+        Response response;
+        if (isQAEnvironment()) {
+            // Google Cloud (QA)
+            response = RestAssured
+                    .given()
+                    .urlEncodingEnabled(false)
+                    .log().all()
+                    .header("Content-Type", "multipart/form-data")
+                    .queryParam("GoogleAccessId", GoogleAccessId)
+                    .queryParam("Expires", Expires)
+                    .queryParam("Signature", Signature)
+                    .body(sampleFile)
+                    .when().put(signedURI);
+        } else {
+            // AWS S3 (Production)
+            response = RestAssured
+                    .given()
+                    .urlEncodingEnabled(false)
+                    .log().all()
+                    .header("Content-Type", "multipart/form-data")
+                    .body(sampleFile)
+                    .when().put(signedURI);
+        }
 
-
-        if (responce.getStatusCode() == 200) {
-
-            logger.info(" uploaded the file to Cloud   :" + responce.getStatusCode());
+        // Check response and log accordingly
+        if (response.getStatusCode() == 200) {
+            logger.info("File uploaded successfully. Status Code: " + response.getStatusCode());
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("file_path", signedUrl[1]);
             RestAssured.baseURI = PropertyLoader.PROP_LIST.get("mentor.qa.api.base.url").toString();
-            responce = null;
-            responce = RestAssured
+            response = RestAssured
                     .given()
                     .log().all()
                     .header("X-auth-token", "bearer " + X_AUTH_TOKEN)
-                    .header("Content-Type","application/json")
-                    .when()
+                    .header("Content-Type", "application/json")
                     .body(jsonObject)
                     .post("mentoring/v1/org-admin/uploadSampleCSV");
 
-            if (responce.getStatusCode() == 200) {
-
-                logger.info(" Uploading of sample file completed    :" + responce.getBody().asString());
+            if (response.getStatusCode() == 200) {
+                logger.info("Sample file upload completed: " + response.getBody().asString());
             } else {
-
-                logger.info(" Uploading of sample file failed    :" + responce.getBody().asString());
+                logger.info("Sample file upload failed: " + response.getBody().asString());
             }
-
-
         } else {
-            System.out.println("After the call  : " + signedUrl[0]);
-            logger.info("Unable to upload the file to Cloud   :" + responce.getBody().asString());
+            logger.info("Failed to upload the file. Status code: " + response.getStatusCode());
+            logger.info(response.asPrettyString());
         }
-
     }
-
 
     public static Map<String, String> splitQuery(String query) {
         Map<String, String> queryPairs = new HashMap<>();
@@ -159,6 +168,4 @@ public class SMsampleCSVBulkPuload extends MentorEDBaseTest {
         }
         return queryPairs;
     }
-
-
 }

@@ -56,6 +56,7 @@ public class AppWelcomePage extends PWBasePage {
 
     public AppWelcomePage logOutFromApp() {
         this.validPage();
+        page.waitForTimeout(1000);
         if (PWBasePage.PWBrowser == PWBrowser.chromePixel4a || PWBasePage.PWBrowser == PWBrowser.msedgePixel4a) {
             logger.info(" Pixel 4a interface detected, clicking on menu button.");
             page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("menu")).click();

@@ -17,13 +17,15 @@ public class TestCustomEntity {
     public void removeEditProfileCustomEnity() {
         JSONObject object = ReadForm.readForm(fetchProperty("mentor.qa.admin.login.user"),
                 fetchProperty("mentor.qa.admin.login.password"), "editProfile", "editProfileForm", "college", false);
-        UpdateForm.updateForm("adithya@shikshalokam.org", "Welcome@123", object);
+        UpdateForm.updateForm(fetchProperty("mentor.qa.admin.login.user"),
+                fetchProperty("mentor.qa.admin.login.password"), object);
     }
 
     public void addEditProfileCustomEnity() {
         JSONObject object = ReadForm.readForm(fetchProperty("mentor.qa.admin.login.user"),
                 fetchProperty("mentor.qa.admin.login.password"), "editProfile", "editProfileForm", "college", true);
-        UpdateForm.updateForm("adithya@shikshalokam.org", "Welcome@123", object);
+        UpdateForm.updateForm(fetchProperty("mentor.qa.admin.login.user"),
+                fetchProperty("mentor.qa.admin.login.password"), object);
     }
 
     @Test(description = "Removing the custom Entity from Profile and verifying it.",
@@ -58,14 +60,16 @@ public class TestCustomEntity {
     //-------------------ManagersSessionForm----------------------------//
     public void removeManagersSessionCustomEnity() {
         JSONObject object = ReadForm.readForm(fetchProperty("mentor.qa.admin.login.user"),
-                fetchProperty("mentor.qa.admin.login.password"), "managersSession", "managersSessionForm", "Location", false);
-        UpdateForm.updateForm("adithya@shikshalokam.org", "Welcome@123", object);
+                fetchProperty("mentor.qa.admin.login.password"), "managersSession", "managersSessionForm", "location", false);
+        UpdateForm.updateForm(fetchProperty("mentor.qa.admin.login.user"),
+                fetchProperty("mentor.qa.admin.login.password"), object);
     }
 
     public void addManagersSessionCustomEnity() {
         JSONObject object = ReadForm.readForm(fetchProperty("mentor.qa.admin.login.user"),
-                fetchProperty("mentor.qa.admin.login.password"), "managersSession", "managersSessionForm", "Location", true);
-        UpdateForm.updateForm("adithya@shikshalokam.org", "Welcome@123", object);
+                fetchProperty("mentor.qa.admin.login.password"), "managersSession", "managersSessionForm", "location", true);
+        UpdateForm.updateForm(fetchProperty("mentor.qa.admin.login.user"),
+                fetchProperty("mentor.qa.admin.login.password"), object);
     }
 
     @Test(description = "Removing the custom Entity from managersSession form and verifying it.",
@@ -79,7 +83,7 @@ public class TestCustomEntity {
         robot.sees(AppAllPages.welcomePage).workspace();
         robot.sees(AppAllPages.workspacePage).manageSession();
         robot.sees(AppAllPages.welcomePage).createSession();
-        robot.sees(AppAllPages.profileDetailsPage).verifyRemovedCustomEntity("Location");
+        robot.sees(AppAllPages.profileDetailsPage).verifyRemovedCustomEntity("location");
         robot.sees(AppAllPages.welcomePage).logOutFromApp();
         robot.quitAppBrowser();
     }
@@ -94,7 +98,7 @@ public class TestCustomEntity {
         robot.sees(AppAllPages.welcomePage).workspace();
         robot.sees(AppAllPages.workspacePage).manageSession();
         robot.sees(AppAllPages.welcomePage).createSession();
-        robot.sees(AppAllPages.profileDetailsPage).verifyAddedCustomEntity("Location");
+        robot.sees(AppAllPages.profileDetailsPage).verifyAddedCustomEntity("location");
         robot.sees(AppAllPages.welcomePage).logOutFromApp();
         robot.quitAppBrowser();
     }
@@ -103,13 +107,15 @@ public class TestCustomEntity {
     public void removeMentorsSessionCustomEnity() {
         JSONObject object = ReadForm.readForm(fetchProperty("mentor.qa.admin.login.user"),
                 fetchProperty("mentor.qa.admin.login.password"), "session", "sessionForm", "grade", false);
-        UpdateForm.updateForm("adithya@shikshalokam.org", "Welcome@123", object);
+        UpdateForm.updateForm(fetchProperty("mentor.qa.admin.login.user"),
+                fetchProperty("mentor.qa.admin.login.password"), object);
     }
 
     public void addMentorsSessionCustomEnity() {
         JSONObject object = ReadForm.readForm(fetchProperty("mentor.qa.admin.login.user"),
                 fetchProperty("mentor.qa.admin.login.password"), "session", "sessionForm", "grade", true);
-        UpdateForm.updateForm("adithya@shikshalokam.org", "Welcome@123", object);
+        UpdateForm.updateForm(fetchProperty("mentor.qa.admin.login.user"),
+                fetchProperty("mentor.qa.admin.login.password"), object);
     }
 
     @Test(description = "Removing the custom Entity from session form and verifying it.",

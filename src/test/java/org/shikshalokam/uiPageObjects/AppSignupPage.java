@@ -35,7 +35,7 @@ public class AppSignupPage extends PWBasePage {
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Generate OTP")).click();
         verifyToastMessage("OTP has been sent to your registered email ID. Please enter the otp to complete the registration process.");
         page.waitForTimeout(5000);
-        String script = "navigator.clipboard.writeText('" + GmailAPI.getOTP("Your OTP to sign-up on MentorED") + "')";
+        String script = "navigator.clipboard.writeText('" + GmailAPI.getOTP() + "')";
         logger.info(script);
         page.locator("input.otp-input").nth(0).click();
         page.evaluate(script);

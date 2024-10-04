@@ -1,4 +1,5 @@
 package org.shikshalokam.backend;
+
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
@@ -17,6 +18,9 @@ import com.google.api.services.gmail.model.Thread;
 import io.restassured.path.json.JsonPath;
 
 
+import javax.mail.Folder;
+import javax.mail.Session;
+import javax.mail.Store;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
@@ -112,8 +116,8 @@ public class GmailAPI {
             Message message = getMessage(service, USER_ID, messages, 0);
             JsonPath jp = new JsonPath(message.toString());
             String subject = jp.getString("payload.headers.find { it.name == 'Subject' }.value");
-           //String body = new String(Base64.getDecoder().decode(jp.getString("payload.parts[0].body.data")));
-            String body=message.get("snippet").toString();
+            //String body = new String(Base64.getDecoder().decode(jp.getString("payload.parts[0].body.data")));
+            String body = message.get("snippet").toString();
             //String body =jp.getString("payload.parts[1].body.data");
             String link = null;
             String[] arr;
@@ -141,6 +145,40 @@ public class GmailAPI {
         String gmailData1 = gmailData.get("body");
         return extractNumbers(gmailData1).get(0);
 
+
+    }
+
+    public static String getOTP() {
+
+        String username = "slautoraj@gmail.com"; // Replace with your Gmail address
+        String appPassword = "eocqxuqoeglncrbs"; // Replace with your generated app password
+        // IMAP properties
+        Properties properties = new Properties();
+        properties.put("mail.store.protocol", "imaps");
+        properties.put("mail.imap.host", "imap.gmail.com");
+        properties.put("mail.imap.port", "993");
+        properties.put("mail.imap.ssl.enable", "false");
+
+        Session session = Session.getDefaultInstance(properties);
+
+        try {
+            // Connect to Gmail's IMAP server
+            Store store = session.getStore("imaps");
+            store.connect("imap.gmail.com", username, appPassword);
+
+            // Open INBOX folder
+            Folder inbox = store.getFolder("INBOX");
+            inbox.open(Folder.READ_ONLY);
+            String body = (String) inbox.getMessage(inbox.getMessageCount()).getContent();
+            String[] split = body.split("<strong>");
+
+            inbox.close(false);
+            store.close();
+            return extractNumbers(split[1]).get(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
 
 
     }
@@ -235,5 +273,6 @@ public class GmailAPI {
         List<Message> messages = listMessagesMatchingQuery(service, USER_ID, query);
         service.users().messages().delete(USER_ID, messages.get(0).getId()).execute();
     }
+
 
 }

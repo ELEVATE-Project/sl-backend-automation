@@ -18,6 +18,7 @@ import com.google.api.services.gmail.model.Thread;
 import io.restassured.path.json.JsonPath;
 
 
+import javax.mail.Flags;
 import javax.mail.Folder;
 import javax.mail.Session;
 import javax.mail.Store;
@@ -178,6 +179,42 @@ public class GmailAPI {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        }
+
+
+    }
+
+    public static void deleteEmails() {
+
+        String username = "slautoraj@gmail.com"; // Replace with your Gmail address
+        String appPassword = "eocqxuqoeglncrbs"; // Replace with your generated app password
+        // IMAP properties
+        Properties properties = new Properties();
+        properties.put("mail.store.protocol", "imaps");
+        properties.put("mail.imap.host", "imap.gmail.com");
+        properties.put("mail.imap.port", "993");
+        properties.put("mail.imap.ssl.enable", "false");
+
+        Session session = Session.getDefaultInstance(properties);
+
+        try {
+            // Connect to Gmail's IMAP server
+            Store store = session.getStore("imaps");
+            store.connect("imap.gmail.com", username, appPassword);
+
+            // Open INBOX folder
+            Folder inbox = store.getFolder("INBOX");
+            inbox.open(Folder.READ_WRITE);
+            inbox.setFlags(inbox.getMessages(), new Flags(Flags.Flag.DELETED), true);
+            inbox.expunge();
+
+
+            inbox.close(false);
+            store.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
         }
 
 

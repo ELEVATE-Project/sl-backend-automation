@@ -44,6 +44,27 @@ public class MentorEDBaseTest extends MentorBase {
         }
     }
 
+    //SCP login
+    public static void loginToScp(String loginId, String password) {
+
+        try {
+
+            RestAssured.baseURI = PropertyLoader.PROP_LIST.get("scp.qa.api.base.url").toString();
+            Response responce = given().contentType("application/x-www-form-urlencoded; charset=utf-8")
+                    .params("email", loginId, "password", password)
+                    .post(new URI(PropertyLoader.PROP_LIST.get("scp.login.endpointasuser").toString()));
+            if (responce.getStatusCode() != 200) {
+                logger.info("Login to the application failed ");
+            } else {
+
+                X_AUTH_TOKEN = responce.body().jsonPath().get("result.access_token");
+                User_ID = responce.body().jsonPath().get("result.user.id").toString();
+            }
+        } catch (Exception e) {
+            logger.info(e.getMessage());
+            e.printStackTrace();
+        }
+    }
 
     //deprecated
     public void deleteMenteeByGivenName(String name) {

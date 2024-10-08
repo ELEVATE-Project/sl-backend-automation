@@ -1,5 +1,6 @@
 package org.shikshalokam.frontend;
 
+import org.shikshalokam.backend.MentorEDBaseTest;
 import org.shikshalokam.uiPageObjects.AppAllPages;
 import org.shikshalokam.uiPageObjects.Robot;
 import org.testng.annotations.Test;
@@ -16,5 +17,9 @@ public class SampleUITest {
                 fetchProperty("mentor.qa.admin.login.password")).logOutFromApp();
         robot.quitAppBrowser();
     }
+    @Test(description = "Verifies the UI functionality of logging in and logging out from the app as an user.")
+    public void testUISCP() {
 
+        MentorEDBaseTest.loginToScp("sl.scp.userascontentcreator","sl.scp.passwordforcontentcreator");
+    }
 }

@@ -12,12 +12,6 @@
                 </methods>
             </class>
 
-            <class name="org.shikshalokam.frontend.scp. TestSample">
-                <methods>
-                    <include name="testUI"/>
-                </methods>
-            </class>
-
             <class name="org.shikshalokam.frontend.TestMenteeSignUp">
                 <methods>
                     <include name="testSignup"/>

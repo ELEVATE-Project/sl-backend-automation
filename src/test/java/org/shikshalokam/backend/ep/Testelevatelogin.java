@@ -7,6 +7,6 @@ public class Testelevatelogin extends ElevateProjectBaseTest{
     @Test
     public void log(){
 
-        logintoElevate("manju@guerrillamail.info","Password@123");
+        logintoElevate("smile@guerrillamail.info","Password@1234");
     }
 }

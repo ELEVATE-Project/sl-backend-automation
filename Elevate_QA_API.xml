@@ -1,0 +1,19 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="SanitySuite">
+
+    <test name="Test">
+        <classes>
+
+            <class name="org.shikshalokam.backend.ep.TestElevateLogin">
+                <methods>
+                    <include name="testLoginWithValidCredentials"/>
+                    <include name="testLoginWithInvalidCredentials"/>
+                    <include name="testLoginWithEmptyFields"/>
+                </methods>
+            </class>
+
+        </classes>
+    </test> <!-- Test -->
+</suite> <!-- Suite -->
+
+

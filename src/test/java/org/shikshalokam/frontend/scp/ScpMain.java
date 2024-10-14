@@ -4,6 +4,7 @@ import org.shikshalokam.backend.scp.SelfCreationPortalBaseTest;
 import org.testng.annotations.Test;
 
 public class ScpMain {
+    //Login for SCP
     @Test(description = "Verifies the UI functionality of logging in and logging out from the app as an user.")
     public void testUISCP() {
 

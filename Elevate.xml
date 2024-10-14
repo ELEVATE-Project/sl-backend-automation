@@ -1,0 +1,17 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Elevate Suite">
+
+    <!--  <listeners>
+         <listener class-name="org.example.MyTestListener"/>
+     </listeners>-->
+    <test verbose="2" preserve-order="false" name="Elevate API Validations">
+
+        <classes>
+            <class name="org.shikshalokam.backend.ep.TestElevateLogin">
+            </class>
+
+        </classes>
+    </test> <!-- Test -->
+</suite> <!-- Suite -->
+
+

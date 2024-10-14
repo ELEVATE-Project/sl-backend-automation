@@ -29,3 +29,5 @@ sl.scp.userascontentcreator=content_creator@sharklasers.com
 sl.scp.passwordforcontentcreator=Admin@1234
 sl.scp.userasreviewer=subash_reviewer@yopmail.com
 sl.scp.passwordforreviewer=Password@123
+sl.scp.invalidCreds=reviewer@yopmail.com
+sl.scp.invalidCredsPassword=Admin@1234

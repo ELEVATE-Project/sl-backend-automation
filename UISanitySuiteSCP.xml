@@ -1,14 +1,14 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="SanitySuite">
+<suite name="SanitySuiteForScp">
     <listeners>
         <listener class-name="org.shikshalokam.Listerners.SLCustomListener"/>
     </listeners>
-    <test name="Test">
+    <test name="Scp">
         <classes>
 
             <class name="org.shikshalokam.frontend.scp.ScpMain">
                 <methods>
-                    <include name="testUI"/>
+                    <include name="ScpMain"/>
                 </methods>
             </class>
 

@@ -16,12 +16,13 @@ public class ElevateProjectBaseTest extends MentorBase {
     static final Logger logger = LogManager.getLogger(ElevateProjectBaseTest.class);
     public static String X_AUTH_TOKEN = null;
     public static Response response = null;
+    public static String User_ID = null;
 
     // method to login with required parameters
     public static Response loginToElevate(String email, String Password) {
-        RestAssured.baseURI = PropertyLoader.PROP_LIST.getProperty("Elevate.qa.api.base.url");
+        RestAssured.baseURI = PropertyLoader.PROP_LIST.getProperty("elevate.qa.api.base.url");
         try {
-            response = given().contentType("application/x-www-form-urlencoded; charset=utf-8").params("email", email, "password", Password).post(new URI(PropertyLoader.PROP_LIST.getProperty("Elevate.login.endpoint")));
+            response = given().contentType("application/x-www-form-urlencoded; charset=utf-8").params("email", email, "password", Password).post(new URI(PropertyLoader.PROP_LIST.getProperty("elevate.login.endpoint")));
             if (response == null) {
                 logger.info("NO response received login to the elevate is failed hence terminating");
                 System.exit(-1);

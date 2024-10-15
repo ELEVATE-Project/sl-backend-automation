@@ -1,16 +1,29 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="SanitySuiteForScp">
+<suite name="ScpApitesting">
     <listeners>
         <listener class-name="org.shikshalokam.Listerners.SLCustomListener"/>
     </listeners>
-    <test name="Scp">
+    <test name="ScpSanity">
         <classes>
 
             <class name="org.shikshalokam.frontend.scp.TestScpLoginAPI">
                 <methods>
-                    <include name="ScpMain"/>
+                    <include name="successfulLoginScp"/>
                 </methods>
             </class>
+
+            <class name="org.shikshalokam.frontend.scp.TestScpLoginAPI">
+                <methods>
+                    <include name="invalidLoginScp"/>
+                </methods>
+            </class>
+
+            <class name="org.shikshalokam.frontend.scp.TestScpLoginAPI">
+                <methods>
+                    <include name="emptyFieldAsUserNameLoginScp"/>
+                </methods>
+            </class>
+
 
         </classes>
     </test> <!-- Test -->

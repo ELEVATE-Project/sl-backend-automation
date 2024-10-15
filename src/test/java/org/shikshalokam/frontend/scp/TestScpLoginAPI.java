@@ -16,7 +16,7 @@ public class TestScpLoginAPI extends SelfCreationPortalBaseTest {
     //Login for SCP
     @Test(description = "Verifies the functionality of logging in as an user.")
     public void successfulLoginScp() {
-        response = SelfCreationPortalBaseTest.loginToScp(PropertyLoader.PROP_LIST.getProperty("sl.scp.userascontentcreator"), PropertyLoader.PROP_LIST.getProperty("sl.scp.passwordforcontentcreator"));
+        response = SelfCreationPortalBaseTest.loginToScp(PropertyLoader.PROP_LIST.getProperty("scp.qa.admin.login.user"), PropertyLoader.PROP_LIST.getProperty("scp.qa.admin.login.password"));
         //Status code 200
         Assert.assertEquals(response.getStatusCode(), 200, "User logged in successfully.");
 

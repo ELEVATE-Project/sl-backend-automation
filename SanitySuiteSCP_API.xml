@@ -6,7 +6,7 @@
     <test name="Scp">
         <classes>
 
-            <class name="org.shikshalokam.frontend.scp.ScpMain">
+            <class name="org.shikshalokam.frontend.scp.TestScpLoginAPI">
                 <methods>
                     <include name="ScpMain"/>
                 </methods>

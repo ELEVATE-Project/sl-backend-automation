@@ -1,9 +1,9 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="ScpApitesting">
+<suite name="ScpApiTestSuite">
     <listeners>
         <listener class-name="org.shikshalokam.Listerners.SLCustomListener"/>
     </listeners>
-    <test name="ScpSanity">
+    <test name="ScpSanityTests">
         <classes>
 
             <class name="org.shikshalokam.frontend.scp.TestScpLoginAPI">
@@ -20,7 +20,7 @@
 
             <class name="org.shikshalokam.frontend.scp.TestScpLoginAPI">
                 <methods>
-                    <include name="emptyFieldAsUserNameLoginScp"/>
+                    <include name="checkEmptyFieldsForLoginCredentials"/>
                 </methods>
             </class>
 

@@ -41,7 +41,7 @@ public class TestScpLoginAPI extends SelfCreationPortalBaseTest {
 
     //Login with empty login fields
     @Test(description = "Verifies the functionality of user entered password but not email")
-    public void emptyFieldAsUserNameLoginScp() {
+    public void checkEmptyFieldsForLoginCredentials() {
         response = SelfCreationPortalBaseTest.loginToScp(PropertyLoader.PROP_LIST.getProperty("sl.scp.invalidCreds"), PropertyLoader.PROP_LIST.getProperty(""));
         //Status code 422
         Assert.assertEquals(response.getStatusCode(), 422, "Entered Email/Password is empty.");

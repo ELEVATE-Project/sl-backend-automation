@@ -39,12 +39,9 @@ public class TestMenteeReport extends MentorEDBaseTest {
         logger.info("Response Body:\n" + responce.asPrettyString());
         assertEquals(responce.getStatusCode(), 200, "Status code failed for fetching Mentee report");
         int totalSessionsEnrolled = responce.getBody().jsonPath().getInt("result.total_session_enrolled");
-        System.out.println(responce.getBody().jsonPath().getInt("result.total_session_attended"));
         int totalSessionsAttended = responce.getBody().jsonPath().getInt("result.total_session_attended");
         assertEquals(totalSessionsEnrolled, 2, "Total sessions enrolled not valid");
         assertEquals(totalSessionsAttended, 0, "Total sessions attended not valid");
-//        assertEquals(totalSessionsEnrolled, 2, "Total sessions enrolled not valid");
-//        assertEquals(totalSessionsAttended, 1, "Total sessions attended not valid");
         logger.info("Ended calling the get Mentee Reports: with all the assertions");
     }
 

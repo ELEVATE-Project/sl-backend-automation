@@ -1,0 +1,2 @@
+name,registryname,isObservable,toBeMappedToParentEntities,immediateChildrenEntityType
+test auto 10,locationRegistry,true,true,school

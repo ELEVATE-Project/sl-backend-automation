@@ -3,15 +3,25 @@
 
     <test name="Test">
         <classes>
+        <class name="org.shikshalokam.backend.ep.TestElevateLogin">
+            <methods>
+                <include name="testLoginWithValidCredentials"/>
+                <include name="testLoginWithInvalidCredentials"/>
+                <include name="testLoginWithEmptyFields"/>
+            </methods>
+        </class>
 
-            <class name="org.shikshalokam.backend.ep.TestElevateLogin">
-                <methods>
-                    <include name="testLoginWithValidCredentials"/>
-                    <include name="testLoginWithInvalidCredentials"/>
-                    <include name="testLoginWithEmptyFields"/>
-                </methods>
-            </class>
+        <class name="org.shikshalokam.backend.ep.TestElevateBulkUploadEntityTypeCreate">
+            <methods>
+                <include name="testValidCsv"/>
+            </methods>
+        </class>
 
+        <class name="org.shikshalokam.backend.ep.TestElevateBulkUploadEntityTypeUpdate">
+            <methods>
+                <include name="testValidCsv"/>
+            </methods>
+        </class>
         </classes>
     </test> <!-- Test -->
 </suite> <!-- Suite -->

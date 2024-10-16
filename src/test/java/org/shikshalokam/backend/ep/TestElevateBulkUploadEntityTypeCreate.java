@@ -20,7 +20,6 @@ public class TestElevateBulkUploadEntityTypeCreate extends ElevateProjectBaseTes
         Response response = TestElevateBulkUploadEntityTypeCreate.testUploadCsvFile("src/main/resources/config/bulk_upload_entity_type_create_ElevateProject.csv", "elevate.qa.bulkenitytype.create.endpoint");
         int Statuscode = response.getStatusCode();
         Assert.assertEquals(Statuscode, 200);
-        //Assert.assertEquals(response.jsonPath().getString("SUCCESS"), "SUCCESS");
         logger.info("Validations related to valid CSV bulk upload entity file is verified");
     }
 
@@ -32,7 +31,6 @@ public class TestElevateBulkUploadEntityTypeCreate extends ElevateProjectBaseTes
 //        Response response = TestElevateBulkUploadEntityCreate.testUploadCsvFile("src/main/resources/bulk_upload_entity_type_create_ElevateProject.csv", "elevate.qa.bulkenitytype.create.endpoint");
 //        int Statuscode = response.getStatusCode();
 //        Assert.assertEquals(Statuscode, 400);
-//        //Assert.assertEquals(response.jsonPath().getString("status"), "FAILURE");
 //        logger.info("Validations related to Invalid CSV bulk upload entity file is verified");
 //    }
 

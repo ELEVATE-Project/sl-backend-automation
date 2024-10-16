@@ -1,2 +1,2 @@
 name,registryname,isObservable,toBeMappedToParentEntities,immediateChildrenEntityType,_SYSTEM_ID
-test auto 10,locationRegistry,true,true,"[""school"",”collage”]",670fc36d46719d77a3fb0ae6
+test auto 11,locationRegistry,true,true,"[""school"",”collage”]",670fc36d46719d77a3fb0ae6

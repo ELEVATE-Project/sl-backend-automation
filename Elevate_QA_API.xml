@@ -17,7 +17,14 @@
                     <include name="testUserRoleCreateWithValidPayload"/>
                     <include name="testUserRoleCreateWithInvalidPayload"/>
                     <include name="testUserRoleCreateWithEmptyFields"/>
-                    <include name="createUserRoleExtension"/>
+                </methods>
+            </class>
+
+            <class name="org.shikshalokam.backend.ep.TestUserRoleExtensionFind">
+                <methods>
+                    <include name="testUserRoleFindWithValidPayload"/>
+                    <include name="testUserRoleFindWithInvalidPayload"/>
+                    <include name="testUserRoleFindWithEmptyFields"/>
                 </methods>
             </class>
         </classes>

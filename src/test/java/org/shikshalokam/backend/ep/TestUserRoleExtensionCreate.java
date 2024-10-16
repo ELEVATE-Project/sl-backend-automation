@@ -10,40 +10,45 @@ import org.testng.annotations.Test;
 
 import java.net.URI;
 
-/*
-Validating the User Role Extension Scenarios in this below class
- */
+// Validating user role extension create scenarios
 public class TestUserRoleExtensionCreate extends ElevateProjectBaseTest {
     static final Logger logger = LogManager.getLogger(TestUserRoleExtensionCreate.class);
-    public static String USER_ROLE_CREATE_ENDPOINT = PropertyLoader.PROP_LIST.getProperty("elevate.createuserroleext.endpoint");
+    private String USER_ROLE_CREATE_ENDPOINT = PropertyLoader.PROP_LIST.getProperty("elevate.createuserroleext.endpoint");
     public static String BASE_URL = PropertyLoader.PROP_LIST.getProperty("elevate.qa.api.base.url");
-    public static String INTERNAL_ACCESS_TOKEN = "Fqn0m0HQ0gXydRtBCg5l";
+    public static String INTERNAL_ACCESS_TOKEN = PropertyLoader.PROP_LIST.getProperty("elevate.internalaccesstoken");
 
     @Test(description = "Validating user role extension creation with valid payload")
     public void testUserRoleCreateWithValidPayload() {
         ElevateProjectBaseTest.loginToElevate(PropertyLoader.PROP_LIST.getProperty("elevate.login.contentcreator"), PropertyLoader.PROP_LIST.getProperty("elevate.login.contentcreator.password"));
-        String validPayload = "{\"userRoleId\": \"88688\", " +
-                "\"title\": \"QAA\", " +
+        String validPayload = "{\"userRoleId\": \"114\", " +
+                "\"title\": \"HTrTTe\", " +
                 "\"entityTypes\": [{\"entityType\": \"state\", " +
                 "\"entityTypeId\": \"6672ce0fc05aa58f89ba12f1\"}]}";
 
         // Taking the response from the user role creation API using method calling
-        ElevateProjectBaseTest.response = createUserRoleExtension(validPayload);
-        ElevateProjectBaseTest.response.prettyPrint();
-        Assert.assertEquals(ElevateProjectBaseTest.response.getStatusCode(), 200, "User role successfully created.");
-        Assert.assertEquals(ElevateProjectBaseTest.response.jsonPath().getString("message"), "USER_ROLE_INFORMATION_CREATED");
-        // Logging success
-        logger.info("User role extension creation with valid payload is verified");
+        Response response = createUserRoleExtension(validPayload);
+        if (response != null) {
+            response.prettyPrint();
+            Assert.assertEquals(response.getStatusCode(), 200, "User role successfully created.");
+            Assert.assertEquals(response.jsonPath().getString("message"), "USER_ROLE_INFORMATION_CREATED");
+            String userId = response.jsonPath().getString("result._id");
+            System.out.println("result._id: " + userId);
+            // Logging success
+            logger.info("User role extension creation with valid payload is verified");
+        } else {
+            // Fail the test if the response is null
+            Assert.fail("Response is null, user role extension creation failed.");
+        }
     }
 
     @Test(description = "Validating user role extension creation with invalid payload")
     public void testUserRoleCreateWithInvalidPayload() {
         ElevateProjectBaseTest.loginToElevate("manju@guerrillamail.info", "Password@123");
-        String invalidPayload = "{ \"userRoleId\": \" @#$% \"," +
-                " \"title\": \"  \"," +
+        String invalidPayload = "{ \"userRoleId\": \" $#@ \"," +
+                " \"title\": \"  RRR6RR\"," +
                 " \"entityTypes\": [ { " +
-                "\"entityType\": \"QA\", " +
-                "\"entityTypeId\": \"6673131ec05aa58f89ba12fa\" } ] }";
+                "\"entityType\": \"sta\", " +
+                "\"entityTypeId\": \"6672ce0fc05aa58f89ba12f1\" } ] }";
         // Invalid entityTypeId
         ElevateProjectBaseTest.response = createUserRoleExtension(invalidPayload);
         ElevateProjectBaseTest.response.prettyPrint();
@@ -60,7 +65,6 @@ public class TestUserRoleExtensionCreate extends ElevateProjectBaseTest {
         String emptyPayload = "{}"; // Empty payload
         ElevateProjectBaseTest.response = createUserRoleExtension(emptyPayload);
         ElevateProjectBaseTest.response.prettyPrint();
-
         Assert.assertEquals(ElevateProjectBaseTest.response.getStatusCode(), 400, "Payload with empty fields failed as expected.");
         String message = ElevateProjectBaseTest.response.jsonPath().getString("message[0]");
         Assert.assertNotNull(message, "Error message is present");
@@ -69,7 +73,7 @@ public class TestUserRoleExtensionCreate extends ElevateProjectBaseTest {
     }
 
     // Helper method to create user role extension
-    public Response createUserRoleExtension(String payload) {
+    private Response createUserRoleExtension(String payload) {
         String url = BASE_URL + USER_ROLE_CREATE_ENDPOINT;
         try {
             logger.info("Request payload: " + payload); // Log request details

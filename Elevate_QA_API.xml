@@ -11,6 +11,12 @@
                     <include name="testLoginWithEmptyFields"/>
                 </methods>
             </class>
+            <class name="org.shikshalokam.backend.ep.TestCreateSingleEntityType">
+                <methods>
+                    <include name="testCreateValidEntityType"/>
+                    <include name="testCreateInvalidEntityType"/>
+                </methods>
+            </class>
 
         </classes>
     </test> <!-- Test -->

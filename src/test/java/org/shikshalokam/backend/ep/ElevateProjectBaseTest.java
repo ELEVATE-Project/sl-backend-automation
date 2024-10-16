@@ -16,9 +16,8 @@ public class ElevateProjectBaseTest extends MentorBase {
     static final Logger logger = LogManager.getLogger(ElevateProjectBaseTest.class);
     public static String X_AUTH_TOKEN = null;
     public static Response response = null;
-    public static String User_ID = null;
     public static String internalAccessToken = "Fqn0m0HQ0gXydRtBCg5l";
-    
+
     // method to login with required parameters
     public static Response loginToElevate(String email, String Password) {
         RestAssured.baseURI = PropertyLoader.PROP_LIST.getProperty("elevate.qa.api.base.url");

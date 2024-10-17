@@ -17,6 +17,8 @@ public class ElevateProjectBaseTest extends MentorBase {
     public static String X_AUTH_TOKEN = null;
     public static Response response = null;
     public static String User_ID = null;
+    public static String BASE_URL = PropertyLoader.PROP_LIST.getProperty("elevate.qa.api.base.url");
+    public static String INTERNAL_ACCESS_TOKEN = PropertyLoader.PROP_LIST.getProperty("elevate.internalaccesstoken");
 
     // method to login with required parameters
     public static Response loginToElevate(String email, String Password) {

@@ -14,9 +14,9 @@
 
             <class name="org.shikshalokam.backend.ep.TestUserRoleExtensionCreate">
                 <methods>
-                    <include name="testUserRoleCreateWithValidPayload"/>
-                    <include name="testUserRoleCreateWithInvalidPayload"/>
-                    <include name="testUserRoleCreateWithEmptyFields"/>
+                    <include name="testUserRoleExtensionCreateWithValidPayload"/>
+                    <include name="testUserRoleExtensionCreateWithInvalidPayload"/>
+                    <include name="testUserRoleExtensionCreateWithEmptyFields"/>
                 </methods>
             </class>
 

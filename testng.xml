@@ -29,7 +29,14 @@
                     <include name="testMentoringQuestoinsRead"/>
                 </methods>
             </class>
-
+            <class name="org.shikshalokam.backend.TestCRUDUserRoles">
+                <methods>
+                    <include name="testCreateUserRoles"/>
+                    <include name="testCreateUserRoles_MissingRequiredFields"/>
+                    <include name="testUpdateUserRoles"/>
+                    <include name="testUpdateUserRoles_MissingRequiredFields"/>
+                </methods>
+            </class>
         </classes>
 
     </test>

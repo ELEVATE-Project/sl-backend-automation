@@ -17,22 +17,31 @@ import static org.shikshalokam.backend.PropertyLoader.PROP_LIST;
 
 public class SelfCreationPortalCreateNewPermission extends SelfCreationPortalBaseTest {
     private static final Logger logger = LogManager.getLogger(SelfCreationPortalCreateNewPermission.class);
-    public static String BASE_URL = PropertyLoader.PROP_LIST.getProperty("scp.qa.api.base.url");
     public static URI createPermissionEndpoint;
-    public static Response response = null;
+    public static String internalAccessToken;
 
     @BeforeTest
     public void init() {
-        logger.info("Logging into the application :");
+        logger.info("Logging into the application:");
+
+        // Make login request to retrieve the token
+
         loginToScp(PROP_LIST.get("scp.qa.admin.login.user").toString(), PROP_LIST.get("scp.qa.admin.login.password").toString());
+
+        // Extract access token from the response
+        internalAccessToken = response.body().jsonPath().get("result.access_token");
+
+        // Log the extracted token
+        logger.info("Internal Access Token: " + internalAccessToken);
+        logger.info(response.prettyPrint());
     }
 
     @Test(description = "Verifies the functionality of creating new user's permission.")
     public void testCreateNewPermission() {
-        logger.info("Started calling the CreatePermission:");
+        logger.info("Started calling the CreatePermission API:");
         try {
             RestAssured.baseURI = PropertyLoader.PROP_LIST.get("scp.qa.api.base.url").toString();
-            createPermissionEndpoint = new URI(PROP_LIST.get("scp.create.permission.endpoint").toString()); // Fixed: Using PROP_LIST for endpoint
+            createPermissionEndpoint = new URI(PROP_LIST.get("scp.create.permission.endpoint").toString());
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -46,16 +55,17 @@ public class SelfCreationPortalCreateNewPermission extends SelfCreationPortalBas
                 "\"status\": \"ACTIVE\" " +
                 "}";
 
+        // Use the extracted internalAccessToken in the request header
         Response response = given()
-                .header("X-auth-token", "bearer " + X_AUTH_TOKEN)  // Using the auth token header
-                .contentType(ContentType.JSON)  // JSON content type
-                .body(requestBody)  // Updated request body
-                .when().post(createPermissionEndpoint);  // POST request to the endpoint
+                .header("X-auth-token", "bearer " + internalAccessToken)  // Using the extracted token
+                .contentType(ContentType.JSON)
+                .body(requestBody)
+                .when().post(createPermissionEndpoint);
 
         // Logging the response body
-        logger.info(response.getBody().asString());
+        logger.info("Response Body: " + response.getBody().asString());
+        logger.info("Response Status Code: " + response.getStatusCode());
 
-        logger.info("Ended calling the CreatePermission:");
+        logger.info("Ended calling the CreatePermission API.");
     }
-
 }

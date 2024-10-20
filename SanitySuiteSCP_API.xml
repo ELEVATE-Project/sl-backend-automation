@@ -24,7 +24,23 @@
                 </methods>
             </class>
 
+            <class name="org.shikshalokam.backend.scp.SelfCreationPortalCreateNewPermission">
+                <methods>
+                    <include name="testCreatePermissionWithValidPayload"/>
+                </methods>
+            </class>
 
+            <class name="org.shikshalokam.backend.scp.SelfCreationPortalCreateNewPermission">
+                <methods>
+                    <include name="testCreatePermissionWithInvalidPayload"/>
+                </methods>
+            </class>
+
+            <class name="org.shikshalokam.backend.scp.SelfCreationPortalCreateNewPermission">
+                <methods>
+                    <include name="testCreatePermissionWithEmptyFields"/>
+                </methods>
+            </class>
         </classes>
     </test> <!-- Test -->
 </suite> <!-- Suite -->

@@ -33,11 +33,10 @@ public class SelfCreationPortalCreateNewPermission extends SelfCreationPortalBas
 
         // Log the extracted token
         logger.info("Internal Access Token: " + internalAccessToken);
-        logger.info(response.prettyPrint());
     }
 
-    @Test(description = "Verifies the functionality of creating new user's permission.")
-    public void testCreateNewPermission() {
+    @Test(description = "Verifies the functionality of creating new user's permission with valid payload.")
+    public void testCreatePermissionWithValidPayload() {
         logger.info("Started calling the CreatePermission API:");
         try {
             RestAssured.baseURI = PropertyLoader.PROP_LIST.get("scp.qa.api.base.url").toString();
@@ -48,7 +47,7 @@ public class SelfCreationPortalCreateNewPermission extends SelfCreationPortalBas
 
         // Updated request body
         String requestBody = "{ " +
-                "\"code\": \"project_subash_uat\", " +
+                "\"code\": \"project_test_break\", " +
                 "\"module\": \"permissions\", " +
                 "\"request_type\": [\"POST\"], " +
                 "\"api_path\": \"/scp/v1/projects/create\", " +
@@ -62,10 +61,95 @@ public class SelfCreationPortalCreateNewPermission extends SelfCreationPortalBas
                 .body(requestBody)
                 .when().post(createPermissionEndpoint);
 
-        // Logging the response body
-        logger.info("Response Body: " + response.getBody().asString());
-        logger.info("Response Status Code: " + response.getStatusCode());
+        // Log the status code and response body
+        int statusCode = response.getStatusCode();
+        String responseBody = response.getBody().asString();
+        logger.info("Response Status Code: " + statusCode);
+        logger.info("Response Body: " + responseBody);
+        // Pretty print the response to the console or logs
+        response.prettyPrint();
 
-        logger.info("Ended calling the CreatePermission API.");
+        //log the end call for createPermission API
+        logger.info("Ended calling the CreatePermission API with valid payload.");
+
     }
+
+    @Test(description = "Verifies the functionality of permission creation when the payload contains invalid payload")
+    public void testCreatePermissionWithInvalidPayload() {
+        logger.info("Started calling the CreatePermission API:");
+        try {
+            RestAssured.baseURI = PropertyLoader.PROP_LIST.get("scp.qa.api.base.url").toString();
+            createPermissionEndpoint = new URI(PROP_LIST.get("scp.create.permission.endpoint").toString());
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Updated request body
+        String requestBody = "{ " +
+                "\"code\": \"project_test_break\", " +
+                "\"module\": \"permissions\", " +
+                "\"request_type\": [\"POST\"], " +
+                "\"api_path\": \"/scp/v1/projects/create\", " +
+                "\"status\": \"ACTIVE\" " +
+                "}";
+
+        // Use the extracted internalAccessToken in the request header
+        Response response = given()
+                .header("X-auth-token", "bearer " + internalAccessToken)  // Using the extracted token
+                .contentType(ContentType.JSON)
+                .body(requestBody)
+                .when().post(createPermissionEndpoint);
+
+        // Log the status code and response body
+        int statusCode = response.getStatusCode();
+        String responseBody = response.getBody().asString();
+        logger.info("Response Status Code: " + statusCode);
+        logger.info("Response Body: " + responseBody);
+        // Pretty print the response to the console or logs
+        response.prettyPrint();
+
+        //log the end call for createPermission API
+        logger.info("Ended calling the CreatePermission API with invalid payload.");
+
+    }
+
+    @Test(description = "Verifies the functionality of permission creation when the payload contains empty fields")
+    public void testCreatePermissionWithEmptyFields() {
+        logger.info("Started calling the CreatePermission API:");
+        try {
+            RestAssured.baseURI = PropertyLoader.PROP_LIST.get("scp.qa.api.base.url").toString();
+            createPermissionEndpoint = new URI(PROP_LIST.get("scp.create.permission.endpoint").toString());
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Updated request body
+        String requestBody = "{ " +
+                "\"code\": \" \", " +
+                "\"module\": \" \", " +
+                "\"request_type\": [\" \"], " +
+                "\"api_path\": \" \", " +
+                "\"status\": \" \" " +
+                "}";
+
+        // Use the extracted internalAccessToken in the request header
+        Response response = given()
+                .header("X-auth-token", "bearer " + internalAccessToken)  // Using the extracted token
+                .contentType(ContentType.JSON)
+                .body(requestBody)
+                .when().post(createPermissionEndpoint);
+
+        // Log the status code and response body
+        int statusCode = response.getStatusCode();
+        String responseBody = response.getBody().asString();
+        logger.info("Response Status Code: " + statusCode);
+        logger.info("Response Body: " + responseBody);
+        // Pretty print the response to the console or logs
+        response.prettyPrint();
+
+        //log the end call for createPermission API
+        logger.info("Ended calling the CreatePermission API with empty fields payload.");
+
+    }
+
 }

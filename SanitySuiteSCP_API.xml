@@ -9,38 +9,19 @@
             <class name="org.shikshalokam.frontend.scp.TestScpLoginAPI">
                 <methods>
                     <include name="successfulLoginScp"/>
-                </methods>
-            </class>
-
-            <class name="org.shikshalokam.frontend.scp.TestScpLoginAPI">
-                <methods>
                     <include name="invalidLoginScp"/>
-                </methods>
-            </class>
-
-            <class name="org.shikshalokam.frontend.scp.TestScpLoginAPI">
-                <methods>
                     <include name="checkEmptyFieldsForLoginCredentials"/>
                 </methods>
             </class>
 
-            <class name="org.shikshalokam.backend.scp.SelfCreationPortalCreateNewPermission">
+            <class name="org.shikshalokam.backend.scp.TestScpPermissionCRUDOperations">
                 <methods>
                     <include name="testCreatePermissionWithValidPayload"/>
-                </methods>
-            </class>
-
-            <class name="org.shikshalokam.backend.scp.SelfCreationPortalCreateNewPermission">
-                <methods>
                     <include name="testCreatePermissionWithInvalidPayload"/>
-                </methods>
-            </class>
-
-            <class name="org.shikshalokam.backend.scp.SelfCreationPortalCreateNewPermission">
-                <methods>
                     <include name="testCreatePermissionWithEmptyFields"/>
                 </methods>
             </class>
+
         </classes>
     </test> <!-- Test -->
 </suite> <!-- Suite -->

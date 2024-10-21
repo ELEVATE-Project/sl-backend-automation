@@ -103,10 +103,9 @@ public class AppWelcomePage extends PWBasePage {
 
     public AppWelcomePage sessionSearch(String session) {
         this.validPage();
+        page.waitForTimeout(1000);
         page.getByPlaceholder("Search for sessions").fill(session);
         page.waitForTimeout(1000);
-        page.getByPlaceholder("Search for sessions").press("Enter");
-        page.waitForTimeout(3000);
         Locator noSessionsAvailableMessage = page.locator("//div[@class='title' and text()=' No sessions available']");
         if (noSessionsAvailableMessage.isVisible()) {
             page.reload();

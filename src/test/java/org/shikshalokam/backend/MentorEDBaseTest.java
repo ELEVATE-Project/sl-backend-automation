@@ -23,6 +23,7 @@ public class MentorEDBaseTest extends MentorBase {
     private String deleteUseruserEndPoint = "user/v1/admin/deleteUser/";
 
     private String deleteUserMentorEndPoint = "/mentoring/v1/admin/userDelete?userId=";
+
     public static void loginToMentorED(String loginId, String password) {
 
         try {
@@ -101,7 +102,7 @@ public class MentorEDBaseTest extends MentorBase {
     public void deleteUser(String userEmail, String userPassword) {
         loginToMentorED(userEmail, userPassword);
         String deleteUserId = User_ID;
-        logger.info("user id :"+deleteUserId);
+        logger.info("user id :" + deleteUserId);
 
         // Check if deleteUserId is null or empty
         if (deleteUserId == null || deleteUserId.isEmpty()) {
@@ -122,9 +123,4 @@ public class MentorEDBaseTest extends MentorBase {
             logger.info("User deletion flow URI is not defined properly");
         }
     }
-
-    }
-
-
-
-
+}

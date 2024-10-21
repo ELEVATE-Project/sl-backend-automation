@@ -12,6 +12,21 @@
                 </methods>
             </class>
 
+            <class name="org.shikshalokam.backend.ep.TestUserRoleExtensionCreate">
+                <methods>
+                    <include name="testUserRoleExtensionCreateWithValidPayload"/>
+                    <include name="testUserRoleExtensionCreateWithInvalidPayload"/>
+                    <include name="testUserRoleExtensionCreateWithEmptyFields"/>
+                </methods>
+            </class>
+
+            <class name="org.shikshalokam.backend.ep.TestUserRoleExtensionFind">
+                <methods>
+                    <include name="testUserRoleFindWithValidPayload"/>
+                    <include name="testUserRoleFindWithInvalidPayload"/>
+                    <include name="testUserRoleFindWithEmptyFields"/>
+                </methods>
+            </class>
         </classes>
     </test> <!-- Test -->
 </suite> <!-- Suite -->

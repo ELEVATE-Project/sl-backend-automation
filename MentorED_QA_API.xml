@@ -12,6 +12,15 @@
                     <include name="testMenteeReport"/>
                 </methods>
             </class>
+            <class name="org.shikshalokam.backend.TestCRUDUserRoles">
+                <methods>
+                    <include name="testCreateUserRoles"/>
+                    <include name="testCreateUserRoles_MissingRequiredFields"/>
+                    <include name="testUpdateUserRoles"/>
+                    <include name="testUpdateUserRoles_MissingRequiredFields"/>
+                    <include name="testDeleteUserRole"/>
+                </methods>
+            </class>
 
         </classes>
     </test> <!-- Test -->

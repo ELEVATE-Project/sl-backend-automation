@@ -134,7 +134,7 @@ public class TestCRUDUserRoles extends MentorEDBaseTest {
         }
     }
 
-    public Response updateUserRole(String roleID, String title, String userType, String status, String visibility) {
+    private Response updateUserRole(String roleID, String title, String userType, String status, String visibility) {
         try {
             updateUserRolesEndpoint = new URI("/user/v1/user-role/update/" + roleID);
         } catch (URISyntaxException e) {
@@ -154,7 +154,6 @@ public class TestCRUDUserRoles extends MentorEDBaseTest {
                 .contentType(ContentType.JSON)
                 .body(requestBodyJson.toString())
                 .when().post(updateUserRolesEndpoint);
-
         return response;
     }
 }

@@ -1,0 +1,20 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="SanitySuite">
+    <listeners>
+        <listener class-name="org.shikshalokam.Listerners.SLCustomListener"/>
+    </listeners>
+
+    <test name="Test">
+        <classes>
+
+            <class name="org.shikshalokam.backend.TestMenteeReport">
+                <methods>
+                    <include name="testMenteeReport"/>
+                </methods>
+            </class>
+
+        </classes>
+    </test> <!-- Test -->
+</suite> <!-- Suite -->
+
+

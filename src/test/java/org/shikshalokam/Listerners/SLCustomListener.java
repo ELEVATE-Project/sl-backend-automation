@@ -6,6 +6,7 @@ import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.aventstack.extentreports.reporter.configuration.Theme;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.shikshalokam.backend.PropertyLoader;
 import org.testng.*;
 
 import static org.shikshalokam.uiPageObjects.PWBasePage.PWBrowser;
@@ -88,8 +89,10 @@ public class SLCustomListener implements ITestListener, ISuiteListener {
         }
 
         // Capture screenshot on failure
-        String screenshotPath = captureScreenshot(result.getMethod().getMethodName(), throwable.toString());
-        test.get().addScreenCaptureFromPath(screenshotPath);
+        if (Boolean.parseBoolean(PropertyLoader.PROP_LIST.getProperty("sl.capture.screenshot.on.failure"))) {
+            String screenshotPath = captureScreenshot(result.getMethod().getMethodName(), throwable.toString());
+            test.get().addScreenCaptureFromPath(screenshotPath);
+        }
     }
 
     @Override

@@ -1,0 +1,30 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="ScpApiTestSuite">
+    <listeners>
+        <listener class-name="org.shikshalokam.Listerners.SLCustomListener"/>
+    </listeners>
+    <test name="ScpSanityTests">
+        <classes>
+
+            <class name="org.shikshalokam.frontend.scp.TestScpLoginAPI">
+                <methods>
+                    <include name="successfulLoginScp"/>
+                </methods>
+            </class>
+
+            <class name="org.shikshalokam.frontend.scp.TestScpLoginAPI">
+                <methods>
+                    <include name="invalidLoginScp"/>
+                </methods>
+            </class>
+
+            <class name="org.shikshalokam.frontend.scp.TestScpLoginAPI">
+                <methods>
+                    <include name="checkEmptyFieldsForLoginCredentials"/>
+                </methods>
+            </class>
+
+
+        </classes>
+    </test> <!-- Test -->
+</suite> <!-- Suite -->

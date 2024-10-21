@@ -17,7 +17,7 @@ import static org.testng.Assert.*;
 public class TestCRUDUserRoles extends MentorEDBaseTest {
 
     public static final Logger logger = LogManager.getLogger(TestCRUDUserRoles.class);
-    private URI createUserRolesEndpoint, getUserRolesEndPoint, updateUserRolesEndpoint;
+    private URI createUserRolesEndpoint, getUserRolesEndPoint, updateUserRolesEndpoint, deleteUserRolesEndpoint;
     private String userRoleTitle, createdRoleID,updateUserRoleTitle;
 
     @BeforeTest
@@ -94,6 +94,24 @@ public class TestCRUDUserRoles extends MentorEDBaseTest {
         logger.info("Ended calling --------------- UpdateUserRoles: Negative test case completed with assertions on missing fields.");
     }
 
+    @Test(dependsOnMethods = "testUpdateUserRoles")
+    public void testDeleteUserRole() {
+        logger.info("Started calling ----------- Delete User Role ------------");
+        Response response = deleteUserRole(createdRoleID);
+
+        logger.info("Response Code: {}, Response Body: {}", response.getStatusCode(), response.getBody().asString());
+        assertEquals(response.getStatusCode(), 202, "Expected status code 202 for successful deletion, got" + response.getStatusCode());
+
+        // Optionally, try to get the deleted role to ensure it no longer exists
+        Response roleExists = getUserRolesID(true, userRoleTitle);
+        if (roleExists == null) {
+            logger.info("Verified: ID is no longer present in the system.");
+        } else {
+            logger.warn("ID -" + createdRoleID + " still exists in the system.");
+        }
+        logger.info("Ended calling ------------ DeleteUserRole with assertions completed.");
+    }
+
     private URI createURI(String endpoint) {
         try {
             return new URI(endpoint);
@@ -134,7 +152,7 @@ public class TestCRUDUserRoles extends MentorEDBaseTest {
         }
     }
 
-    public Response updateUserRole(String roleID, String title, String userType, String status, String visibility) {
+    private Response updateUserRole(String roleID, String title, String userType, String status, String visibility) {
         try {
             updateUserRolesEndpoint = new URI("/user/v1/user-role/update/" + roleID);
         } catch (URISyntaxException e) {
@@ -154,8 +172,21 @@ public class TestCRUDUserRoles extends MentorEDBaseTest {
                 .contentType(ContentType.JSON)
                 .body(requestBodyJson.toString())
                 .when().post(updateUserRolesEndpoint);
+        return response;
+    }
 
+    private Response deleteUserRole(String roleID) {
+        try {
+            deleteUserRolesEndpoint = new URI("/user/v1/user-role/delete/" + roleID);
+        } catch (URISyntaxException e) {
+            logger.error("Invalid URI syntax for the endpoint", e);
+            throw new RuntimeException("Invalid URI Syntax", e);
+        }
+
+        Response response = given()
+                .header("X-auth-token", "bearer " + X_AUTH_TOKEN)
+                .contentType(ContentType.JSON)
+                .when().delete(deleteUserRolesEndpoint);
         return response;
     }
 }
-

@@ -20,7 +20,7 @@ public class ElevateProjectBaseTest extends MentorBase {
     public static String BASE_URL = PropertyLoader.PROP_LIST.getProperty("elevate.qa.api.base.url");
     public static String INTERNAL_ACCESS_TOKEN = PropertyLoader.PROP_LIST.getProperty("elevate.internalaccesstoken");
 
-    // method to login with required parameters
+    // method to Login with required parameters
     public static Response loginToElevate(String email, String Password) {
         RestAssured.baseURI = PropertyLoader.PROP_LIST.getProperty("elevate.qa.api.base.url");
         try {

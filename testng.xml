@@ -29,7 +29,6 @@
                     <include name="testMentoringQuestoinsRead"/>
                 </methods>
             </class>
-
         </classes>
 
     </test>

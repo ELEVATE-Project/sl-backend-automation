@@ -20,8 +20,8 @@ public class TestUserRoleExtensionCRUDoperations extends ElevateProjectBaseTest 
 
         // Create the JSON payload using JSONObject
         JSONObject jsonBody = new JSONObject();
-        jsonBody.put("userRoleId", "210");
-        jsonBody.put("title", "DEO");
+        jsonBody.put("userRoleId", "216");
+        jsonBody.put("title", "DErtO");
 
         // Create an array for entityTypes
         JSONArray entityTypesArray = new JSONArray();

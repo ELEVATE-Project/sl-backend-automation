@@ -18,7 +18,6 @@ public class TestUserRoleExtensionFind extends ElevateProjectBaseTest {
     public static String BASE_URL = PropertyLoader.PROP_LIST.getProperty("elevate.qa.api.base.url");
     public static String INTERNAL_ACCESS_TOKEN = PropertyLoader.PROP_LIST.getProperty("elevate.internalaccesstoken");
 
-
     @Test(description = "Validating user role extension find with valid query")
     public void testUserRoleFindWithValidPayload() {
         ElevateProjectBaseTest.loginToElevate(PropertyLoader.PROP_LIST.getProperty("elevate.login.contentcreator"), PropertyLoader.PROP_LIST.getProperty("elevate.login.contentcreator.password"));

@@ -1,4 +1,4 @@
-package org.shikshalokam.frontend.scp;
+package org.shikshalokam.backend.scp;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -8,15 +8,15 @@ import org.shikshalokam.backend.scp.SelfCreationPortalBaseTest;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class TestScpLoginAPI extends SelfCreationPortalBaseTest {
-    static final Logger logger = LogManager.getLogger(TestScpLoginAPI.class);
+public class TestScpLogin extends SelfCreationPortalBaseTest {
+    static final Logger logger = LogManager.getLogger(TestScpLogin.class);
     public static String X_AUTH_TOKEN = null;
     public static Response response = null;
 
     //Login for SCP
     @Test(description = "Verifies the functionality of logging in as an user.")
     public void successfulLoginScp() {
-        response = SelfCreationPortalBaseTest.loginToScp(PropertyLoader.PROP_LIST.getProperty("sl.scp.userascontentcreator"), PropertyLoader.PROP_LIST.getProperty("sl.scp.passwordforcontentcreator"));
+        response = SelfCreationPortalBaseTest.loginToScp(PropertyLoader.PROP_LIST.getProperty("scp.qa.admin.login.user"), PropertyLoader.PROP_LIST.getProperty("scp.qa.admin.login.password"));
         //Status code 200
         Assert.assertEquals(response.getStatusCode(), 200, "User logged in successfully.");
 

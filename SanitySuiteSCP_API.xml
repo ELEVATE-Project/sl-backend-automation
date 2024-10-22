@@ -6,7 +6,7 @@
     <test name="ScpSanityTests">
         <classes>
 
-            <class name="org.shikshalokam.frontend.scp.TestScpLoginAPI">
+            <class name="org.shikshalokam.backend.scp.TestScpLogin">
                 <methods>
                     <include name="successfulLoginScp"/>
                     <include name="invalidLoginScp"/>

@@ -1,4 +1,4 @@
-package org.shikshalokam.frontend.scp;
+package org.shikshalokam.backend.scp;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -8,8 +8,8 @@ import org.shikshalokam.backend.scp.SelfCreationPortalBaseTest;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class TestScpLoginAPI extends SelfCreationPortalBaseTest {
-    static final Logger logger = LogManager.getLogger(TestScpLoginAPI.class);
+public class TestScpLogin extends SelfCreationPortalBaseTest {
+    static final Logger logger = LogManager.getLogger(TestScpLogin.class);
     public static String X_AUTH_TOKEN = null;
     public static Response response = null;
 

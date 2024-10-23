@@ -32,7 +32,6 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
         // Initialize the createPermissionEndpoint URI
         try {
             createPermissionEndpoint = new URI(PROP_LIST.get("scp.create.permission.endpoint").toString());
-//            updatePermissionEndpoint = new URI(PROP_LIST.get("scp.create.permission.endpoint").toString());
         } catch (URISyntaxException e) {
             throw new RuntimeException("Invalid URI for createPermissionEndpoint", e);
         }
@@ -98,19 +97,55 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
     public void testUpdatePermissionWithValidPayload() {
         logger.info("Started calling the UpdatePermission API with valid payload:");
 
-        // Ensure createdId is valid
-        Assert.assertTrue(createdId > 0, "createdId should be greater than 0");
-        logger.info("Created ID is valid: " + createdId);
+        JSONObject requestBody = createRequestBodyForUpdate("updated_project_", "projects", "POST", "/scp/v1/projects/create", "ACTIVE");
 
-        // Call updatePermission with valid parameters and createdId
-        Response response = updatePermission(String.valueOf(createdId), "updated_project_", "projects", "POST", "/scp/v1/projects/create", "ACTIVE");
+        // Call updatePermission with the created requestBody
+        Response response = updatePermission(requestBody);
 
         // Log the status code and response body
         int statusCode = response.getStatusCode();
         response.prettyPrint();
 
-        // Validate response code is 200 for a successful update
+        // Validate response code is 201 for a successful update
         Assert.assertEquals(statusCode, 201, "Status code should be 201");
+
+        logger.info("Ended calling the UpdatePermission API with valid payload.");
+    }
+
+    @Test(dependsOnMethods = "testCreatePermissionWithInvalidPayload", description = "Verifies the functionality of updating user's permission with Invalid payload.")
+    public void testUpdatePermissionWithInvalidPayload() {
+        logger.info("Started calling the UpdatePermission API with Invalid payload:");
+
+        JSONObject requestBody = createRequestBodyForUpdate("project_", "invalidModule", "INVALID", "/scp/invalid/api", "INVALID");;
+
+        // Call updatePermission with the created requestBody
+        Response response = updatePermission(requestBody);
+
+        // Log the status code and response body
+        int statusCode = response.getStatusCode();
+        response.prettyPrint();
+
+        // Validate response code is 400 or 422 for invalid request
+        Assert.assertTrue(statusCode == 400 || statusCode == 422, "Status code should be 400 or 422 for invalid payload");
+
+        logger.info("Ended calling the UpdatePermission API with valid payload.");
+    }
+
+    @Test(dependsOnMethods = "testCreatePermissionWithEmptyFields", description = "Verifies the functionality of updating user's permission with Invalid payload.")
+    public void testUpdatePermissionWithEmptyFieldsPayload() {
+        logger.info("Started calling the UpdatePermission API with Invalid payload:");
+
+        JSONObject requestBody = createRequestBodyForUpdate("", "", "", "", "");;
+
+        // Call updatePermission with the created requestBody
+        Response response = updatePermission(requestBody);
+
+        // Log the status code and response body
+        int statusCode = response.getStatusCode();
+        response.prettyPrint();
+
+        // Validate response code for empty fields (usually 400)
+        Assert.assertEquals(statusCode, 400, "Status code should be 400 for empty fields payload");
 
         logger.info("Ended calling the UpdatePermission API with valid payload.");
     }
@@ -138,21 +173,10 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
         return response;
     }
 
-    // Method to update a permission using the created ID
-    private Response updatePermission(String roleID, String prefix, String module, String requestType, String apiPath, String status) {
-        try {
-            // Construct the update endpoint dynamically based on the roleID
-            String updatePermissionEndpointStr = PROP_LIST.get("scp.update.permission.endpoint").toString() + "/" + roleID;
-            updatePermissionEndpoint = new URI(updatePermissionEndpointStr);  // Properly concatenate the roleID to the endpoint
-        } catch (URISyntaxException e) {
-            logger.error("Invalid URI syntax for the endpoint", e);
-            throw new RuntimeException("Invalid URI Syntax", e);
-        }
-
+    // Method to create request body for update permission
+    private JSONObject createRequestBodyForUpdate(String codePrefix, String module, String requestType, String apiPath, String status) {
         JSONObject requestBody = new JSONObject();
-
-        // Generate random alphabetic string for "code"
-        requestBody.put("code", prefix + RandomStringUtils.randomAlphabetic(8).toLowerCase());
+        requestBody.put("code", codePrefix + RandomStringUtils.randomAlphabetic(8).toLowerCase());
         requestBody.put("module", module);
         JSONArray requestTypeArray = new JSONArray();
         requestTypeArray.add(requestType);
@@ -160,7 +184,17 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
         requestBody.put("api_path", apiPath);
         requestBody.put("status", status);
 
-        // Make the PUT request to update the permission
+        return requestBody;
+    }
+
+    private Response updatePermission(JSONObject requestBody) {
+        try {
+            updatePermissionEndpoint = new URI(PROP_LIST.get("scp.update.permission.endpoint").toString() + "/" + createdId);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException("Invalid URI for updatePermissionEndpoint", e);
+        }
+
+        // Make the POST request to update the permission
         Response response = given()
                 .header("X-auth-token", "bearer " + X_AUTH_TOKEN)
                 .contentType(ContentType.JSON)

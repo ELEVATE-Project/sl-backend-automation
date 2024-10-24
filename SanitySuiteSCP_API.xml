@@ -25,6 +25,17 @@
                 </methods>
             </class>
 
+            <class name="org.shikshalokam.backend.scp.TestScpEntityTypesAndEntitiesCRUDOperations">
+                <methods>
+                    <include name="testCreateEntityTypeWithValidPayload"/>
+                    <include name="testCreateEntityTypeWithInValidPayload"/>
+                    <include name="testCreateEntityTypeWithEmptyFields"/>
+                    <include name="testUpdateEntityTypesWithValidPayload"/>
+                    <include name="testUpdateEntityTypesWithInvalidPayload"/>
+                    <include name="testUpdateEntityTypesWithEmptyFields"/>
+                </methods>
+            </class>
+
         </classes>
     </test> <!-- Test -->
 </suite> <!-- Suite -->

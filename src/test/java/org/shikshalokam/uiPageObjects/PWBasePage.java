@@ -202,7 +202,7 @@ public class PWBasePage extends MentorEDBaseTest {
             if (!screenshotsDir.exists()) {
                 screenshotsDir.mkdirs();
             }
-            Path screenshotPath = Paths.get("/screenshots", testName + ".png");
+            Path screenshotPath = Paths.get("target/screenshots", testName + ".png");
             page.screenshot(new Page.ScreenshotOptions().setPath(screenshotPath));
             BufferedImage image = ImageIO.read(screenshotPath.toFile());
             Graphics2D g = image.createGraphics();

@@ -57,7 +57,6 @@ public class MentorEDSessionUpdate extends MentorBase {
     }
 
 
-
     public static void updateCSVWithSessionIds(List<String> sessionIds, String sourceCsvFilePath, String targetCsvFilePath) {
         try {
             // Read the entire CSV content into a string
@@ -80,17 +79,43 @@ public class MentorEDSessionUpdate extends MentorBase {
         logger.info("Logging into the application:");
         loginToMentorED(fetchProperty("defaultorgadmin.user"),
                 fetchProperty("defaultorgadmin.password"));
-
         // Define paths to your JSON files
-        String[] jsonFilePaths = {"src/main/resources/managersession_update_payload1.json", "src/main/resources/managersession_update_payload2.json"
-        };
+        String environment = fetchProperty("environment");
+        String[] jsonFilePaths = null;
+        if ("QA".equalsIgnoreCase(environment)) {
+            jsonFilePaths = new String[]{"src/main/resources/managersession_update_payload1.json", "src/main/resources/managersession_update_payload2.json"
+            };
+        } else if ("PROD".equalsIgnoreCase(environment)) {
+            jsonFilePaths = new String[]{"src/main/resources/managersession_update_payload_prod1.json", "src/main/resources/managersession_update_payload_prod2.json"
+            };
+        } else {
+            logger.error("Invalid environment specified: " + environment);
+            return; // Exit the method if the environment is invalid
+        }
         // Fetch session IDs from multiple JSON files and combine them
         List<String> allFetchedSessionIds = new ArrayList<>();
         for (String jsonFilePath : jsonFilePaths) {
             allFetchedSessionIds.addAll(updateSessions(jsonFilePath));
         }
         // Update CSV files with the combined session IDs
-        updateCSVWithSessionIds(allFetchedSessionIds, "src/main/resources/bulk_session_edit.csv", "target/bulksession_files/session_edit.csv");
-        updateCSVWithSessionIds(allFetchedSessionIds, "src/main/resources/bulk_session_delete.csv", "target/bulksession_files/session_delete.csv");
+
+        if ("QA".equalsIgnoreCase(environment)) {
+            updateCSVWithSessionIds(allFetchedSessionIds, "src/main/resources/bulk_session_edit.csv", "target/bulksession_files/session_edit.csv");
+            updateCSVWithSessionIds(allFetchedSessionIds, "src/main/resources/bulk_session_delete.csv", "target/bulksession_files/session_delete.csv");
+        } else if ("PROD".equalsIgnoreCase(environment)) {
+            updateCSVWithSessionIds(allFetchedSessionIds, "src/main/resources/bulk_session_edit_prod.csv", "target/bulksession_files/session_edit.csv");
+            updateCSVWithSessionIds(allFetchedSessionIds, "src/main/resources/bulk_session_delete_prod.csv", "target/bulksession_files/session_delete.csv");
+        }
     }
 }
+
+
+
+
+
+
+
+
+
+
+

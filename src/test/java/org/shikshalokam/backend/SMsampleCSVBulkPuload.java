@@ -55,7 +55,7 @@ public class SMsampleCSVBulkPuload extends MentorEDBaseTest {
             fileName = "bulk_session_creation_auto_Qa.csv";
             readSignedUrl = "/mentoring/v1/cloud-services/getSignedUrl?fileName=" + fileName;
         } else {
-            fileName = "bulk_session_creation_auto_Prod.csv";
+            fileName = "bulk_session_creation.csv";
             readSignedUrl = "/mentoring/v1/cloud-services/getSignedUrl?fileName=" + fileName;
         }
 

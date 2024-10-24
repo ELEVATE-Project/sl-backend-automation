@@ -19,6 +19,9 @@
                     <include name="testCreatePermissionWithValidPayload"/>
                     <include name="testCreatePermissionWithInvalidPayload"/>
                     <include name="testCreatePermissionWithEmptyFields"/>
+                    <include name="testUpdatePermissionWithValidPayload"/>
+                    <include name="testUpdatePermissionWithInvalidPayload"/>
+                    <include name="testUpdatePermissionWithEmptyFieldsPayload"/>
                 </methods>
             </class>
 

@@ -25,7 +25,7 @@ public class TestBulkUploadSession extends SMsampleCSVBulkPuload {
         robot.sees(AppAllPages.welcomePage).workspace();
         robot.sees(AppAllPages.workspacePage).manageSession();
         robot.sees(AppAllPages.manageSessionPage).bulkUploadTab();
-        robot.sees(AppAllPages.manageSessionPage).downloadSampleCsv("bulksession_files", "bulk_session_creation_PROD.csv");
+        robot.sees(AppAllPages.manageSessionPage).downloadSampleCsv("bulksession_files", "bulk_session_creation.csv");
     }
 
     @Test(description = "Uploading the Csv file via bulk upload option to Create sessions",

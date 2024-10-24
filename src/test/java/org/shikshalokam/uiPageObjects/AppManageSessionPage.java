@@ -66,10 +66,10 @@ public class AppManageSessionPage extends PWBasePage {
         Path filePath = null;
         String currentWorkingDirectory = System.getProperty("user.dir");
         if ("QA".equalsIgnoreCase(fetchProperty("environment"))) {
-            filePath = Paths.get(currentWorkingDirectory, "target", "bulksession_files", "bulk_session_creation_PROD.csv");
+            filePath = Paths.get(currentWorkingDirectory, "target", "bulksession_files", "bulk_session_creation.csv");
             logger.info("File Path: " + filePath.toString());
         } else {
-            filePath = Paths.get(currentWorkingDirectory, "src/main/resources", "bulk_session_creation_PROD.csv");
+            filePath = Paths.get(currentWorkingDirectory, "src/main/resources", "bulk_session_creation.csv");
             logger.info("File Path: " + filePath.toString());
         }
 

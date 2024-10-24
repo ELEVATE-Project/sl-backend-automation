@@ -1,0 +1,19 @@
+ {
+    "title": "AutoPublicSession",
+    "description": "Sample Description",
+    "type": "PUBLIC",
+    "mentor_id": "467",
+    "categories": [
+      "educational_leadership"
+    ],
+    "start_date": "1914816600",
+    "end_date": "1914819300",
+    "image": [],
+    "medium": [
+      "en_in"
+    ],
+    "recommended_for": [
+      "te"
+    ],
+    "time_zone": "Asia/Calcutta"
+  }

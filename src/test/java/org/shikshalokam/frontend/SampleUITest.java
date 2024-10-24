@@ -12,8 +12,8 @@ public class SampleUITest {
     public void testUI() {
         Robot robot = new Robot();
         robot.openApp();
-        robot.sees(AppAllPages.loginPage).loginToApp(fetchProperty("mentor.qa.admin.login.user"),
-                fetchProperty("mentor.qa.admin.login.password")).logOutFromApp();
+        robot.sees(AppAllPages.loginPage).loginToApp(fetchProperty("gmailsignup.userEmail"), "PassworD@@@1234");
+        robot.sees(AppAllPages.welcomePage).logOutFromApp();
         robot.quitAppBrowser();
     }
 

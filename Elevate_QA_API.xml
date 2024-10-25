@@ -1,9 +1,11 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="SanitySuite">
+    <listeners>
+        <listener class-name="org.shikshalokam.Listerners.SLCustomListener"/>
+    </listeners>
 
     <test name="Test">
         <classes>
-
             <class name="org.shikshalokam.backend.ep.TestElevateLogin">
                 <methods>
                     <include name="testLoginWithValidCredentials"/>
@@ -12,6 +14,22 @@
                 </methods>
             </class>
 
+            <class name="org.shikshalokam.backend.ep.TestElevateEntityTypeCRUDOperations">
+                <methods>
+                    <include name="testCreateValidEntitytype"/>
+                    <include name="testCreateInvalidEntitytype"/>
+                    <include name="testFetchEntitytype"/>
+                    <include name="testUpdateSingleEntitytypeValidFields"/>
+                    <include name="testFetchEntitytypeList"/>
+                </methods>
+            </class>
+
+            <class name="org.shikshalokam.backend.ep.TestElevateBulkUploadEntityTypeCRUDOperations">
+                <methods>
+                    <include name="testValidCsvCreate"/>
+                    <include name="testValidCsvUpdate"/>
+                </methods>
+            </class>
         </classes>
     </test> <!-- Test -->
 </suite> <!-- Suite -->

@@ -21,6 +21,13 @@
                     <include name="testDeleteUserRole"/>
                 </methods>
             </class>
+            <class name="org.shikshalokam.backend.TestCRUDUserPermissions">
+                <methods>
+                    <include name="testCreatePermission"/>
+                    <include name="testCreatePermission_MissingRequiredFields"/>
+                    <include name="getUserPermissions"/>
+                </methods>
+            </class>
 
         </classes>
     </test> <!-- Test -->

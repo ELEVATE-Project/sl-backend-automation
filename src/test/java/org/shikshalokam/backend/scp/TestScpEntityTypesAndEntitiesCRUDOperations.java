@@ -10,8 +10,12 @@ import org.testng.annotations.Test;
 import org.json.simple.JSONObject;
 import org.testng.Assert;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import java.net.URI;
 import java.net.URISyntaxException;
+
 
 import static io.restassured.RestAssured.given;
 import static org.shikshalokam.backend.PropertyLoader.PROP_LIST;
@@ -20,6 +24,7 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
     private static final Logger logger = LogManager.getLogger(TestScpEntityTypesAndEntitiesCRUDOperations.class);
     private URI entityTypeCreateEndpoint, entityTypeUpdatePermissionEndpoint;
     private int createdId;
+    private Map<String, String> map;
 
     @BeforeTest
     public void init() {
@@ -41,10 +46,18 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
         logger.info("Started calling the CreateEntityType API with valid payload:");
 
         // Call entityTypeCreation with valid parameters
-        JSONObject requestBody = createEntityType("entityTypeValue_", "entityTypeLabel", "ACTIVE", "SYSTEM", "STRING", "true");
+        Map<String, String> requestBody = new HashMap<>();
+        requestBody.put("value", "entityTypeValue_" + RandomStringUtils.randomAlphabetic(8).toLowerCase());
+        requestBody.put("label", "entityTypeLabel" + RandomStringUtils.randomAlphabetic(8).toLowerCase());
+        requestBody.put("status", "ACTIVE");
+        requestBody.put("type", "SYSTEM");
+        requestBody.put("data_type", "STRING");
+        requestBody.put("has_entities", "true");
+
+        JSONObject createRequestBody = createEntityType(requestBody);
 
         // Call updatePermission with the created requestBody
-        Response response = createEntityTypeRequest(requestBody);
+        Response response = createEntityTypeRequest(createRequestBody);
 
         // Log the status code and response body
         int statusCode = response.getStatusCode();
@@ -66,10 +79,17 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
         logger.info("Started calling the CreateEntityType API with Invalid payload:");
 
         // Call entityTypeCreation with valid parameters
-        JSONObject requestBody = createEntityType("WEFW_@$#@", "_Label_", "INACTIVE", "IT_SYSTEM", "STRING_ARRAY", "false");
+        Map<String, String> requestBody = new HashMap<>();
+        requestBody.put("value", "WEFW_@$#@");
+        requestBody.put("label", "_Label_");
+        requestBody.put("status", "INACTIVE");
+        requestBody.put("type", "IT_SYSTEM");
+        requestBody.put("data_type", "STRING_ARRAY");
+        requestBody.put("has_entities", "false");
 
+        JSONObject createRequestBody = createEntityType(requestBody);
         // Call updatePermission with the created requestBody
-        Response response = createEntityTypeRequest(requestBody);
+        Response response = createEntityTypeRequest(createRequestBody);
 
         // Log the status code and response body
         int statusCode = response.getStatusCode();
@@ -86,10 +106,17 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
         logger.info("Started calling the CreatePermission API with empty fields payload:");
 
         // Call entityTypeCreation with valid parameters
-        JSONObject requestBody = createEntityType("", "", "", "", "", "");
+        Map<String, String> requestBody = new HashMap<>();
+        requestBody.put("value", "");
+        requestBody.put("label", "");
+        requestBody.put("status", "");
+        requestBody.put("type", "");
+        requestBody.put("data_type", "");
+        requestBody.put("has_entities", "");
 
+        JSONObject createRequestBody = createEntityType(requestBody);
         // Call updatePermission with the created requestBody
-        Response response = createEntityTypeRequest(requestBody);
+        Response response = createEntityTypeRequest(createRequestBody);
 
         // Log the status code and response body
         int statusCode = response.getStatusCode();
@@ -106,10 +133,18 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
         logger.info("Started calling the update entity types API with valid payload:");
 
         // Call entityTypeUpdation with valid parameters
-        JSONObject requestBody = entityTypeForUpdate("updatedentityTypeValue", "updatedentityTypeLabel", "ACTIVE", "SYSTEM", "false", "string");
+        Map<String, String> requestBody = new HashMap<>();
+        requestBody.put("value", "updatedentityTypeValue_" + RandomStringUtils.randomAlphabetic(8).toLowerCase());
+        requestBody.put("label", "updatedentityTypeLabel" + RandomStringUtils.randomAlphabetic(8).toLowerCase());
+        requestBody.put("status", "ACTIVE");
+        requestBody.put("type", "SYSTEM");
+        requestBody.put("allow_filtering", "false");
+        requestBody.put("data_type", "string");
 
-        // Call entityTypeUpdation with the created requestBody
-        Response response = entityTypeUpdateRequest(requestBody);
+        JSONObject updatedRequestBody = entityTypeForUpdate(requestBody);
+
+        // Call updatePermission with the created requestBody
+        Response response = entityTypeUpdateRequest(updatedRequestBody);
 
         // Log the status code and response body
         int statusCode = response.getStatusCode();
@@ -126,10 +161,19 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
         logger.info("Started calling the entity types API with Invalid payload:");
 
         // Call entityTypeUpdation with invalid parameters
-        JSONObject requestBody = entityTypeForUpdate("__entityTypeValue_", "_updatedentityTypeLabel_", "INACTIVE", "SYSTEM_ADMIN", "true", "array");
+        Map<String, String> requestBody = new HashMap<>();
+        requestBody.put("value", "updatedentity#@$TypeValue_");
+        requestBody.put("label", "_updatedentityTypeLabel");
+        requestBody.put("status", "INACTIVE");
+        requestBody.put("type", "SYSTEM_ADMIN");
+        requestBody.put("allow_filtering", "true");
+        requestBody.put("data_type", "string-array");
 
-        // Call entityTypeUpdation with the created requestBody
-        Response response = entityTypeUpdateRequest(requestBody);
+        JSONObject updatedRequestBody = entityTypeForUpdate(requestBody);
+
+        // Call updatePermission with the created requestBody
+        Response response = entityTypeUpdateRequest(updatedRequestBody);
+
 
         // Log the status code and response body
         int statusCode = response.getStatusCode();
@@ -145,11 +189,19 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
     public void testUpdateEntityTypesWithEmptyFields() {
         logger.info("Started calling the entity types API with empty fields payload:");
 
-        // Call entityTypeUpdation with invalid parameters
-        JSONObject requestBody = entityTypeForUpdate("", "", "", "", "", "");
+        // Call entityTypeUpdation with valid parameters
+        Map<String, String> requestBody = new HashMap<>();
+        requestBody.put("value", "");
+        requestBody.put("label", "");
+        requestBody.put("status", "");
+        requestBody.put("type", "");
+        requestBody.put("allow_filtering", "");
+        requestBody.put("data_type", "");
 
-        // Call entityTypeUpdation with the created requestBody
-        Response response = entityTypeUpdateRequest(requestBody);
+        JSONObject updatedRequestBody = entityTypeForUpdate(requestBody);
+
+        // Call updatePermission with the created requestBody
+        Response response = entityTypeUpdateRequest(updatedRequestBody);
 
         // Log the status code and response body
         int statusCode = response.getStatusCode();
@@ -162,20 +214,9 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
     }
 
     //Method to create request body for entityTypes
-    private JSONObject createEntityType(String value, String label, String status, String type, String data_type, String has_entities) {
+    private JSONObject createEntityType(Map<String, String> map) {
         JSONObject requestBody = new JSONObject();
-
-        // Generate random alphabetic string for "code"
-        requestBody.put("value", value + RandomStringUtils.randomAlphabetic(8).toLowerCase());
-        requestBody.put("label", label + RandomStringUtils.randomAlphabetic(8).toLowerCase());
-        requestBody.put("status", status);
-        requestBody.put("type", type);
-        requestBody.put("data_type", data_type);
-        requestBody.put("has_entities", has_entities);
-
-        // Pretty-print the response for debugging
-        response.prettyPrint();
-
+        requestBody.putAll(map);
         return requestBody;
     }
 
@@ -200,20 +241,9 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
     }
 
     // Method to create request body for update entityTypes
-    private JSONObject entityTypeForUpdate(String value, String label, String status, String type, String allow_filtering, String data_type) {
+    private JSONObject entityTypeForUpdate(Map<String, String> map) {
         JSONObject requestBody = new JSONObject();
-
-        // Generate random alphabetic string for "code"
-        requestBody.put("value", value + RandomStringUtils.randomAlphabetic(8).toLowerCase());
-        requestBody.put("label", label + RandomStringUtils.randomAlphabetic(8).toLowerCase());
-        requestBody.put("status", status);
-        requestBody.put("type", type);
-        requestBody.put("allow_filtering", allow_filtering);
-        requestBody.put("data_type", data_type);
-
-        // Pretty-print the response for debugging
-        response.prettyPrint();
-
+        requestBody.putAll(map);
         return requestBody;
     }
 

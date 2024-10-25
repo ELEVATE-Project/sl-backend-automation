@@ -58,7 +58,8 @@ public class PWBasePage extends MentorEDBaseTest {
             case "chromium":
                 logger.info("Using Chromium browser for Test suite");
                 PWBasePage.PWBrowser = PWBasePage.PWBrowser.chromium;
-                BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions().setHeadless(headless);
+                BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions().setHeadless(headless).setSlowMo(1500);
+
                 // Set slowMo if recording is enabled
                 if (recordVideo) {
                     launchOptions.setSlowMo(1500); // Adjust the delay as needed
@@ -77,28 +78,28 @@ public class PWBasePage extends MentorEDBaseTest {
             case "msedge":
                 logger.info("Using Edge browser for Test suite ");
                 PWBasePage.PWBrowser = PWBrowser.msedge;
-                browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setChannel("msedge").setHeadless(headless));
+                browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setChannel("msedge").setHeadless(headless).setSlowMo(1500));
                 browserContext = browser.newContext();
                 page = browserContext.newPage();
                 break;
             case "firefox":
                 logger.info("Using Firefox browser for Test suite");
                 PWBasePage.PWBrowser = PWBrowser.firefox;
-                browser = playwright.firefox().launch(new BrowserType.LaunchOptions().setHeadless(headless));
+                browser = playwright.firefox().launch(new BrowserType.LaunchOptions().setHeadless(headless).setSlowMo(1500));
                 browserContext = browser.newContext();
                 page = browserContext.newPage();
                 break;
             case "webkit":
                 logger.info("Using Safari browser for Test suite");
                 PWBasePage.PWBrowser = PWBrowser.webkit;
-                browser = playwright.webkit().launch(new BrowserType.LaunchOptions().setHeadless(headless));
+                browser = playwright.webkit().launch(new BrowserType.LaunchOptions().setHeadless(headless).setSlowMo(1500));
                 browserContext = browser.newContext();
                 page = browserContext.newPage();
                 break;
             case "chromePixel4a":
                 logger.info("Using Chrome browser for Test suite with Pixel 4a emulation");
                 PWBasePage.PWBrowser = PWBrowser.chromePixel4a;
-                browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(headless));
+                browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(headless).setSlowMo(1500));
                 browserContext = browser.newContext(new Browser.NewContextOptions()
                         .setUserAgent(PropertyLoader.PROP_LIST.getProperty("mentor.qa.emulation.userAgent"))
                         .setViewportSize(Integer.parseInt(PropertyLoader.PROP_LIST.getProperty("mentor.qa.emulation.viewport.width")),
@@ -111,7 +112,7 @@ public class PWBasePage extends MentorEDBaseTest {
             case "msedgePixel4a":
                 logger.info("Using Edge browser for Test suite with Pixel 4a emulation");
                 PWBasePage.PWBrowser = PWBrowser.msedgePixel4a;
-                browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setChannel("msedge").setHeadless(headless));
+                browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setChannel("msedge").setHeadless(headless).setSlowMo(1500));
                 browserContext = browser.newContext(new Browser.NewContextOptions()
                         .setUserAgent(PropertyLoader.PROP_LIST.getProperty("mentor.qa.emulation.userAgent"))
                         .setViewportSize(Integer.parseInt(PropertyLoader.PROP_LIST.getProperty("mentor.qa.emulation.viewport.width")),
@@ -202,7 +203,7 @@ public class PWBasePage extends MentorEDBaseTest {
             if (!screenshotsDir.exists()) {
                 screenshotsDir.mkdirs();
             }
-            Path screenshotPath = Paths.get("/screenshots", testName + ".png");
+            Path screenshotPath = Paths.get("target/screenshots", testName + ".png");
             page.screenshot(new Page.ScreenshotOptions().setPath(screenshotPath));
             BufferedImage image = ImageIO.read(screenshotPath.toFile());
             Graphics2D g = image.createGraphics();

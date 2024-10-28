@@ -29,6 +29,7 @@ public class AppResetPasswordPage extends PWBasePage {
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Validate OTP")).click();
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Generate OTP")).click();
         verifyToastMessage("OTP has been sent to your registered email ID. Please enter the number to update your password.");
+        page.waitForTimeout(5000);
         String script = "navigator.clipboard.writeText('" + GmailAPI.getOTP() + "')";
         logger.info(script);
         page.locator("input.otp-input").nth(0).click();

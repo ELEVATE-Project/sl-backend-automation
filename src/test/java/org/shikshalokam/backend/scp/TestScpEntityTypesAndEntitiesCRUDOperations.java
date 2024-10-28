@@ -5,6 +5,7 @@ import io.restassured.response.Response;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.simple.JSONArray;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.json.simple.JSONObject;
@@ -15,16 +16,19 @@ import java.util.Map;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.request;
 import static org.shikshalokam.backend.PropertyLoader.PROP_LIST;
 
 public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPortalBaseTest {
     private static final Logger logger = LogManager.getLogger(TestScpEntityTypesAndEntitiesCRUDOperations.class);
-    private URI entityTypeCreateEndpoint, entityTypeUpdatePermissionEndpoint;
+    private URI entityTypeCreateEndpoint, entityTypeUpdatePermissionEndpoint, entityTypeReadEndpoint, entityTypeDeleteEndpoint;
     private int createdId;
     private Map<String, String> map;
+    private String entityTypeValue;
 
     @BeforeTest
     public void init() {
@@ -47,7 +51,8 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
 
         // Call entityTypeCreation with valid parameters
         Map<String, String> requestBody = new HashMap<>();
-        requestBody.put("value", "entityTypeValue_" + RandomStringUtils.randomAlphabetic(8).toLowerCase());
+        entityTypeValue = "entityTypeValue" + RandomStringUtils.randomAlphabetic(8).toLowerCase(); // Generate entityTypeValue
+        requestBody.put("value", entityTypeValue);
         requestBody.put("label", "entityTypeLabel" + RandomStringUtils.randomAlphabetic(8).toLowerCase());
         requestBody.put("status", "ACTIVE");
         requestBody.put("type", "SYSTEM");
@@ -185,7 +190,7 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
         logger.info("Ended calling the entity types API with valid payload.");
     }
 
-    @Test(dependsOnMethods = "testCreateEntityTypeWithEmptyFields", description = "Verifies the functionality of updating user's permission with Invalid payload.")
+    @Test(dependsOnMethods = "testCreateEntityTypeWithEmptyFields", description = "Verifies the functionality of updating entity types with empty fields payload.")
     public void testUpdateEntityTypesWithEmptyFields() {
         logger.info("Started calling the entity types API with empty fields payload:");
 
@@ -212,6 +217,76 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
 
         logger.info("Ended calling the entity types API with empty fields.");
     }
+
+    @Test(description = "Verifies the functionality of reading entity types with valid payload.")
+    public void testReadEntityTypesWithValidPayload() {
+        logger.info("Started calling the read entity types API with valid payload:");
+
+        // Ensure that entityTypeValue is set from the previous test
+        JSONObject readRequestBody = entityTypeForRead(entityTypeValue); // Ensure entityTypeValue is correctly set
+        Response response = entityTypeReadRequest(readRequestBody);
+
+        int statusCode = response.getStatusCode();
+        response.prettyPrint();
+        Assert.assertEquals(statusCode, 200, "Status code should be 200");
+
+        // Validate that "entity_types" array is not empty
+        List<Map<String, Object>> entityTypes = response.jsonPath().getList("result.entity_types");
+        Assert.assertTrue(entityTypes != null && !entityTypes.isEmpty(), "Entity types array should not be empty.");
+
+        // Validate that the first entity type in the array matches the created "value"
+        String fetchedValue = entityTypes.get(0).get("value").toString();
+        Assert.assertEquals(fetchedValue, entityTypeValue, "The returned entity type does not match the created entity type.");
+
+        logger.info("Ended calling the read entity types API with valid payload.");
+    }
+
+//    @Test(dependsOnMethods = "testCreateEntityTypeWithInValidPayload", description = "Verifies the functionality of read entity types with Invalid payload.")
+//    public void testReadEntityTypesWithInvalidPayload() {
+//        logger.info("Started calling the entity types API with Invalid payload:");
+//
+//        // Call entityTypeUpdation with invalid parameters
+//        Map<String, String> requestBody = new HashMap<>();
+//        requestBody.put("value", "updatedentity#@$TypeValue_");
+//
+//        JSONObject updatedRequestBody = entityTypeForRead(requestBody);
+//
+//        // Call updatePermission with the created requestBody
+//        Response response = entityTypeReadRequest(updatedRequestBody);
+//
+//
+//        // Log the status code and response body
+//        int statusCode = response.getStatusCode();
+//        response.prettyPrint();
+//
+//        // Validate response code is 400 or 422 for invalid request
+//        Assert.assertTrue(statusCode == 400 || statusCode == 422, "Status code should be 400 or 422 for invalid payload");
+//
+//        logger.info("Ended calling the entity types API with valid payload.");
+//    }
+//
+//    @Test(dependsOnMethods = "testCreateEntityTypeWithEmptyFields", description = "Verifies the functionality of reading entity types with empty fields payload.")
+//    public void testReadEntityTypesWithEmptyFields() {
+//        logger.info("Started calling the entity types API with empty fields payload:");
+//
+//        // Call entityTypeUpdation with valid parameters
+//        Map<String, String> requestBody = new HashMap<>();
+//        requestBody.put("value", "");
+//
+//        JSONObject updatedRequestBody = entityTypeForUpdate(requestBody);
+//
+//        // Call updatePermission with the created requestBody
+//        Response response = entityTypeUpdateRequest(updatedRequestBody);
+//
+//        // Log the status code and response body
+//        int statusCode = response.getStatusCode();
+//        response.prettyPrint();
+//
+//        // Validate response code for empty fields (usually 400)
+//        Assert.assertEquals(statusCode, 400, "Status code should be 400 for empty fields payload");
+//
+//        logger.info("Ended calling the entity types API with empty fields.");
+//    }
 
     //Method to create request body for entityTypes
     private JSONObject createEntityType(Map<String, String> map) {
@@ -260,6 +335,41 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
                 .contentType(ContentType.JSON)
                 .body(requestBody.toString())
                 .when().post(entityTypeUpdatePermissionEndpoint);
+
+        // Pretty-print the response for debugging
+        response.prettyPrint();
+
+        return response;
+    }
+
+    // Method to create request body for read entityTypes
+    // Method to create request body for read entityTypes
+    private JSONObject entityTypeForRead(String value) {
+        JSONObject requestBody = new JSONObject();
+        JSONArray valueArray = new JSONArray();
+        valueArray.add(value); // Add the value to the array, should be non-null
+        requestBody.put("value", valueArray);
+        requestBody.put("read_user_entity", false);
+
+        // Log the request body
+        logger.info("Request Body for read entity types: " + requestBody.toJSONString());
+
+        return requestBody;
+    }
+
+    private Response entityTypeReadRequest(JSONObject requestBody) {
+        try {
+            entityTypeReadEndpoint = new URI(PROP_LIST.get("scp.read.entitytype.endpoint").toString());
+        } catch (URISyntaxException e) {
+            throw new RuntimeException("Invalid URI for updateEntityTypeEndpoint", e);
+        }
+
+        // Make the POST request to update the permission
+        Response response = given()
+                .header("X-auth-token", "bearer " + X_AUTH_TOKEN)
+                .contentType(ContentType.JSON)
+                .body(requestBody.toString())
+                .when().post(entityTypeReadEndpoint);
 
         // Pretty-print the response for debugging
         response.prettyPrint();

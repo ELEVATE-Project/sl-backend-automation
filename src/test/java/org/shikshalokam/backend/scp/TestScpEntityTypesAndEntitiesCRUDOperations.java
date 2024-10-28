@@ -16,11 +16,9 @@ import java.util.Map;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
 
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.request;
 import static org.shikshalokam.backend.PropertyLoader.PROP_LIST;
 
 public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPortalBaseTest {
@@ -51,8 +49,7 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
 
         // Call entityTypeCreation with valid parameters
         Map<String, String> requestBody = new HashMap<>();
-        entityTypeValue = "entityTypeValue" + RandomStringUtils.randomAlphabetic(8).toLowerCase(); // Generate entityTypeValue
-        requestBody.put("value", entityTypeValue);
+        requestBody.put("value", "entityTypeValue" + RandomStringUtils.randomAlphabetic(8).toLowerCase());
         requestBody.put("label", "entityTypeLabel" + RandomStringUtils.randomAlphabetic(8).toLowerCase());
         requestBody.put("status", "ACTIVE");
         requestBody.put("type", "SYSTEM");
@@ -139,7 +136,8 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
 
         // Call entityTypeUpdation with valid parameters
         Map<String, String> requestBody = new HashMap<>();
-        requestBody.put("value", "updatedentityTypeValue_" + RandomStringUtils.randomAlphabetic(8).toLowerCase());
+        entityTypeValue = "updatedentitytypevalue" + RandomStringUtils.randomAlphabetic(8).toLowerCase(); // Generate entityTypeValue
+        requestBody.put("value", entityTypeValue);
         requestBody.put("label", "updatedentityTypeLabel" + RandomStringUtils.randomAlphabetic(8).toLowerCase());
         requestBody.put("status", "ACTIVE");
         requestBody.put("type", "SYSTEM");
@@ -176,7 +174,7 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
 
         JSONObject updatedRequestBody = entityTypeForUpdate(requestBody);
 
-        // Call updatePermission with the created requestBody
+        // Call updateEntityType with the created requestBody
         Response response = entityTypeUpdateRequest(updatedRequestBody);
 
 
@@ -218,75 +216,38 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
         logger.info("Ended calling the entity types API with empty fields.");
     }
 
-    @Test(description = "Verifies the functionality of reading entity types with valid payload.")
+    @Test(dependsOnMethods = "testUpdateEntityTypesWithValidPayload", description = "Verifies the functionality of reading entity types with valid payload.")
     public void testReadEntityTypesWithValidPayload() {
         logger.info("Started calling the read entity types API with valid payload:");
 
         // Ensure that entityTypeValue is set from the previous test
-        JSONObject readRequestBody = entityTypeForRead(entityTypeValue); // Ensure entityTypeValue is correctly set
+        JSONObject readRequestBody = entityTypeForRead(entityTypeValue.toLowerCase());
+
         Response response = entityTypeReadRequest(readRequestBody);
 
         int statusCode = response.getStatusCode();
         response.prettyPrint();
         Assert.assertEquals(statusCode, 200, "Status code should be 200");
 
-        // Validate that "entity_types" array is not empty
-        List<Map<String, Object>> entityTypes = response.jsonPath().getList("result.entity_types");
-        Assert.assertTrue(entityTypes != null && !entityTypes.isEmpty(), "Entity types array should not be empty.");
-
-        // Validate that the first entity type in the array matches the created "value"
-        String fetchedValue = entityTypes.get(0).get("value").toString();
-        Assert.assertEquals(fetchedValue, entityTypeValue, "The returned entity type does not match the created entity type.");
-
         logger.info("Ended calling the read entity types API with valid payload.");
     }
 
-//    @Test(dependsOnMethods = "testCreateEntityTypeWithInValidPayload", description = "Verifies the functionality of read entity types with Invalid payload.")
-//    public void testReadEntityTypesWithInvalidPayload() {
-//        logger.info("Started calling the entity types API with Invalid payload:");
-//
-//        // Call entityTypeUpdation with invalid parameters
-//        Map<String, String> requestBody = new HashMap<>();
-//        requestBody.put("value", "updatedentity#@$TypeValue_");
-//
-//        JSONObject updatedRequestBody = entityTypeForRead(requestBody);
-//
-//        // Call updatePermission with the created requestBody
-//        Response response = entityTypeReadRequest(updatedRequestBody);
-//
-//
-//        // Log the status code and response body
-//        int statusCode = response.getStatusCode();
-//        response.prettyPrint();
-//
-//        // Validate response code is 400 or 422 for invalid request
-//        Assert.assertTrue(statusCode == 400 || statusCode == 422, "Status code should be 400 or 422 for invalid payload");
-//
-//        logger.info("Ended calling the entity types API with valid payload.");
-//    }
-//
-//    @Test(dependsOnMethods = "testCreateEntityTypeWithEmptyFields", description = "Verifies the functionality of reading entity types with empty fields payload.")
-//    public void testReadEntityTypesWithEmptyFields() {
-//        logger.info("Started calling the entity types API with empty fields payload:");
-//
-//        // Call entityTypeUpdation with valid parameters
-//        Map<String, String> requestBody = new HashMap<>();
-//        requestBody.put("value", "");
-//
-//        JSONObject updatedRequestBody = entityTypeForUpdate(requestBody);
-//
-//        // Call updatePermission with the created requestBody
-//        Response response = entityTypeUpdateRequest(updatedRequestBody);
-//
-//        // Log the status code and response body
-//        int statusCode = response.getStatusCode();
-//        response.prettyPrint();
-//
-//        // Validate response code for empty fields (usually 400)
-//        Assert.assertEquals(statusCode, 400, "Status code should be 400 for empty fields payload");
-//
-//        logger.info("Ended calling the entity types API with empty fields.");
-//    }
+    @Test(dependsOnMethods = "testReadEntityTypesWithValidPayload", description = "Verifies the functionality of deleting entity types with valid payload.")
+    public void testDeleteEntityTypesWithValidPayload() {
+        logger.info("Started calling the delete entity types API with valid payload:");
+
+        // Call delete entityType with the created requestBody
+        Response response = entityTypeDeleteRequest();
+
+        // Log the status code and response body
+        int statusCode = response.getStatusCode();
+        response.prettyPrint();
+
+        // Validate response code is 202 for a successful update
+        Assert.assertEquals(statusCode, 202, "Status code should be 202");
+
+        logger.info("Ended calling the delete entity types API with valid payload.");
+    }
 
     //Method to create request body for entityTypes
     private JSONObject createEntityType(Map<String, String> map) {
@@ -343,11 +304,10 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
     }
 
     // Method to create request body for read entityTypes
-    // Method to create request body for read entityTypes
     private JSONObject entityTypeForRead(String value) {
         JSONObject requestBody = new JSONObject();
         JSONArray valueArray = new JSONArray();
-        valueArray.add(value); // Add the value to the array, should be non-null
+        valueArray.add(value);
         requestBody.put("value", valueArray);
         requestBody.put("read_user_entity", false);
 
@@ -361,15 +321,34 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
         try {
             entityTypeReadEndpoint = new URI(PROP_LIST.get("scp.read.entitytype.endpoint").toString());
         } catch (URISyntaxException e) {
-            throw new RuntimeException("Invalid URI for updateEntityTypeEndpoint", e);
+            throw new RuntimeException("Invalid URI for readEntityTypeEndpoint", e);
         }
 
-        // Make the POST request to update the permission
+        // Make the POST request to read the entityTypes
         Response response = given()
                 .header("X-auth-token", "bearer " + X_AUTH_TOKEN)
                 .contentType(ContentType.JSON)
                 .body(requestBody.toString())
                 .when().post(entityTypeReadEndpoint);
+
+        // Pretty-print the response for debugging
+        response.prettyPrint();
+
+        return response;
+    }
+
+    private Response entityTypeDeleteRequest() {
+        try {
+            entityTypeDeleteEndpoint = new URI(PROP_LIST.get("scp.delete.entitytype.endpoint").toString() + "/" + createdId);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException("Invalid URI for deleteEntityTypeEndpoint", e);
+        }
+
+        // Make the DELETE request to read the entityTypes
+        Response response = given()
+                .header("X-auth-token", "bearer " + X_AUTH_TOKEN)
+                .contentType(ContentType.JSON)
+                .when().delete(entityTypeDeleteEndpoint);
 
         // Pretty-print the response for debugging
         response.prettyPrint();

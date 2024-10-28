@@ -12,6 +12,16 @@
                 </methods>
             </class>
 
+            <class name="org.shikshalokam.backend.ep.TestElevateLogin">
+                <methods>
+                    <include name="testCreatingSingleEntitytype"/>
+                    <include name="testInavlidCreatingSingleEntitytype"/>
+                    <include name="testFetchingEntitytype"/>
+                    <include name="testUpdatingSingleEntitytype"/>
+                    <include name="testFetchingEntitytypeList"/>
+                </methods>
+            </class>
+
         </classes>
     </test> <!-- Test -->
 </suite> <!-- Suite -->

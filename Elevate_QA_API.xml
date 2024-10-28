@@ -1,37 +1,31 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="SanitySuite">
+<suite name="Elevate Project test suit">
     <listeners>
         <listener class-name="org.shikshalokam.Listerners.SLCustomListener"/>
     </listeners>
 
     <test name="Test">
         <classes>
-            <class name="org.shikshalokam.backend.ep.TestElevateLogin">
-                <methods>
-                    <include name="testLoginWithValidCredentials"/>
-                    <include name="testLoginWithInvalidCredentials"/>
-                    <include name="testLoginWithEmptyFields"/>
-                </methods>
-            </class>
+                        <class name="org.shikshalokam.backend.ep.TestElevateLogin">
+                            <methods>
+                                <include name="testLoginWithValidCredentials"/>
+                                <include name="testLoginWithInvalidCredentials"/>
+                                <include name="testLoginWithEmptyFields"/>
+                            </methods>
+                        </class>
 
             <class name="org.shikshalokam.backend.ep.TestElevateEntityTypeCRUDOperations">
                 <methods>
-                    <include name="testCreateValidEntitytype"/>
-                    <include name="testCreateInvalidEntitytype"/>
-                    <include name="testFetchEntitytype"/>
-                    <include name="testUpdateSingleEntitytypeValidFields"/>
-                    <include name="testFetchEntitytypeList"/>
+                    <include name="testCreatingSingleEntitytype"/>
+                    <include name="testInavlidCreatingSingleEntitytype"/>
+                    <include name="testFetchingEntitytype"/>
+                    <include name="testUpdatingSingleEntitytype"/>
+                    <include name="testFetchingEntitytypeList"/>
                 </methods>
             </class>
 
-            <class name="org.shikshalokam.backend.ep.TestElevateBulkUploadEntityTypeCRUDOperations">
-                <methods>
-                    <include name="testValidCsvCreate"/>
-                    <include name="testValidCsvUpdate"/>
-                </methods>
-            </class>
         </classes>
-    </test> <!-- Test -->
-</suite> <!-- Suite -->
+    </test>
+</suite>
 
 

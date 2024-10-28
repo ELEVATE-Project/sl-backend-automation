@@ -18,8 +18,6 @@ import static org.testng.AssertJUnit.fail;
 
 public class TestElevateEntityTypeCRUDOperations extends ElevateProjectBaseTest {
     private Logger logger = LogManager.getLogger(TestElevateEntityTypeCRUDOperations.class);
-    private String entityType_Id;
-
 
     @BeforeTest
     public void userLogin() {
@@ -112,42 +110,6 @@ public class TestElevateEntityTypeCRUDOperations extends ElevateProjectBaseTest 
             fail(response.prettyPrint() + "ERROR....!!!!!!");
         }
         return response;
-    }
-
-    //Method to fetch entity type by name
-    private Response fetchSingleEntityType(String name) {
-        Map<String, Object> requestBody = new HashMap<>();
-        Map<String, String> query = new HashMap<>();
-        query.put("name", name);
-        Map<String, Integer> projection = new HashMap<>();
-        projection.put("_id", 1);
-        projection.put("name", 1);
-        Map<String, Integer> skipFields = new HashMap<>();
-        skipFields.put("createdAt", 1);
-        requestBody.put("query", query);
-        requestBody.put("projection", projection);
-        requestBody.put("skipFields", skipFields);
-
-        Response response = given()
-                .header("Authorization", INTERNAL_ACCESS_TOKEN)
-                .header("internal-access-token", INTERNAL_ACCESS_TOKEN)
-                .header("x-auth-token", X_AUTH_TOKEN)
-                .header("Content-Type", "application/json")
-                .body(requestBody) // Send the HashMap request body
-                .post(BASE_URL + PropertyLoader.PROP_LIST.getProperty("elevate.qa.fetchentitytype.endpoint"));
-        if (response.getStatusCode() != 200) {
-            fail(response.prettyPrint() + " ERROR..!!!!");
-        }
-        return response;
-    }
-
-    //Method to get entity type Id
-    private void getEntitytype_Id(String entityName) {
-        Response response = fetchSingleEntityType(entityName);
-        response.prettyPrint();
-        entityType_Id = response.jsonPath().getString("result[0]._id");
-        Assert.assertEquals(response.jsonPath().getString("result[0].name"), entityName);
-        logger.info("Entity type Id fetched successfully!! = " + entityType_Id);
     }
 
     //Method to update entity type

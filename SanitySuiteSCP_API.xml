@@ -6,24 +6,35 @@
     <test name="ScpSanityTests">
         <classes>
 
-            <class name="org.shikshalokam.frontend.scp.TestScpLoginAPI">
+            <class name="org.shikshalokam.backend.scp.TestScpLogin">
                 <methods>
                     <include name="successfulLoginScp"/>
-                </methods>
-            </class>
-
-            <class name="org.shikshalokam.frontend.scp.TestScpLoginAPI">
-                <methods>
                     <include name="invalidLoginScp"/>
-                </methods>
-            </class>
-
-            <class name="org.shikshalokam.frontend.scp.TestScpLoginAPI">
-                <methods>
                     <include name="checkEmptyFieldsForLoginCredentials"/>
                 </methods>
             </class>
 
+            <class name="org.shikshalokam.backend.scp.TestScpPermissionCRUDOperations">
+                <methods>
+                    <include name="testCreatePermissionWithValidPayload"/>
+                    <include name="testCreatePermissionWithInvalidPayload"/>
+                    <include name="testCreatePermissionWithEmptyFields"/>
+                    <include name="testUpdatePermissionWithValidPayload"/>
+                    <include name="testUpdatePermissionWithInvalidPayload"/>
+                    <include name="testUpdatePermissionWithEmptyFieldsPayload"/>
+                </methods>
+            </class>
+
+            <class name="org.shikshalokam.backend.scp.TestScpEntityTypesAndEntitiesCRUDOperations">
+                <methods>
+                    <include name="testCreateEntityTypeWithValidPayload"/>
+                    <include name="testCreateEntityTypeWithInValidPayload"/>
+                    <include name="testCreateEntityTypeWithEmptyFields"/>
+                    <include name="testUpdateEntityTypesWithValidPayload"/>
+                    <include name="testUpdateEntityTypesWithInvalidPayload"/>
+                    <include name="testUpdateEntityTypesWithEmptyFields"/>
+                </methods>
+            </class>
 
         </classes>
     </test> <!-- Test -->

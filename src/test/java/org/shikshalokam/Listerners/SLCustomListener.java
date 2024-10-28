@@ -29,7 +29,9 @@ public class SLCustomListener implements ITestListener, ISuiteListener {
 
         extent = new ExtentReports();
         extent.attachReporter(htmlReporter);
-        extent.setSystemInfo("Browser", String.valueOf(PWBrowser));
+        if (Boolean.parseBoolean(PropertyLoader.PROP_LIST.getProperty("sl.capture.screenshot.on.failure"))) {
+            extent.setSystemInfo("Browser", String.valueOf(PWBrowser));
+        }
         extent.setSystemInfo("OS", System.getProperty("os.name"));
         extent.setSystemInfo("OS Version", System.getProperty("os.version"));
         extent.setSystemInfo("Java Version", System.getProperty("java.version"));

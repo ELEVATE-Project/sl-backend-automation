@@ -16,5 +16,6 @@ public class SampleUITest {
                 fetchProperty("mentor.qa.admin.login.password")).logOutFromApp();
         robot.quitAppBrowser();
     }
-
 }
+
+

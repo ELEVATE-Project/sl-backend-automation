@@ -23,7 +23,7 @@ import static org.shikshalokam.backend.PropertyLoader.PROP_LIST;
 
 public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPortalBaseTest {
     private static final Logger logger = LogManager.getLogger(TestScpEntityTypesAndEntitiesCRUDOperations.class);
-    private URI entityTypeCreateEndpoint, entityTypeUpdatePermissionEndpoint, entityTypeReadEndpoint, entityTypeDeleteEndpoint;
+    private URI entityTypeCreateEndpoint, entityTypeUpdatePermissionEndpoint, entityTypeReadEndpoint, entityTypeDeleteEndpoint, entityCreateEndpoint;
     private int createdId;
     private Map<String, String> map;
     private String entityTypeValue;
@@ -251,6 +251,87 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
         logger.info("Ended calling the delete entity types API with valid payload.");
     }
 
+    @Test(dependsOnMethods = "testCreateEntityTypeWithValidPayload", description = "Verifies the functionality of creating new entity with valid payload.")
+    public void testCreateEntityWithValidPayload() {
+        logger.info("Started calling the CreateEntity API with valid payload:");
+
+        // Call entityCreation with valid parameters
+        Map<String, String> requestBody = new HashMap<>();
+        requestBody.put("value", "entityValue" + RandomStringUtils.randomAlphabetic(8).toLowerCase());
+        requestBody.put("label", "entityLabel" + RandomStringUtils.randomAlphabetic(8).toLowerCase());
+        requestBody.put("status", "ACTIVE");
+        requestBody.put("type", "SYSTEM");
+        requestBody.put("entity_type_id", String.valueOf(createdId));
+
+        JSONObject createRequestBody = createEntity(requestBody);
+
+        // Call updatePermission with the created requestBody
+        Response response = createEntityRequest(createRequestBody);
+
+        // Log the status code and response body
+        int statusCode = response.getStatusCode();
+        response.prettyPrint();
+
+        // Validate response code is 201
+        Assert.assertEquals(statusCode, 201, "Status code should be 201");
+
+        logger.info("Ended calling the EntityCreation API with valid payload.");
+    }
+    @Test(dependsOnMethods = "testCreateEntityTypeWithInValidPayload", description = "Verifies the functionality of creating new entity with valid payload.")
+    public void testCreateEntityWithInValidPayload() {
+        logger.info("Started calling the CreateEntity API with invalid payload:");
+
+        // Call entityCreation with valid parameters
+        Map<String, String> requestBody = new HashMap<>();
+        requestBody.put("value", "$@#@!#@!");
+        requestBody.put("label", "R#RW@@@@@@@@@@");
+        requestBody.put("status", "INACTIVE");
+        requestBody.put("type", "SYSTEM_ADMIN");
+        requestBody.put("entity_type_id", String.valueOf("createdID"));
+
+        JSONObject createRequestBody = createEntity(requestBody);
+
+        // Call updatePermission with the created requestBody
+        Response response = createEntityRequest(createRequestBody);
+
+        // Log the status code and response body
+        int statusCode = response.getStatusCode();
+        response.prettyPrint();
+
+        // Validate response code is 201
+        // Validate response code is 400 or 422 for invalid request
+        Assert.assertTrue(statusCode == 400 || statusCode == 422, "Status code should be 400 or 422 for invalid payload");
+
+        logger.info("Ended calling the EntityCreation API with invalid payload.");
+    }
+    @Test(dependsOnMethods = "testCreateEntityTypeWithEmptyFields", description = "Verifies the functionality of creating new entity with valid payload.")
+    public void testCreateEntityWithEmptyFields() {
+        logger.info("Started calling the CreateEntity API with empty fields payload:");
+
+        // Call entityCreation with valid parameters
+        Map<String, String> requestBody = new HashMap<>();
+        requestBody.put("value", "");
+        requestBody.put("label", "");
+        requestBody.put("status", "");
+        requestBody.put("type", "");
+        requestBody.put("entity_type_id", "");
+
+        JSONObject createRequestBody = createEntity(requestBody);
+
+        // Call updatePermission with the created requestBody
+        Response response = createEntityRequest(createRequestBody);
+
+        // Log the status code and response body
+        int statusCode = response.getStatusCode();
+        response.prettyPrint();
+
+        // Validate response code for empty fields (usually 400)
+        Assert.assertEquals(statusCode, 400, "Status code should be 400 for empty fields payload");
+
+        logger.info("Ended calling the EntityCreation API with empty fields payload.");
+    }
+
+
     //Method to create request body for entityTypes
     private JSONObject createEntityType(Map<String, String> map) {
         JSONObject requestBody = new JSONObject();
@@ -352,6 +433,32 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
                 .pathParams("id", createdId)
                 .contentType(ContentType.JSON)
                 .when().delete(entityTypeDeleteEndpoint + "{id}");
+
+        // Pretty-print the response for debugging
+        response.prettyPrint();
+
+        return response;
+    }
+    //Method to create request body for entityTypes
+    private JSONObject createEntity(Map<String, String> map) {
+        JSONObject requestBody = new JSONObject();
+        requestBody.putAll(map);
+        return requestBody;
+    }
+
+    private Response createEntityRequest(JSONObject requestBody) {
+        try {
+            entityCreateEndpoint = new URI(PROP_LIST.get("scp.create.entity.endpoint").toString());
+        } catch (URISyntaxException e) {
+            throw new RuntimeException("Invalid URI for entityCreatEndpoint", e);
+        }
+
+        // Make the POST request to update the permission
+        Response response = given()
+                .header("X-auth-token", "bearer " + X_AUTH_TOKEN)
+                .contentType(ContentType.JSON)
+                .body(requestBody.toString())
+                .when().post(entityCreateEndpoint);
 
         // Pretty-print the response for debugging
         response.prettyPrint();

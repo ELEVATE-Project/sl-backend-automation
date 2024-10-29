@@ -285,17 +285,17 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
 
     private Response entityTypeUpdateRequest(JSONObject requestBody) {
         try {
-            entityTypeUpdatePermissionEndpoint = new URI(PROP_LIST.get("scp.update.entitytype.endpoint").toString() + "/" + createdId);
+            entityTypeUpdatePermissionEndpoint = new URI(PROP_LIST.get("scp.update.entitytype.endpoint").toString());
         } catch (URISyntaxException e) {
             throw new RuntimeException("Invalid URI for updateEntityTypeEndpoint", e);
         }
-
         // Make the POST request to update the permission
         Response response = given()
                 .header("X-auth-token", "bearer " + X_AUTH_TOKEN)
+                .pathParams("id", createdId)
                 .contentType(ContentType.JSON)
                 .body(requestBody.toString())
-                .when().post(entityTypeUpdatePermissionEndpoint);
+                .when().post(entityTypeUpdatePermissionEndpoint + "{id}");
 
         // Pretty-print the response for debugging
         response.prettyPrint();
@@ -339,7 +339,7 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
 
     private Response entityTypeDeleteRequest() {
         try {
-            entityTypeDeleteEndpoint = new URI(PROP_LIST.get("scp.delete.entitytype.endpoint").toString() + "/" + createdId);
+            entityTypeDeleteEndpoint = new URI(PROP_LIST.get("scp.delete.entitytype.endpoint").toString());
         } catch (URISyntaxException e) {
             throw new RuntimeException("Invalid URI for deleteEntityTypeEndpoint", e);
         }
@@ -347,8 +347,9 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
         // Make the DELETE request to read the entityTypes
         Response response = given()
                 .header("X-auth-token", "bearer " + X_AUTH_TOKEN)
+                .pathParams("id", createdId)
                 .contentType(ContentType.JSON)
-                .when().delete(entityTypeDeleteEndpoint);
+                .when().delete(entityTypeDeleteEndpoint  + "{id}");
 
         // Pretty-print the response for debugging
         response.prettyPrint();

@@ -66,7 +66,7 @@ public class TestElevateEntityTypeCRUDOperations extends ElevateProjectBaseTest 
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertEquals(response.jsonPath().getString("result.name"), updated_Name);
         logger.info("Entity type name is updated from: " + randomEntitytypeName + " to" + updated_Name + "entity type Id = " + entityType_Id);
-        logger.info("Validations related to updating the entity type with the _Id is verified");
+        logger.info("Validations related tgito updating the entity type with the _Id is verified");
     }
 
     @Test(description = "Fetching Entity Types List", dependsOnMethods = "testCreatingSingleEntitytype")

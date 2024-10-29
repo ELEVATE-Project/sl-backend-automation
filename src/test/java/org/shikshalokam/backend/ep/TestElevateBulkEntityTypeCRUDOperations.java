@@ -131,5 +131,4 @@ public class TestElevateBulkEntityTypeCRUDOperations extends ElevateProjectBaseT
             logger.info(e + "Error!!!");
         }
     }
-
 }

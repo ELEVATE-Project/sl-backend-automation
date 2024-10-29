@@ -117,7 +117,7 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
         logger.info("Started calling the UpdatePermission API with Invalid payload:");
 
         JSONObject requestBody = createRequestBodyForUpdate("project_", "invalidModule", "INVALID", "/scp/invalid/api", "INVALID");
-        ;
+
 
         // Call updatePermission with the created requestBody
         Response response = updatePermission(requestBody);
@@ -137,7 +137,7 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
         logger.info("Started calling the UpdatePermission API with Invalid payload:");
 
         JSONObject requestBody = createRequestBodyForUpdate("", "", "", "", "");
-        ;
+
 
         // Call updatePermission with the created requestBody
         Response response = updatePermission(requestBody);
@@ -176,10 +176,10 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
     }
 
     @Test(description = "Verifies the getPermissions API for a valid user.")
-    public void testGetPermissionsApi() {
+    public void testGetPermissionsWithValidPayload() {
         logger.info("Started calling the GetPermissions API with valid token.");
 
-        Response response = getPermissions(X_AUTH_TOKEN);
+        Response response = getPermissions(true);
         response.prettyPrint();
 
         // Validate response code
@@ -191,7 +191,7 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
     public void testGetPermissionsApiWithInvalidToken() {
         logger.info("Started calling the GetPermissions API with an invalid token.");
 
-        Response response = getPermissions("invalid token");
+        Response response = getPermissions(false);
 
         // Validate response code for invalid token
         Assert.assertEquals(response.getStatusCode(), 401, "Expected 401 Unauthorized error.");
@@ -231,20 +231,30 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
     }
 
     // Method to handle the getPermissions API request
-    private Response getPermissions(String token) {
+    private Response getPermissions(Boolean validToken) {
+        String temp_X_AUTH_TOKEN=X_AUTH_TOKEN;
+        Response local =null;
         try {
+            if (!validToken)
+            {
+                X_AUTH_TOKEN="junk";
+            }
+
+
             permissionListApiEndpoint = new URI(PROP_LIST.get("scp.qa.permission.list").toString());
         } catch (URISyntaxException e) {
             throw new RuntimeException("Invalid URI for getPermissionEndpoint", e);
         }
 
-        // Make the GET request without a request body
-        return given()
-                .header("X-auth-token", "bearer " + token)
+        local=given()
+                .header("X-auth-token", "bearer " + X_AUTH_TOKEN)
                 .contentType(ContentType.JSON)
                 .when()
                 .get(permissionListApiEndpoint)
                 .then()
                 .extract().response();
+        // Make the GET request without a request body
+        X_AUTH_TOKEN=temp_X_AUTH_TOKEN;
+        return local;
     }
 }

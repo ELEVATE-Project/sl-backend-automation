@@ -188,7 +188,7 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
         logger.info("Ended calling the entity types API with valid payload.");
     }
 
-    @Test(dependsOnMethods = "testCreateEntityTypeWithEmptyFields", description = "Verifies the functionality of updating entity types with empty fields payload.")
+    @Test(description = "Verifies the functionality of updating entity types with empty fields payload.")
     public void testUpdateEntityTypesWithEmptyFields() {
         logger.info("Started calling the entity types API with empty fields payload:");
 
@@ -245,6 +245,8 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
 
         // Validate response code is 202 for a successful update
         Assert.assertEquals(statusCode, 202, "Status code should be 202");
+        response = entityTypeDeleteRequest();
+        Assert.assertEquals(response.getStatusCode(), 400, "Entity type not found");
 
         logger.info("Ended calling the delete entity types API with valid payload.");
     }
@@ -349,7 +351,7 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
                 .header("X-auth-token", "bearer " + X_AUTH_TOKEN)
                 .pathParams("id", createdId)
                 .contentType(ContentType.JSON)
-                .when().delete(entityTypeDeleteEndpoint  + "{id}");
+                .when().delete(entityTypeDeleteEndpoint + "{id}");
 
         // Pretty-print the response for debugging
         response.prettyPrint();

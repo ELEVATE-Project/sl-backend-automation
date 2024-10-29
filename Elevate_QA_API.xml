@@ -1,5 +1,5 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="SanitySuite">
+<suite name="SanitySuiteEP">
 
     <test name="Test">
         <classes>
@@ -12,8 +12,25 @@
                 </methods>
             </class>
 
+            <class name="org.shikshalokam.backend.ep.TestElevateEntityTypeCRUDOperations">
+                <methods>
+                    <include name="testCreatingSingleEntitytype"/>
+                    <include name="testInavlidCreatingSingleEntitytype"/>
+                    <include name="testFetchingEntitytype"/>
+                    <include name="testUpdatingSingleEntitytype"/>
+                    <include name="testFetchingEntitytypeList"/>
+                </methods>
+            </class>
+
+            <class name="org.shikshalokam.backend.ep.TestElevateBulkEntityTypeCRUDOperations">
+                <methods>
+                    <include name="testBulkCreateWithValidCsv"/>
+                    <include name="testBulkUpdateEntitytypeWithValidCsv"/>
+                </methods>
+            </class>
+
         </classes>
-    </test> <!-- Test -->
-</suite> <!-- Suite -->
+    </test>
+</suite>
 
 

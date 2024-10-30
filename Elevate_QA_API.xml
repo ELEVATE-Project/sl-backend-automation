@@ -24,6 +24,12 @@
                     <include name="testFetchingEntityTypeList"/>
                 </methods>
             </class>
+            <class name="org.shikshalokam.backend.ep.TestElevateBulkEntityTypeCRUDOperations">
+                <methods>
+                    <include name="testBulkCreateEntityTypeWithValidCsv"/>
+                    <include name="testBulkUpdateEntityTypeWithValidCsv"/>
+                </methods>
+            </class>
 
         </classes>
     </test>

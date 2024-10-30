@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import java.net.URI;
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class TestCRUDUserPermissions extends MentorEDBaseTest {
     private URI createUserPermissionEndpoint, getUserPermissionsEndPoint, updateUserPermissionEndpoint, deleteUserPermissionEndpoint;
     private String createdPermissionID, permissionName, updatedPermName;
 
-    @BeforeTest
+    @BeforeMethod
     public void init() {
         logger.info("Logging into the application :");
         loginToMentorED(PROP_LIST.get("mentor.qa.sysadmin.login.user").toString(), PROP_LIST.get("mentor.qa.sysadmin.login.password").toString());

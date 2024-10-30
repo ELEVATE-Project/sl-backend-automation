@@ -19,7 +19,7 @@ import static org.shikshalokam.backend.PropertyLoader.PROP_LIST;
 
 public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest {
     private static final Logger logger = LogManager.getLogger(TestScpPermissionCRUDOperations.class);
-    private URI createPermissionEndpoint, updatePermissionEndpoint;
+    private URI createPermissionEndpoint, updatePermissionEndpoint, permissionListApiEndpoint;
     private int createdId;
 
     @BeforeTest
@@ -116,7 +116,8 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
     public void testUpdatePermissionWithInvalidPayload() {
         logger.info("Started calling the UpdatePermission API with Invalid payload:");
 
-        JSONObject requestBody = createRequestBodyForUpdate("project_", "invalidModule", "INVALID", "/scp/invalid/api", "INVALID");;
+        JSONObject requestBody = createRequestBodyForUpdate("project_", "invalidModule", "INVALID", "/scp/invalid/api", "INVALID");
+
 
         // Call updatePermission with the created requestBody
         Response response = updatePermission(requestBody);
@@ -135,7 +136,8 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
     public void testUpdatePermissionWithEmptyFieldsPayload() {
         logger.info("Started calling the UpdatePermission API with Invalid payload:");
 
-        JSONObject requestBody = createRequestBodyForUpdate("", "", "", "", "");;
+        JSONObject requestBody = createRequestBodyForUpdate("", "", "", "", "");
+
 
         // Call updatePermission with the created requestBody
         Response response = updatePermission(requestBody);
@@ -173,6 +175,30 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
         return response;
     }
 
+    @Test(description = "Verifies the getPermissions API for a valid user.")
+    public void testGetPermissionsWithValidPayload() {
+        logger.info("Started calling the GetPermissions API with valid token.");
+
+        Response response = getPermissions(true);
+        response.prettyPrint();
+
+        // Validate response code
+        Assert.assertEquals(response.getStatusCode(), 200, "Failed to fetch permissions.");
+        logger.info("Permissions retrieved successfully.");
+    }
+
+    @Test(description = "Verifies the getPermissions API with an invalid token.")
+    public void testGetPermissionsApiWithInvalidToken() {
+        logger.info("Started calling the GetPermissions API with an invalid token.");
+
+        Response response = getPermissions(false);
+
+        // Validate response code for invalid token
+        Assert.assertEquals(response.getStatusCode(), 401, "Expected 401 Unauthorized error.");
+        logger.info("Received expected error for invalid token.");
+    }
+
+
     // Method to create request body for update permission
     private JSONObject createRequestBodyForUpdate(String codePrefix, String module, String requestType, String apiPath, String status) {
         JSONObject requestBody = new JSONObject();
@@ -202,5 +228,33 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
                 .when().post(updatePermissionEndpoint);
 
         return response;
+    }
+
+    // Method to handle the getPermissions API request
+    private Response getPermissions(Boolean validToken) {
+        String temp_X_AUTH_TOKEN=X_AUTH_TOKEN;
+        Response local =null;
+        try {
+            if (!validToken)
+            {
+                X_AUTH_TOKEN="junk";
+            }
+
+
+            permissionListApiEndpoint = new URI(PROP_LIST.get("scp.qa.permission.list").toString());
+        } catch (URISyntaxException e) {
+            throw new RuntimeException("Invalid URI for getPermissionEndpoint", e);
+        }
+
+        local=given()
+                .header("X-auth-token", "bearer " + X_AUTH_TOKEN)
+                .contentType(ContentType.JSON)
+                .when()
+                .get(permissionListApiEndpoint)
+                .then()
+                .extract().response();
+        // Make the GET request without a request body
+        X_AUTH_TOKEN=temp_X_AUTH_TOKEN;
+        return local;
     }
 }

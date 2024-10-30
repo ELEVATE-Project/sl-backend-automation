@@ -1,0 +1,4 @@
+name,registryname,isObservable,tobeMappedToParentEntities,immediatechildrenEntityType
+EntityTypeName,locationRegistry,TRUE,TRUE,
+EntityTypeName,locationRegistry,TRUE,TRUE,
+EntityTypeName,locationRegistry,TRUE,TRUE,

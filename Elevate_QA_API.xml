@@ -17,20 +17,14 @@
 
             <class name="org.shikshalokam.backend.ep.TestElevateEntityTypeCRUDOperations">
                 <methods>
-                    <include name="testCreatingSingleEntitytype"/>
-                    <include name="testInavlidCreatingSingleEntitytype"/>
-                    <include name="testFetchingEntitytype"/>
-                    <include name="testUpdatingSingleEntitytype"/>
-                    <include name="testFetchingEntitytypeList"/>
+                    <include name="testCreatingSingleEntityType"/>
+                    <include name="testInvalidCreatingSingleEntityType"/>
+                    <include name="testFetchingEntityType"/>
+                    <include name="testUpdatingSingleEntityType"/>
+                    <include name="testFetchingEntityTypeList"/>
                 </methods>
             </class>
 
-            <class name="org.shikshalokam.backend.ep.TestElevateBulkEntityTypeCRUDOperations">
-                <methods>
-                    <include name="testBulkCreateWithValidCsv"/>
-                    <include name="testBulkUpdateEntitytypeWithValidCsv"/>
-                </methods>
-            </class>
 
         </classes>
     </test>

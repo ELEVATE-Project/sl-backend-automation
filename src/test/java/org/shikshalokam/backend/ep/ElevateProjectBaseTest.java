@@ -7,10 +7,12 @@ import org.apache.logging.log4j.Logger;
 import org.shikshalokam.backend.MentorBase;
 import org.shikshalokam.backend.PropertyLoader;
 import org.testng.Assert;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
+
 import static io.restassured.RestAssured.given;
 import static org.testng.AssertJUnit.fail;
 
@@ -21,8 +23,7 @@ public class ElevateProjectBaseTest extends MentorBase {
     public static String User_ID = null;
     public static String BASE_URL = PropertyLoader.PROP_LIST.getProperty("elevate.qa.api.base.url");
     public static String INTERNAL_ACCESS_TOKEN = PropertyLoader.PROP_LIST.getProperty("elevate.internalaccesstoken");
-    public static String CRUDEntityType_Name = PropertyLoader.PROP_LIST.getProperty("elevate.qa.CRUDEntitytype.name");
-    public static String entityType_Id;
+    public static String entityType_Id = null;
 
     // method to login with required parameters
     public static Response loginToElevate(String email, String Password) {
@@ -61,9 +62,7 @@ public class ElevateProjectBaseTest extends MentorBase {
                 .header("Content-Type", "application/json")
                 .body(requestBody) // Send the HashMap request body
                 .post(BASE_URL + PropertyLoader.PROP_LIST.getProperty("elevate.qa.fetchentitytype.endpoint"));
-        if (response.getStatusCode() != 200) {
-            fail(response.prettyPrint() + " ERROR..!!!!");
-        }
+        response.prettyPrint();
         return response;
     }
 

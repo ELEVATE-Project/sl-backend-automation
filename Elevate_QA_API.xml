@@ -1,5 +1,8 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="SanitySuite">
+<suite name="SanitySuiteEP">
+    <listeners>
+        <listener class-name="org.shikshalokam.Listerners.SLCustomListener"/>
+    </listeners>
 
     <test name="Test">
         <classes>
@@ -12,8 +15,24 @@
                 </methods>
             </class>
 
+            <class name="org.shikshalokam.backend.ep.TestElevateEntityTypeCRUDOperations">
+                <methods>
+                    <include name="testCreatingSingleEntityType"/>
+                    <include name="testInvalidCreatingSingleEntityType"/>
+                    <include name="testFetchingEntityType"/>
+                    <include name="testUpdatingSingleEntityType"/>
+                    <include name="testFetchingEntityTypeList"/>
+                </methods>
+            </class>
+            <class name="org.shikshalokam.backend.ep.TestElevateBulkEntityTypeCRUDOperations">
+                <methods>
+                    <include name="testBulkCreateEntityTypeWithValidCsv"/>
+                    <include name="testBulkUpdateEntityTypeWithValidCsv"/>
+                </methods>
+            </class>
+
         </classes>
-    </test> <!-- Test -->
-</suite> <!-- Suite -->
+    </test>
+</suite>
 
 

@@ -4,6 +4,7 @@ import io.restassured.response.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.annotations.BeforeTest;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.net.URI;
@@ -16,7 +17,7 @@ import static org.testng.Assert.assertEquals;
 public class TestMenteeReport extends MentorEDBaseTest {
     private static final Logger logger = LogManager.getLogger(TestMenteeReport.class);
 
-    @BeforeTest
+    @BeforeMethod
     public void init() {
         logger.info("Logging into the application :");
         loginToMentorED(PROP_LIST.get("mentor.qa.admin.login.user").toString(),

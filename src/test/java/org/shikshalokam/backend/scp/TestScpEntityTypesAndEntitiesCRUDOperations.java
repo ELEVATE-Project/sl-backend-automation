@@ -277,7 +277,7 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
 
         logger.info("Ended calling the EntityCreation API with valid payload.");
     }
-    @Test(dependsOnMethods = "testCreateEntityTypeWithInValidPayload", description = "Verifies the functionality of creating new entity with valid payload.")
+    @Test(description = "Verifies the functionality of creating new entity with valid payload.")
     public void testCreateEntityWithInValidPayload() {
         logger.info("Started calling the CreateEntity API with invalid payload:");
 
@@ -304,7 +304,7 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
 
         logger.info("Ended calling the EntityCreation API with invalid payload.");
     }
-    @Test(dependsOnMethods = "testCreateEntityTypeWithEmptyFields", description = "Verifies the functionality of creating new entity with valid payload.")
+    @Test(description = "Verifies the functionality of creating new entity with valid payload.")
     public void testCreateEntityWithEmptyFields() {
         logger.info("Started calling the CreateEntity API with empty fields payload:");
 

@@ -32,3 +32,17 @@ jobs:
 
       - name: Build with Maven
         run: mvn clean compile  # -B is for batch mode to reduce output noise
+      
+      - name: Send Email Notification
+        if: always()  # Run this step whether the tests succeed or fail
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com  # Replace with your SMTP server address
+          server_port: 587  # Typically 587 for TLS
+          username: ${{ secrets.SMTP_USERNAME }}  # Stored in GitHub Secrets
+          password: ${{ secrets.SMTP_PASSWORD }}  # Stored in GitHub Secrets
+          subject: "Test Status - ${{ github.workflow }}"
+          body: "The test run for the project has completed with status: ${{ job.status }}"
+          to: "sl-qa@shikshalokam.org"  # Replace with recipient's email address
+          from: "automation@shikshalokam.org"  # Replace with sender's email address
+          secure: true  

@@ -29,9 +29,12 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
+      - name: Copy Configuration File
+        run: cp src/resources/config/Automation_ElevateAPI_QA.properties src/resources/config/automation.properties
 
-      - name: Build with Maven
-        run: mvn clean compile  # -B is for batch mode to reduce output noise
+      
+      - name: Build with Maven and run tests
+        run: mvn clean test -DsuiteXmlFile="Elevate_QA_API.xml"  # -B is for batch mode to reduce output noise
       
       - name: Send Email Notification
         if: always()  # Run this step whether the tests succeed or fail
@@ -45,4 +48,5 @@ jobs:
           body: "The test run for the project has completed with status: ${{ job.status }}"
           to: "sl-qa@shikshalokam.org"  # Replace with recipient's email address
           from: "automation@shikshalokam.org"  # Replace with sender's email address
-          secure: false  
+          secure: false
+          attachments: target/ExtentReport.html

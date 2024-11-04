@@ -1,0 +1,34 @@
+name: Automation_compile
+
+on:
+  
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        java-version: [8]  # Specify the JDK version(s) here
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3  # Checks out your repository
+
+      - name: Set up JDK ${{ matrix.java-version }}
+        uses: actions/setup-java@v3
+        with:
+          java-version: ${{ matrix.java-version }}
+          distribution: 'zulu'  # Or 'zulu', 'temurin', depending on your preferred JDK distribution
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Build with Maven
+        run: mvn clean compile  # -B is for batch mode to reduce output noise

@@ -45,4 +45,4 @@ jobs:
           body: "The test run for the project has completed with status: ${{ job.status }}"
           to: "sl-qa@shikshalokam.org"  # Replace with recipient's email address
           from: "automation@shikshalokam.org"  # Replace with sender's email address
-          secure: true  
+          secure: false  

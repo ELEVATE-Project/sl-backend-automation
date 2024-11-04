@@ -29,6 +29,12 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
+      - name: Check Current Directory
+        run: |
+          echo "Current Directory:"
+          pwd  # Print the current working directory
+          echo "Files in Current Directory:"
+          ls -al  # List files and directories in the current directory      
       - name: Copy Configuration File
         run: cp ./src/resources/config/Automation_ElevateAPI_QA.properties ./src/resources/config/automation.properties
 

@@ -30,7 +30,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
       - name: Copy Configuration File
-        run: cp src/resources/config/Automation_ElevateAPI_QA.properties src/resources/config/automation.properties
+        run: cp ./src/resources/config/Automation_ElevateAPI_QA.properties ./src/resources/config/automation.properties
 
       
       - name: Build with Maven and run tests
@@ -49,4 +49,4 @@ jobs:
           to: "sl-qa@shikshalokam.org"  # Replace with recipient's email address
           from: "automation@shikshalokam.org"  # Replace with sender's email address
           secure: false
-          attachments: target/ExtentReport.html
+          attachments: ./target/ExtentReport.html

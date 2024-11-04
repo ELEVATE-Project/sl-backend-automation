@@ -10,7 +10,7 @@ jobs:
 
     strategy:
       matrix:
-        java-version: [8]  # Specify the JDK version(s) here
+        java-version: [11]  # Specify the JDK version(s) here
 
     steps:
       - name: Checkout code

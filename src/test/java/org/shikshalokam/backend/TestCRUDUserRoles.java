@@ -25,8 +25,8 @@ public class TestCRUDUserRoles extends MentorEDBaseTest {
         logger.info("Logging into the application :");
         loginToMentorED(PROP_LIST.get("mentor.qa.admin.login.user").toString(), PROP_LIST.get("mentor.qa.admin.login.password").toString());
 
-        createUserRolesEndpoint = createURI("/user/v1/user-role/create");
-        getUserRolesEndPoint = createURI("/user/v1/user-role/list");
+        createUserRolesEndpoint = MentorBase.createURI("/user/v1/user-role/create");
+        getUserRolesEndPoint = MentorBase.createURI("/user/v1/user-role/list");
 
         userRoleTitle = "userroletitle" + RandomStringUtils.randomAlphabetic(5).toLowerCase();
         updateUserRoleTitle = "updusertitle" + RandomStringUtils.randomAlphabetic(3).toLowerCase();
@@ -67,7 +67,7 @@ public class TestCRUDUserRoles extends MentorEDBaseTest {
         Response response = updateUserRole(createdRoleID, updateUserRoleTitle, "1", "ACTIVE", "PUBLIC");
 
         logger.info("Response Code: {}, Response Body: {}", response.getStatusCode(), response.getBody().asString());
-        assertEquals(response.getStatusCode(), 201, "User role creation failed with " + response.getStatusCode());
+        assertEquals(response.getStatusCode(), 201, "User role updation failed with " + response.getStatusCode());
 
         Response responsebody = getUserRolesID(false, updateUserRoleTitle);
         userRoleTitle = responsebody.jsonPath().getString("result.data[0].title");
@@ -81,7 +81,7 @@ public class TestCRUDUserRoles extends MentorEDBaseTest {
 
     @Test(dependsOnMethods = "testCreateUserRoles")
     public void testUpdateUserRoles_MissingRequiredFields() {
-        logger.info("Started calling --------- Update User Roles - Negative Test Case Missing Required Fields");
+        logger.info("Started calling --------- Update User Roles - Negative Test Missing Required Fields");
         Response response = updateUserRole(createdRoleID,"", "1", "ACTIVE", "PUBLIC");
 
         logger.info("Response Code: {}, Response Body: {}", response.getStatusCode(), response.getBody().asString());
@@ -91,7 +91,7 @@ public class TestCRUDUserRoles extends MentorEDBaseTest {
         assertTrue(responseBody.contains("title field is empty") || responseBody.contains("title is invalid, must not contain spaces"),
                 "Expected error messages for missing title or invalid title not found in response: " + responseBody);
 
-        logger.info("Ended calling --------------- UpdateUserRoles: Negative test case completed with assertions on missing fields.");
+        logger.info("Ended calling --------------- UpdateUserRoles: Negative test completed with assertions on missing fields.");
     }
 
     @Test(dependsOnMethods = "testUpdateUserRoles")
@@ -110,15 +110,6 @@ public class TestCRUDUserRoles extends MentorEDBaseTest {
             logger.warn("ID -" + createdRoleID + " still exists in the system.");
         }
         logger.info("Ended calling ------------ DeleteUserRole with assertions completed.");
-    }
-
-    private URI createURI(String endpoint) {
-        try {
-            return new URI(endpoint);
-        } catch (URISyntaxException e) {
-            logger.error("Invalid URI syntax for endpoint: {}", endpoint, e);
-            throw new RuntimeException("Invalid URI Syntax", e);
-        }
     }
 
     private Response createUserRole(String title, String userType, String status, String visibility) {

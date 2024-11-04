@@ -22,6 +22,8 @@
                     <include name="testUpdatePermissionWithValidPayload"/>
                     <include name="testUpdatePermissionWithInvalidPayload"/>
                     <include name="testUpdatePermissionWithEmptyFieldsPayload"/>
+                    <include name="testGetPermissionsWithValidPayload"/>
+                    <include name="testGetPermissionsApiWithInvalidToken"/>
                 </methods>
             </class>
 

@@ -32,6 +32,12 @@
                 </methods>
             </class>
 
+            <class name="org.shikshalokam.backend.TestGetListofSessions">
+                <methods>
+                    <include name="testGetListofSessions"></include>
+                </methods>
+            </class>
+
         </classes>
     </test> <!-- Test -->
 </suite> <!-- Suite -->

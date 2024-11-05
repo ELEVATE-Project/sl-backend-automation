@@ -31,7 +31,7 @@ public class TestCRUDUserRoleExtensionOperations extends ElevateProjectBaseTest 
 
     @Test(description = "Creates user role extension with given parameters")
     public void testCreateValidUserRoleExtension() {
-        Response response = createUserRoleExtension(userRoleTitle, userRoleId, PROP_LIST.getProperty("entityType"), PROP_LIST.getProperty("entityTypeId"));
+        Response response = createUserRoleExtension(userRoleTitle, userRoleId, PROP_LIST.getProperty("elevate.qa.entityType"), PROP_LIST.getProperty("elevate.qa.entityTypeId"));
         logger.info("Response Code: {}, Response Body: {}", response.getStatusCode(), response.getBody().asString());
         createdRoleID = response.jsonPath().getString("result._id");
         assertEquals(response.getStatusCode(), 200, "User role extension creation failed with " + response.getStatusCode());
@@ -39,9 +39,9 @@ public class TestCRUDUserRoleExtensionOperations extends ElevateProjectBaseTest 
         logger.info("Ended CreateUserRoleExtension with assertions completed");
     }
 
-    @Test
+    @Test (description = "creating user role extension by passing empty values")
     public void testCreateInvalidUserRoleExtension() {
-        Response response = createUserRoleExtension("", "", PROP_LIST.getProperty("entityType"), PROP_LIST.getProperty("entityTypeId"));
+        Response response = createUserRoleExtension("", "", PROP_LIST.getProperty("elevate.qa.entityType"), PROP_LIST.getProperty("elevate.qa.entityTypeId"));
         logger.info("Response Code: {}, Response Body: {}", response.getStatusCode(), response.getBody().asString());
         assertEquals(response.getStatusCode(), 400, "User role extension creation failed with " + response.getStatusCode());
         assertTrue(response.asString().contains("The title field cannot be empty."));
@@ -50,7 +50,7 @@ public class TestCRUDUserRoleExtensionOperations extends ElevateProjectBaseTest 
 
     @Test(dependsOnMethods = "testCreateValidUserRoleExtension", description = "Updates the user role extension")
     public void testValidUpdateUserRoleExtension() {
-        Response response = updateUserRoleExtension(updatedRoleTitle, PROP_LIST.getProperty("entityType"), PROP_LIST.getProperty("entityTypeId"));
+        Response response = updateUserRoleExtension(updatedRoleTitle, PROP_LIST.getProperty("elevate.qa.entityType"), PROP_LIST.getProperty("elevate.qa.entityTypeId"));
         logger.info("Response Code: {}, Response Body: {}", response.getStatusCode(), response.getBody().asString());
         assertEquals(response.getStatusCode(), 200, "User role extension update failed with " + response.getStatusCode());
         assertEquals(response.jsonPath().getString("message"), "USER_ROLE_UPDATATED");
@@ -115,11 +115,13 @@ public class TestCRUDUserRoleExtensionOperations extends ElevateProjectBaseTest 
     }
 
     private Response deleteUserRoleExtension(String roleID) {
-        return given()
+        Response response = given()
                 .header("X-auth-token", X_AUTH_TOKEN)
                 .header("internal-access-token", INTERNAL_ACCESS_TOKEN)
                 .contentType(ContentType.JSON)
                 .when().pathParam("_id", createdRoleID).delete(PROP_LIST.getProperty("deleteUserRoleExtensionEndpoint") + "{_id}"); // Use the updated URL here
+        response.prettyPrint();
+        return response;
     }
 
     private Response findUserRoleExtension() {

@@ -31,6 +31,16 @@
                 </methods>
             </class>
 
+            <class name="org.shikshalokam.backend.ep.TestCRUDUserRoleExtensionOperations">
+                <methods>
+                    <include name="testCreateValidUserRoleExtension"/>
+                    <include name="testCreateInvalidUserRoleExtension"/>
+                    <include name="testValidUpdateUserRoleExtension"/>
+                    <include name="testFindUserRoleExtension"/>
+                    <include name="testDeleteUserRoleExtension"/>
+                </methods>
+            </class>
+
         </classes>
     </test>
 </suite>

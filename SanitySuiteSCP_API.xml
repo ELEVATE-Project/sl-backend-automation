@@ -44,7 +44,7 @@
                     <include name="testUpdateEntityWithEmptyFields"/>
                     <include name="testReadEntityWithValidPayload"/>
                     <include name="testDeleteEntityWithValidPayload"/>
-                    <include name="testDeleteEntityTypesWithValidPayload"/>
+                    <include name="testDeleteEntityTypesWithValidPayload"   />
                 </methods>
             </class>
 

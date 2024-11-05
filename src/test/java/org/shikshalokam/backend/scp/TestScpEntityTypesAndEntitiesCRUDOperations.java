@@ -45,7 +45,7 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
         }
     }
 
-    @Test(description = "Verifies the functionality of creating new entityType with valid payload.")
+    @Test(priority = 1, description = "Verifies the functionality of creating new entityType with valid payload.")
     public void testCreateEntityTypeWithValidPayload() {
         logger.info("Started calling the CreateEntityType API with valid payload:");
 
@@ -78,7 +78,7 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
         logger.info("Ended calling the EntityTypeCreation API with valid payload.");
     }
 
-    @Test(description = "Verifies the functionality of creating new entityType with Invalid payload.")
+    @Test(priority = 2, description = "Verifies the functionality of creating new entityType with Invalid payload.")
     public void testCreateEntityTypeWithInValidPayload() {
         logger.info("Started calling the CreateEntityType API with Invalid payload:");
 
@@ -105,7 +105,7 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
         logger.info("Ended calling the EntityTypeCreation API with valid payload.");
     }
 
-    @Test(description = "Verifies the functionality of creating new entityType with empty fields payload.")
+    @Test(priority = 3, description = "Verifies the functionality of creating new entityType with empty fields payload.")
     public void testCreateEntityTypeWithEmptyFields() {
         logger.info("Started calling the CreatePermission API with empty fields payload:");
 
@@ -132,7 +132,7 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
         logger.info("Ended calling the EntityTypeCreation API with valid payload.");
     }
 
-    @Test(dependsOnMethods = "testCreateEntityTypeWithValidPayload", description = "Verifies the functionality of updating entity types with valid payload.")
+    @Test(priority = 4, dependsOnMethods = "testCreateEntityTypeWithValidPayload", description = "Verifies the functionality of updating entity types with valid payload.")
     public void testUpdateEntityTypesWithValidPayload() {
         logger.info("Started calling the update entity types API with valid payload:");
 
@@ -161,7 +161,7 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
         logger.info("Ended calling the update entity types API with valid payload.");
     }
 
-    @Test(description = "Verifies the functionality of updating entity types with Invalid payload.")
+    @Test(priority = 5, description = "Verifies the functionality of updating entity types with Invalid payload.")
     public void testUpdateEntityTypesWithInvalidPayload() {
         logger.info("Started calling the entity types API with Invalid payload:");
 
@@ -190,7 +190,7 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
         logger.info("Ended calling the entity types API with valid payload.");
     }
 
-    @Test(description = "Verifies the functionality of updating entity types with empty fields payload.")
+    @Test(priority = 6, description = "Verifies the functionality of updating entity types with empty fields payload.")
     public void testUpdateEntityTypesWithEmptyFields() {
         logger.info("Started calling the entity types API with empty fields payload:");
 
@@ -218,7 +218,7 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
         logger.info("Ended calling the entity types API with empty fields.");
     }
 
-    @Test(dependsOnMethods = "testUpdateEntityTypesWithValidPayload", description = "Verifies the functionality of reading entity types with valid payload.")
+    @Test(priority = 7, dependsOnMethods = "testUpdateEntityTypesWithValidPayload", description = "Verifies the functionality of reading entity types with valid payload.")
     public void testReadEntityTypesWithValidPayload() {
         logger.info("Started calling the read entity types API with valid payload:");
 
@@ -234,7 +234,7 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
         logger.info("Ended calling the read entity types API with valid payload.");
     }
 
-    @Test(dependsOnMethods = "testCreateEntityTypeWithValidPayload", description = "Verifies the functionality of creating new entity with valid payload.")
+    @Test(priority = 8, dependsOnMethods = "testCreateEntityTypeWithValidPayload", description = "Verifies the functionality of creating new entity with valid payload.")
     public void testCreateEntityWithValidPayload() {
         logger.info("Started calling the CreateEntity API with valid payload:");
 
@@ -255,26 +255,20 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
         int statusCode = response.getStatusCode();
         response.prettyPrint();
 
-        try {
-            // Fetch the entityValue from the response
-            entityValue = response.jsonPath().getString("result.value");
-            entityCreatedId = response.jsonPath().getInt("result.id");
-            Assert.assertNotNull(entityValue, "Entity value should not be null");
-            Assert.assertNotNull(entityCreatedId, "Entity createdID should not be null");
-            logger.info("Entity Value: " + entityValue);
-            logger.info(("Entity create ID:" + entityCreatedId));
-        } catch (Exception e) {
-            logger.error("Failed to retrieve entity value from response: " + e.getMessage());
-            Assert.fail("Failed to retrieve entity value: " + e.getMessage());
-        }
+        entityValue = response.jsonPath().getString("result.value");
+        Assert.assertNotNull(entityValue, "Entity value should not be null");
+        logger.info("Entity Value: " + entityValue);
 
+        entityCreatedId = response.jsonPath().getInt("result.id");
+        Assert.assertNotNull(entityCreatedId, "Entity createdID should not be null");
+        logger.info(("Entity create ID:" + entityCreatedId));
         // Validate response code is 201
         Assert.assertEquals(statusCode, 201, "Status code should be 201");
 
         logger.info("Ended calling the EntityCreation API with valid payload.");
     }
 
-    @Test(description = "Verifies the functionality of creating new entity with invalid payload.")
+    @Test(priority = 9, description = "Verifies the functionality of creating new entity with invalid payload.")
     public void testCreateEntityWithInValidPayload() {
         logger.info("Started calling the CreateEntity API with invalid payload:");
 
@@ -301,7 +295,7 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
         logger.info("Ended calling the EntityCreation API with invalid payload.");
     }
 
-    @Test(description = "Verifies the functionality of creating new entity with empty payload.")
+    @Test(priority = 10, description = "Verifies the functionality of creating new entity with empty payload.")
     public void testCreateEntityWithEmptyFields() {
         logger.info("Started calling the CreateEntity API with empty fields payload:");
 
@@ -328,7 +322,7 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
         logger.info("Ended calling the EntityCreation API with empty fields payload.");
     }
 
-    @Test(dependsOnMethods = "testCreateEntityWithValidPayload", description = "Verifies the functionality of updating new entity with valid payload.")
+    @Test(priority = 11, dependsOnMethods = "testCreateEntityWithValidPayload", description = "Verifies the functionality of updating new entity with valid payload.")
     public void testUpdateEntityWithValidPayload() {
         logger.info("Started calling the UpdateEntity API with valid payload:");
 
@@ -353,7 +347,7 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
         logger.info("Ended calling the EntityUpdation API with valid payload.");
     }
 
-    @Test(description = "Verifies the functionality of updating new entity with Invalid payload.")
+    @Test(priority = 12, description = "Verifies the functionality of updating new entity with Invalid payload.")
     public void testUpdateEntityWithInValidPayload() {
         logger.info("Started calling the updateEntity API with invalid payload:");
 
@@ -379,7 +373,7 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
         logger.info("Ended calling the EntityUpdation API with invalid payload.");
     }
 
-    @Test(description = "Verifies the functionality of creating new entity with empty payload.")
+    @Test(priority = 13, description = "Verifies the functionality of creating new entity with empty payload.")
     public void testUpdateEntityWithEmptyFields() {
         logger.info("Started calling the updateEntity API with empty fields payload:");
 
@@ -405,7 +399,7 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
         logger.info("Ended calling the EntityUpdation API with empty fields payload.");
     }
 
-    @Test(dependsOnMethods = "testUpdateEntityWithValidPayload", description = "Verifies the functionality of reading entity types with valid payload.")
+    @Test(priority = 14, dependsOnMethods = "testUpdateEntityWithValidPayload", description = "Verifies the functionality of reading entity types with valid payload.")
     public void testReadEntityWithValidPayload() {
         logger.info("Started calling the read entity types API with valid payload:");
 
@@ -418,7 +412,7 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
         logger.info("Ended calling the read entity API with valid payload.");
     }
 
-    @Test(description = "Verifies the functionality of deleting entity with valid payload.")
+    @Test(priority = 15, description = "Verifies the functionality of deleting entity with valid payload.")
     public void testDeleteEntityWithValidPayload() {
         logger.info("Started calling the delete entity API with valid payload:");
 
@@ -437,7 +431,7 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
         logger.info("Ended calling the delete entity API with valid payload.");
     }
 
-    @Test(description = "Verifies the functionality of deleting entity types with valid payload.")
+    @Test(priority = 16, description = "Verifies the functionality of deleting entity types with valid payload.")
     public void testDeleteEntityTypesWithValidPayload() {
         logger.info("Started calling the delete entity types API with valid payload:");
 
@@ -627,8 +621,10 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
         } catch (URISyntaxException e) {
             throw new RuntimeException("Invalid URI for deleteEntityEndpoint", e);
         }
+
         // Log the entityCreatedId for debugging
         logger.info("Deleting entity with ID: " + entityCreatedId);
+
         // Make the DELETE request to read the entity
         Response response = given()
                 .header("X-auth-token", "bearer " + X_AUTH_TOKEN)
@@ -640,6 +636,7 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
         response.prettyPrint();
         return response;
     }
+
 
     //Method to delete entityType
     private Response entityTypeDeleteRequest() {

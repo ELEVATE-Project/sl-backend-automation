@@ -30,6 +30,12 @@
                     <include name="testBulkUpdateEntityTypeWithValidCsv"/>
                 </methods>
             </class>
+            <class name="org.shikshalokam.backend.ep.TestElevateEntityCRUDOperations">
+                <methods>
+                    <include name="testAddingSingleEntity"/>
+                    <include name="testInvalidAddingSingleEntity"/>
+                </methods>
+            </class>
 
         </classes>
     </test>

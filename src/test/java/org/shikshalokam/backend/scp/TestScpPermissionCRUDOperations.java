@@ -16,10 +16,11 @@ import java.net.URISyntaxException;
 
 import static io.restassured.RestAssured.given;
 import static org.shikshalokam.backend.PropertyLoader.PROP_LIST;
+import static org.testng.Assert.assertEquals;
 
 public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest {
     private static final Logger logger = LogManager.getLogger(TestScpPermissionCRUDOperations.class);
-    private URI createPermissionEndpoint, updatePermissionEndpoint, permissionListApiEndpoint;
+    private URI createPermissionEndpoint, updatePermissionEndpoint, permissionListApiEndpoint, deletePermissionEndpoint;
     private int createdId;
 
     @BeforeTest
@@ -49,7 +50,7 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
         response.prettyPrint();
 
         // Validate response code is 201
-        Assert.assertEquals(statusCode, 201, "Status code should be 201");
+        assertEquals(statusCode, 201, "Status code should be 201");
 
         // Fetch ID from response and validate
         createdId = response.jsonPath().getInt("result.id");
@@ -88,7 +89,7 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
         response.prettyPrint();
 
         // Validate response code for empty fields (usually 400)
-        Assert.assertEquals(statusCode, 400, "Status code should be 400 for empty fields payload");
+        assertEquals(statusCode, 400, "Status code should be 400 for empty fields payload");
 
         logger.info("Ended calling the CreatePermission API with empty fields payload.");
     }
@@ -107,7 +108,7 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
         response.prettyPrint();
 
         // Validate response code is 201 for a successful update
-        Assert.assertEquals(statusCode, 201, "Status code should be 201");
+        assertEquals(statusCode, 201, "Status code should be 201");
 
         logger.info("Ended calling the UpdatePermission API with valid payload.");
     }
@@ -147,7 +148,7 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
         response.prettyPrint();
 
         // Validate response code for empty fields (usually 400)
-        Assert.assertEquals(statusCode, 400, "Status code should be 400 for empty fields payload");
+        assertEquals(statusCode, 400, "Status code should be 400 for empty fields payload");
 
         logger.info("Ended calling the UpdatePermission API with valid payload.");
     }
@@ -183,7 +184,7 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
         response.prettyPrint();
 
         // Validate response code
-        Assert.assertEquals(response.getStatusCode(), 200, "Failed to fetch permissions.");
+        assertEquals(response.getStatusCode(), 200, "Failed to fetch permissions.");
         logger.info("Permissions retrieved successfully.");
     }
 
@@ -194,10 +195,24 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
         Response response = getPermissions(false);
 
         // Validate response code for invalid token
-        Assert.assertEquals(response.getStatusCode(), 401, "Expected 401 Unauthorized error.");
+        assertEquals(response.getStatusCode(), 401, "Expected 401 Unauthorized error.");
         logger.info("Received expected error for invalid token.");
     }
+    @Test(dependsOnMethods = "testCreatePermissionWithValidPayload", description = "Verifies the functionality of deleting user's permission by ID.")
+    public void testDeletePermissionById() {
+        logger.info("Started calling the DeletePermission API with valid ID.");
 
+        Response response = deletePermissionById(createdId);
+
+        // Log the status code and response body
+        int statusCode = response.getStatusCode();
+        response.prettyPrint();
+
+        // Validate response code is 200 for a successful deletion
+        Assert.assertEquals(statusCode, 202, "Status code should be 200 for successful deletion");
+
+        logger.info("Ended calling the DeletePermission API with valid ID.");
+    }
 
     // Method to create request body for update permission
     private JSONObject createRequestBodyForUpdate(String codePrefix, String module, String requestType, String apiPath, String status) {
@@ -256,5 +271,19 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
         // Make the GET request without a request body
         X_AUTH_TOKEN=temp_X_AUTH_TOKEN;
         return local;
+    }
+    // Method to delete permission by ID
+    private Response deletePermissionById(int createdId) {
+        try {
+             deletePermissionEndpoint = new URI(PROP_LIST.get("scp.delete.permission.endpoint").toString() + createdId);
+            return given()
+                    .header("X-auth-token", "bearer " +X_AUTH_TOKEN)
+                    .contentType(ContentType.JSON)
+                    .when().delete(deletePermissionEndpoint)
+                    .then()
+                    .extract().response();
+        } catch (URISyntaxException e) {
+            throw new RuntimeException("Invalid URI for deletePermissionEndpoint", e);
+        }
     }
 }

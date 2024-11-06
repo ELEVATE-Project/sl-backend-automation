@@ -31,14 +31,21 @@
                     <include name="testGetUserPermissions"/>
                 </methods>
             </class>
-
             <class name="org.shikshalokam.backend.TestSessionCRUD">
                 <methods>
                     <include name="testGetListofSessions"/>
                     <include name="testGetListofEnrolledSessions"/>
                 </methods>
             </class>
-
+            <class name="org.shikshalokam.backend.TestCRUDUserModules">
+                <methods>
+                    <include name="testCreateUserModules"/>
+                    <include name="testCreateUserModules_MissingRequiredFields"/>
+                    <include name="testUpdateUserModules"/>
+                    <include name="testUpdateUserModules_MissingRequiredFields"/>
+                    <include name="testDeleteModules"/>
+                </methods>
+            </class>
         </classes>
     </test> <!-- Test -->
 </suite> <!-- Suite -->

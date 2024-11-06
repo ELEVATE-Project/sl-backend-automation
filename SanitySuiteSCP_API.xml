@@ -48,6 +48,15 @@
                 </methods>
             </class>
 
+            <class name="org.shikshalokam.backend.scp.TestScpProjectCRUDOperations">
+                <methods>
+                    <include name="testCreateProjectWithValidPayload"/>
+                    <include name="testCreateProjectWithInvalidPayload"/>
+                    <include name="testUpdateProjectWithValidPayload"/>
+                    <include name="testUpdateProjectWithInValidPayload"/>
+                </methods>
+            </class>
+
         </classes>
     </test> <!-- Test -->
 </suite> <!-- Suite -->

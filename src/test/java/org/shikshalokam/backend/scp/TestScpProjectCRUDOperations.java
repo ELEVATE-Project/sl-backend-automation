@@ -6,6 +6,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONObject;
+import org.shikshalokam.backend.PropertyLoader;
 import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -24,11 +25,8 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
 
     @BeforeTest
     public void init() {
-        logger.info("Logging into the application:");
-
-        // Make login request to retrieve the token
-        loginToScp(PROP_LIST.get("sl.scp.userascontentcreator").toString(), PROP_LIST.get("sl.scp.passwordforcontentcreator").toString());
-
+        logger.info("Logging into the application :");
+        loginToScpContentCreator(PROP_LIST.get("sl.scp.userascontentcreator").toString(), PROP_LIST.get("sl.scp.passwordforcontentcreator").toString());
         // Initialize the projectCreateEndpoint URI
         try {
             projectCreateEndpoint = new URI(PROP_LIST.get("scp.create.project.endpoint").toString());
@@ -571,7 +569,7 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
 
         // Make the POST request to update the permission
         Response response = given()
-                .header("X-auth-token", "bearer " + X_AUTH_TOKEN)
+                .header("X-auth-token", "bearer " + X_AUTH_TOKEN_CC)
                 .contentType(ContentType.JSON)
                 .body(requestBody.toString())
                 .when().post(projectCreateEndpoint);
@@ -597,7 +595,7 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
         }
         // Make the POST request to update the permission
         Response response = given()
-                .header("X-auth-token", "bearer " + X_AUTH_TOKEN)
+                .header("X-auth-token", "bearer " + X_AUTH_TOKEN_CC)
                 .pathParams("id", createdId)
                 .contentType(ContentType.JSON)
                 .body(requestBody.toString())

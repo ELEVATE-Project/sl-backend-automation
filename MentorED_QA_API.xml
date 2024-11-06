@@ -32,9 +32,10 @@
                 </methods>
             </class>
 
-            <class name="org.shikshalokam.backend.TestGetListofSessions">
+            <class name="org.shikshalokam.backend.TestSessionCRUD">
                 <methods>
-                    <include name="testGetListofSessions"></include>
+                    <include name="testGetListofSessions"/>
+                    <include name="testGetListofEnrolledSessions"/>
                 </methods>
             </class>
 

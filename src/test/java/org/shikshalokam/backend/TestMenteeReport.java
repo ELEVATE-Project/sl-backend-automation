@@ -20,8 +20,8 @@ public class TestMenteeReport extends MentorEDBaseTest {
     @BeforeMethod
     public void init() {
         logger.info("Logging into the application :");
-        loginToMentorED(PROP_LIST.get("mentor.qa.admin.login.user").toString(),
-                PROP_LIST.get("mentor.qa.admin.login.password").toString());
+        loginToMentorED(PROP_LIST.get("mentee.login.user").toString(),
+                PROP_LIST.get("mentee.login.password").toString());
     }
 
     @Test
@@ -42,7 +42,7 @@ public class TestMenteeReport extends MentorEDBaseTest {
         int totalSessionsEnrolled = responce.getBody().jsonPath().getInt("result.total_session_enrolled");
         int totalSessionsAttended = responce.getBody().jsonPath().getInt("result.total_session_attended");
         assertEquals(totalSessionsEnrolled, 2, "Total sessions enrolled not valid");
-        assertEquals(totalSessionsAttended, 0, "Total sessions attended not valid");
+        assertEquals(totalSessionsAttended, 1, "Total sessions attended not valid");
         logger.info("Ended calling the get Mentee Reports: with all the assertions");
     }
 

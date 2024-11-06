@@ -1,0 +1,58 @@
+name: MentorED API automation run
+
+on:
+  
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        java-version: [11]  # Specify the JDK version(s) here
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3  # Checks out your repository
+
+      - name: Set up JDK ${{ matrix.java-version }}
+        uses: actions/setup-java@v3
+        with:
+          java-version: ${{ matrix.java-version }}
+          distribution: 'zulu'  # Or 'zulu', 'temurin', depending on your preferred JDK distribution
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Check Current Directory
+        run: |
+          echo "Current Directory:"
+          pwd  # Print the current working directory
+          echo "Files in Current Directory:"
+          ls -al  # List files and directories in the current directory      
+      - name: Copy Configuration File
+        run: cp ./src/main/resources/config/automation.MentorED_QA_API.properties ./src/main/resources/config/automation.properties
+
+      
+      - name: Build with Maven and run tests
+        run: mvn clean test -DsuiteXmlFile="MentorED_QA_API.xml"  # -B is for batch mode to reduce output noise
+      
+      - name: Send Email Notification
+        if: always()  # Run this step whether the tests succeed or fail
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com  # Replace with your SMTP server address
+          server_port: 587  # Typically 587 for TLS
+          username: ${{ secrets.SMTP_USERNAME }}  # Stored in GitHub Secrets
+          password: ${{ secrets.SMTP_PASSWORD }}  # Stored in GitHub Secrets
+          subject: "Test Status - ${{ github.workflow }}"
+          body: "The test run for the project has completed with status: ${{ job.status }}"
+          to: "sl-qa@shikshalokam.org"  # Replace with recipient's email address
+          from: "automation@shikshalokam.org"  # Replace with sender's email address
+          secure: false
+          attachments: ./target/ExtentReport.html

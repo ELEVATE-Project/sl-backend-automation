@@ -54,6 +54,10 @@
                     <include name="testCreateProjectWithInvalidPayload"/>
                     <include name="testUpdateProjectWithValidPayload"/>
                     <include name="testUpdateProjectWithInValidPayload"/>
+                    <include name="testGetProjectDetailsWithValidProjectId"/>
+                    <include name="testGetProjectDetailsWithInValidProjectId"/>
+                    <include name="testDeleteProjectWithValidProjectId"/>
+                    <include name="testDeleteProjectWithInValidProjectId"/>
                 </methods>
             </class>
 

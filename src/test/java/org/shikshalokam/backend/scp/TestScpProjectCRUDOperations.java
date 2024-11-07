@@ -6,7 +6,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONObject;
-import org.shikshalokam.backend.PropertyLoader;
 import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -20,7 +19,7 @@ import static org.shikshalokam.backend.PropertyLoader.PROP_LIST;
 
 public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
     private static final Logger logger = LogManager.getLogger(TestScpProjectCRUDOperations.class);
-    private URI projectCreateEndpoint, projectUpdateEndpoint;
+    private URI projectCreateEndpoint, projectUpdateEndpoint, getProjectDetailsEndpoint, projectDeletionEndpoint;
     private Integer createdId;
 
     @BeforeTest
@@ -553,6 +552,66 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
         logger.info("Ended calling the projectUpdation API with invalid payload.");
     }
 
+    @Test(description = "Verifies the functionality of getting project details with valid project id.")
+    public void testGetProjectDetailsWithValidProjectId() {
+        logger.info("Started calling the getProjectDetails API valid project ID.");
+
+        // Call updatePermission with the created requestBody
+        Response response = getProjectDetailsRequest(createdId);
+
+        // Log the status code and response body
+        response.prettyPrint();
+
+        // Validate response code
+        Assert.assertEquals(response.getStatusCode(), 200, "Status code should be 200");
+        logger.info("Ended calling the projectCreation API with valid payload.");
+    }
+
+    @Test(description = "Verifies the functionality of getting project details with Invalid project id.")
+    public void testGetProjectDetailsWithInValidProjectId() {
+        logger.info("Started calling the getProjectDetails API Invalid project ID.");
+        int invalidId = 9999999;
+
+        Response response = getProjectDetailsRequest(invalidId);
+
+        // Log the status code and response body
+        response.prettyPrint();
+
+        // Validate response code for invalid token
+        Assert.assertEquals(response.getStatusCode(), 400, "Project not found");
+        logger.info("Ended calling the projectCreation API with Invalid payload.");
+    }
+
+    @Test(description = "Verifies the functionality of deleting project with valid project id.")
+    public void testDeleteProjectWithValidProjectId() {
+        logger.info("Started calling the delete project API with project id");
+
+        // Call delete project with the created requestBody
+        Response response = projectDeleteRequest(createdId);
+
+        // Log the status code and response body
+        response.prettyPrint();
+
+        // Validate response code
+        Assert.assertEquals(response.getStatusCode(), 202, "Status code should be 202");
+        logger.info("Ended calling the delete project API with valid project id.");
+    }
+
+    @Test(description = "Verifies the functionality of deleting project with Invalid project id.")
+    public void testDeleteProjectWithInValidProjectId() {
+        logger.info("Started calling the deleting project API Invalid project ID.");
+        int invalidId = 9999999;
+
+        Response response = getProjectDetailsRequest(invalidId);
+
+        // Log the status code and response body
+        response.prettyPrint();
+
+        // Validate response code for invalid token
+        Assert.assertEquals(response.getStatusCode(), 400, "Project not found");
+        logger.info("Ended calling the projectDeletion API with Invalid project id.");
+    }
+
     //Method to create project
     private JSONObject createProject(Map<String, Object> map) {
         JSONObject requestBody = new JSONObject();
@@ -600,6 +659,51 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
                 .contentType(ContentType.JSON)
                 .body(requestBody.toString())
                 .when().post(projectUpdateEndpoint + "{id}");
+
+        // Pretty-print the response for debugging
+        response.prettyPrint();
+
+        return response;
+    }
+
+    // Method to handle the getProjectDetails API request with project ID
+    private Response getProjectDetailsRequest(Integer id) {
+        try {
+            getProjectDetailsEndpoint = new URI(PROP_LIST.get("scp.qa.projectdetails").toString());
+        } catch (URISyntaxException e) {
+            throw new RuntimeException("Invalid URI for getProjectDetails", e);
+        }
+
+        // Make the GET request with the project ID as a path parameter
+        Response response = given()
+                .header("X-auth-token", "bearer " + X_AUTH_TOKEN_CC)
+                .pathParam("id", id)
+                .contentType(ContentType.JSON)
+                .when()
+                .get(getProjectDetailsEndpoint + "{id}")
+                .then()
+                .extract().response();
+
+        // Pretty-print the response for debugging
+        response.prettyPrint();
+
+        return response;
+    }
+
+    //Method to delete entityType
+    private Response projectDeleteRequest(Integer id) {
+        try {
+            projectDeletionEndpoint = new URI(PROP_LIST.get("scp.delete.project.endpoint").toString());
+        } catch (URISyntaxException e) {
+            throw new RuntimeException("Invalid URI for deleteProjectEndpoint", e);
+        }
+
+        // Make the DELETE project request
+        Response response = given()
+                .header("X-auth-token", "bearer " + X_AUTH_TOKEN_CC)
+                .pathParam("id", id)
+                .contentType(ContentType.JSON)
+                .when().delete(projectDeletionEndpoint + "{id}");
 
         // Pretty-print the response for debugging
         response.prettyPrint();

@@ -44,6 +44,7 @@
             <class name="org.shikshalokam.backend.ep.TestElevateBulkEntityCRUDOperations">
                 <methods>
                     <include name="testValidEntityBulkCreate"/>
+                    <include name="testValidEntityBulkUpdate"/>
                 </methods>
             </class>
         </classes>

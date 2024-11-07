@@ -4,6 +4,8 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.shikshalokam.backend.MentorBase;
 import org.shikshalokam.backend.PropertyLoader;
 import org.testng.Assert;
@@ -24,6 +26,7 @@ public class ElevateProjectBaseTest extends MentorBase {
     public static String BASE_URL = PropertyLoader.PROP_LIST.getProperty("elevate.qa.api.base.url");
     public static String INTERNAL_ACCESS_TOKEN = PropertyLoader.PROP_LIST.getProperty("elevate.internalaccesstoken");
     public static String entityType_Id = null;
+    public static String entity_Id = null;
 
     // method to login with required parameters
     public static Response loginToElevate(String email, String Password) {
@@ -61,7 +64,7 @@ public class ElevateProjectBaseTest extends MentorBase {
                 .header("x-auth-token", X_AUTH_TOKEN)
                 .header("Content-Type", "application/json")
                 .body(requestBody) // Send the HashMap request body
-                .post(BASE_URL + PropertyLoader.PROP_LIST.getProperty("elevate.qa.fetchentitytype.endpoint"));
+                .post(PropertyLoader.PROP_LIST.getProperty("elevate.qa.fetchentitytype.endpoint"));
         response.prettyPrint();
         return response;
     }
@@ -75,4 +78,34 @@ public class ElevateProjectBaseTest extends MentorBase {
         logger.info("Entity type Id fetched successfully!! = " + entityType_Id);
         return entityType_Id;
     }
+
+    public Response fetchEntitydetails(String externalID) {
+        JSONObject requestBody = new JSONObject();
+        JSONObject query = new JSONObject();
+        query.put("metaInformation.externalId", externalID);
+        JSONArray projection = new JSONArray();
+        projection.add("metaInformation.externalId");
+        projection.add("metaInformation.name");
+        projection.add("registryDetails.locationId");
+        requestBody.put("query", query);
+        requestBody.put("projection", projection);
+        Response response = given()
+                .header("Authorization", INTERNAL_ACCESS_TOKEN)
+                .header("internal-access-token", INTERNAL_ACCESS_TOKEN)
+                .header("x-auth-token", X_AUTH_TOKEN)
+                .header("Content-Type", "application/json")
+                .body(requestBody)
+                .post(PropertyLoader.PROP_LIST.getProperty("elevate.qa.fetchentity.endpoint"));
+        response.prettyPrint();
+        return response;
+    }
+
+    public String getSystemId(String externalID) {
+        Response response = fetchEntitydetails(externalID);
+        entity_Id = response.jsonPath().getString("result._id");
+        Assert.assertTrue(response.asString().contains(externalID), "externalId not found");
+        logger.info("Entity Id fetched successfully!! = " + entity_Id);
+        return entity_Id;
+    }
+
 }

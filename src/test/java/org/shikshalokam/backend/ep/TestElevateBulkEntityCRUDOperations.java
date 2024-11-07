@@ -31,7 +31,7 @@ public class TestElevateBulkEntityCRUDOperations extends ElevateProjectBaseTest 
         loginToElevate(PropertyLoader.PROP_LIST.getProperty("elevate.login.contentcreator"), PropertyLoader.PROP_LIST.getProperty("elevate.login.contentcreator.password"));
     }
 
-    @Test
+    @Test(description = "Bulk creating valid entities")
     public void testValidEntityBulkCreate() {
         updateCsvWithName("src/main/resources/bulk_entity_valid_create_ElevateProject.csv", "target/classes/bulk_entity_valid_create_ElevateProject.csv");
         updateCsvWithEntityId("target/classes/bulk_entity_valid_create_ElevateProject.csv", "target/classes/bulk_entity_valid_create_ElevateProject.csv");
@@ -41,14 +41,14 @@ public class TestElevateBulkEntityCRUDOperations extends ElevateProjectBaseTest 
     }
 
     //This test case has an issue hence we cannot use this TC until the fix is been provided by the devs
-    @Test
+    @Test(description = "Bulk creating invalid entities")
     public void testInvalidEntityBulkCreate() {
         Response response = testUploadCreateCsvFile("src/main/resources/bulk_entity_invalid_create_ElevateProject.csv", "elevate.qa.bulkentity.create", PropertyLoader.PROP_LIST.getProperty("elevate.qa.automation.entitytype.name"));
         Assert.assertEquals(response.getStatusCode(), 400);
         logger.info("Validations related to Invalid CSV bulk upload entity file is verified");
     }
 
-    @Test(dependsOnMethods = "testValidEntityBulkCreate")
+    @Test(description = "Bulk updating entities ", dependsOnMethods = "testValidEntityBulkCreate")
     public void testValidEntityBulkUpdate() {
         updateCsvWithSystemID("src/main/resources/bulk_entity_update_ElevateProject.csv", "target/classes/bulk_entity_update_ElevateProject.csv");
         updateCsvWithName("target/classes/bulk_entity_update_ElevateProject.csv", "target/classes/bulk_entity_update_ElevateProject.csv");

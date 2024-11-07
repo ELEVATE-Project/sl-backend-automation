@@ -46,6 +46,7 @@
                     <include name="testValidEntityBulkCreate"/>
                     <include name="testValidEntityBulkUpdate"/>
                 </methods>
+
             </class>
         </classes>
     </test>

@@ -48,6 +48,14 @@
                 </methods>
 
             </class>
+            <class name="org.shikshalokam.backend.ep.TestElevateEntityCRUDOperations">
+                <methods>
+                    <include name="testAddingValidEntity"/>
+                    <include name="testAddingInvalidEntity"/>
+
+
+                </methods>
+            </class>
         </classes>
     </test>
 </suite>

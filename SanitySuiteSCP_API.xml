@@ -61,6 +61,12 @@
                 </methods>
             </class>
 
+            <class name="org.shikshalokam.backend.scp.TestGetReviewerList">
+                <methods>
+                    <include name="testGetReviewerList"/>
+                </methods>
+            </class>
+
         </classes>
     </test> <!-- Test -->
 </suite> <!-- Suite -->

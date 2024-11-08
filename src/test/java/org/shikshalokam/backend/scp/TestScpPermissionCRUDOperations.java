@@ -20,7 +20,7 @@ import static org.testng.Assert.assertEquals;
 
 public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest {
     private static final Logger logger = LogManager.getLogger(TestScpPermissionCRUDOperations.class);
-    private URI createPermissionEndpoint, updatePermissionEndpoint, permissionListApiEndpoint, deletePermissionEndpoint;
+    private URI createPermissionEndpoint, updatePermissionEndpoint, permissionListApiEndpoint, deletePermissionEndpoint, listPermissionsByRoleEndpoint;
     private int createdId;
 
     @BeforeTest
@@ -38,7 +38,7 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
         }
     }
 
-    @Test(description = "Verifies the functionality of creating new user's permission with valid payload.")
+    @Test(priority = 1 , description = "Verifies the functionality of creating new user's permission with valid payload.")
     public void testCreatePermissionWithValidPayload() {
         logger.info("Started calling the CreatePermission API with valid payload:");
 
@@ -60,7 +60,7 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
         logger.info("Ended calling the CreatePermission API with valid payload.");
     }
 
-    @Test(description = "Verifies the functionality of permission creation when the payload contains invalid payload")
+    @Test(priority = 2 , description = "Verifies the functionality of permission creation when the payload contains invalid payload")
     public void testCreatePermissionWithInvalidPayload() {
         logger.info("Started calling the CreatePermission API with invalid payload:");
 
@@ -77,7 +77,7 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
         logger.info("Ended calling the CreatePermission API with invalid payload.");
     }
 
-    @Test(description = "Verifies the functionality of permission creation with empty fields payload")
+    @Test(priority = 3 , description = "Verifies the functionality of permission creation with empty fields payload")
     public void testCreatePermissionWithEmptyFields() {
         logger.info("Started calling the CreatePermission API with empty fields payload:");
 
@@ -94,7 +94,7 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
         logger.info("Ended calling the CreatePermission API with empty fields payload.");
     }
 
-    @Test(dependsOnMethods = "testCreatePermissionWithValidPayload", description = "Verifies the functionality of updating user's permission with valid payload.")
+    @Test(dependsOnMethods = "testCreatePermissionWithValidPayload", priority = 4 , description = "Verifies the functionality of updating user's permission with valid payload.")
     public void testUpdatePermissionWithValidPayload() {
         logger.info("Started calling the UpdatePermission API with valid payload:");
 
@@ -113,7 +113,7 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
         logger.info("Ended calling the UpdatePermission API with valid payload.");
     }
 
-    @Test(dependsOnMethods = "testCreatePermissionWithInvalidPayload", description = "Verifies the functionality of updating user's permission with Invalid payload.")
+    @Test(dependsOnMethods = "testCreatePermissionWithInvalidPayload", priority = 5 , description = "Verifies the functionality of updating user's permission with Invalid payload.")
     public void testUpdatePermissionWithInvalidPayload() {
         logger.info("Started calling the UpdatePermission API with Invalid payload:");
 
@@ -133,7 +133,7 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
         logger.info("Ended calling the UpdatePermission API with valid payload.");
     }
 
-    @Test(dependsOnMethods = "testCreatePermissionWithEmptyFields", description = "Verifies the functionality of updating user's permission with Invalid payload.")
+    @Test(dependsOnMethods = "testCreatePermissionWithEmptyFields", priority = 6 , description = "Verifies the functionality of updating user's permission with Invalid payload.")
     public void testUpdatePermissionWithEmptyFieldsPayload() {
         logger.info("Started calling the UpdatePermission API with Invalid payload:");
 
@@ -176,7 +176,7 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
         return response;
     }
 
-    @Test(description = "Verifies the getPermissions API for a valid user.")
+    @Test(priority = 7 , description = "Verifies the getPermissions API for a valid user.")
     public void testGetPermissionsWithValidPayload() {
         logger.info("Started calling the GetPermissions API with valid token.");
 
@@ -188,7 +188,7 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
         logger.info("Permissions retrieved successfully.");
     }
 
-    @Test(description = "Verifies the getPermissions API with an invalid token.")
+    @Test(priority = 8 , description = "Verifies the getPermissions API with an invalid token.")
     public void testGetPermissionsApiWithInvalidToken() {
         logger.info("Started calling the GetPermissions API with an invalid token.");
 
@@ -198,7 +198,7 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
         assertEquals(response.getStatusCode(), 401, "Expected 401 Unauthorized error.");
         logger.info("Received expected error for invalid token.");
     }
-    @Test(dependsOnMethods = "testCreatePermissionWithValidPayload", description = "Verifies the functionality of deleting user's permission by ID.")
+    @Test(priority = 9 , description = "Verifies the functionality of deleting user's permission by ID.")
     public void testDeletePermissionById() {
         logger.info("Started calling the DeletePermission API with valid ID.");
 
@@ -213,10 +213,28 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
 
         logger.info("Ended calling the DeletePermission API with valid ID.");
     }
+    @Test(priority = 10, description = "Verifies the functionality of retrieving permissions list based on a specific role.")
+    public void testGetListPermissionsByRole() {
+        logger.info("Started calling the GetListPermissionsByRole API with a valid role.");
 
+        // Call getListPermissionsByRole with a specific role
+        Response response = getListPermissionsByRole("admin");  // Replace "admin" with the actual role to test
+
+        // Log the status code and response body
+        int statusCode = response.getStatusCode();
+        response.prettyPrint();
+
+        // Validate response code is 200 for a successful retrieval
+        assertEquals(statusCode, 200, "Status code should be 200 for valid role.");
+
+        logger.info("Ended calling the GetPermissionsByRole API with a valid role.");
+    }
     // Method to create request body for update permission
     private JSONObject createRequestBodyForUpdate(String codePrefix, String module, String requestType, String apiPath, String status) {
         JSONObject requestBody = new JSONObject();
+        String code = codePrefix + RandomStringUtils.randomAlphabetic(8).toLowerCase();
+        System.out.println(code);
+        System.out.println("code");
         requestBody.put("code", codePrefix + RandomStringUtils.randomAlphabetic(8).toLowerCase());
         requestBody.put("module", module);
         JSONArray requestTypeArray = new JSONArray();
@@ -286,4 +304,22 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
             throw new RuntimeException("Invalid URI for deletePermissionEndpoint", e);
         }
     }
-}
+    // Method to get listPermission By Role
+    private Response getListPermissionsByRole(String role) {
+        try {
+            // Construct the endpoint URI
+            listPermissionsByRoleEndpoint = new URI(PROP_LIST.get("scp.qa.listPermissionByRole.endpoint").toString());
+
+            // Make the GET request with role as a query parameter
+            return given()
+                    .header("X-auth-token", "bearer " + X_AUTH_TOKEN)
+                    .contentType(ContentType.JSON)
+                    .queryParam("role", role)
+                    .when()
+                    .get(listPermissionsByRoleEndpoint)
+                    .then()
+                    .extract().response();
+        } catch (URISyntaxException e) {
+            throw new RuntimeException("Invalid URI for listPermissionsByRoleEndpoint", e);
+        }
+    }}

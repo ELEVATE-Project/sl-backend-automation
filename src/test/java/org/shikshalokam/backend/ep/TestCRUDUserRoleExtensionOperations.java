@@ -83,7 +83,7 @@ public class TestCRUDUserRoleExtensionOperations extends ElevateProjectBaseTest 
         requestBody.put("title", title);
         requestBody.put("userRoleId", userRoleId);
         requestBody.put("code", userRoleId);
-        requestBody.put("entityTypes", List.of(new HashMap<String, String>() {{
+        requestBody.put("entityTypes",List.of(new HashMap<String, String>() {{
             put("entityType", entityType);
             put("entityTypeId", entityTypeId);
         }}));

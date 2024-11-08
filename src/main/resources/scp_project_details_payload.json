@@ -1,0 +1,307 @@
+{
+  "testCreateProjectWithValidPayload": {
+    "id": "587",
+    "title": "Innovative Pedagogy in Action",
+    "categories": [
+      "teachers",
+      "students",
+      "community"
+    ],
+    "objective": "Teachers will be able to engage students in class using the Innovative Pedagogy Method",
+    "recommended_duration": {
+      "number": "2",
+      "duration": "months"
+    },
+    "keywords": "Innovative Pedagogy",
+    "recommended_for": [
+      "hm",
+      "head_teacher",
+      "principal",
+      "head_master/mistress"
+    ],
+    "languages": [
+      "en",
+      "hi",
+      "assamese",
+      "bengali"
+    ],
+    "learning_resources": [
+      {
+        "name": "What is Innovative Pedagogy English",
+        "url": "https://diksha.gov.in/play/content/do_314145472557998080112225"
+      },
+      {
+        "name": "How to conduct a staff meeting",
+        "url": "https://diksha.gov.in/play/content/do_31414547447630233618641"
+      }
+    ],
+    "licenses": "cc_by_nc",
+    "formMeta": {
+      "formValidation": {
+        "projectDetails": "VALID",
+        "tasks": "VALID",
+        "subTasks": "VALID",
+        "certificates": "VALID"
+      },
+      "isCertificateSelected": "1",
+      "isProjectEvidenceSelected": "0",
+      "taskEvidenceSelected": {
+        "70aa6379-df7f-4033-a653-d58e45adff24": 1,
+        "c43eab58-cb4d-4a6d-a6ee-ab63952e4e43": 1
+      }
+    },
+    "tasks": [
+      {
+        "id": "70aa6379-df7f-4033-a653-d58e45adff24",
+        "name": "Watch the video to learn about What is Innovative Pedagogy",
+        "is_mandatory": true,
+        "allow_evidences": true,
+        "evidence_details": {
+          "file_types": [
+            "images",
+            "document",
+            "videos",
+            "audio"
+          ],
+          "min_no_of_evidences": 5
+        },
+        "learning_resources": [
+          {
+            "name": "Sample Lesson Plan Template",
+            "url": "https://diksha.gov.in/play/content/do_31414547548140339219861"
+          },
+          {
+            "name": "Guidelines for Video Evidence",
+            "url": "https://diksha.gov.in/play/content/do_31414547669843148819063"
+          }
+        ],
+        "children": [
+          {
+            "id": "ae207d2c-f42b-442b-9647-7a90b4cfb769",
+            "name": "Suba task 1",
+            "type": "content",
+            "parent_id": "70aa6379-df7f-4033-a653-d58e45adff24",
+            "sequence_no": 1,
+            "is_mandatory": true,
+            "allow_evidences": true
+          }
+        ],
+        "type": "content",
+        "sequence_no": 1,
+        "solution_details": {}
+      },
+      {
+        "id": "c43eab58-cb4d-4a6d-a6ee-ab63952e4e43",
+        "name": "Meet and discuss Innovative Pedagogy in staff meeting",
+        "is_mandatory": true,
+        "allow_evidences": true,
+        "evidence_details": {
+          "file_types": [
+            "images",
+            "document"
+          ],
+          "min_no_of_evidences": 6
+        },
+        "learning_resources": [
+          {
+            "name": "DIKSHA tutorial on How to attach evidences",
+            "url": "https://diksha.gov.in/play/content/do_31414547772021145619064"
+          },
+          {
+            "name": "What is Innovative Pedagogy Garo",
+            "url": "https://diksha.gov.in/play/content/do_314145469936934912112223"
+          },
+          {
+            "name": "What is Innovative Pedagogy_Khasi",
+            "url": "https://diksha.gov.in/play/content/do_31414546773054259218637"
+          }
+        ],
+        "children": [
+          {
+            "id": "54e152b7-8dad-4a34-b1ef-4ddce4389e4a",
+            "name": "Subtask 2",
+            "type": "content",
+            "parent_id": "c43eab58-cb4d-4a6d-a6ee-ab63952e4e43",
+            "sequence_no": 1,
+            "is_mandatory": true,
+            "allow_evidences": true
+          },
+          {
+            "id": "ec6f0d46-c876-4f6d-ae74-0576970b0bff",
+            "name": "Subtask 3",
+            "type": "content",
+            "parent_id": "c43eab58-cb4d-4a6d-a6ee-ab63952e4e43",
+            "sequence_no": 2,
+            "is_mandatory": true,
+            "allow_evidences": true
+          }
+        ],
+        "type": "content",
+        "sequence_no": 2,
+        "solution_details": {}
+      },
+      {
+        "id": "46f0a69b-0266-499a-b1b8-e2e2bc797ddf",
+        "name": "Create Lesson Plans for the topic to be taught based on Innovative Pedagogy Method",
+        "is_mandatory": false,
+        "allow_evidences": false,
+        "evidence_details": {},
+        "learning_resources": [],
+        "children": [],
+        "type": "observation",
+        "sequence_no": 3,
+        "solution_details": {
+          "name": "Observation with pedgogy",
+          "link": "https://qa.elevate-ml.shikshalokam.org/view/observation/beb6e72ad73a097b9d7910e45a613431",
+          "min_no_of_submissions_required": 1,
+          "type": "observation"
+        }
+      }
+    ],
+    "certificate": {
+      "base_template_id": 1,
+      "base_template_url": "https://mentoring-prod-storage.s3.ap-south-1.amazonaws.com/certfile_BASE_TEMPLATE/system/cert/cf317c7c-4496-4fe1-8648-8cf751ec78c6/one_logo_one_sign.svg",
+      "code": "one_logo_one_sign",
+      "name": "One Logo One Signature",
+      "logos": {
+        "no_of_logos": 1,
+        "stateLogo1": "https://mentoring-prod-storage.s3.ap-south-1.amazonaws.com/certificate/314/certificate/f9d18893-461b-452e-ad65-633b5d0015d6/image-80x80.png",
+        "stateLogo2": ""
+      },
+      "signature": {
+        "no_of_signature": 1,
+        "signatureImg1": "https://mentoring-prod-storage.s3.ap-south-1.amazonaws.com/certificate/314/certificate/cd9b539b-88ad-4929-a2ce-db6bad2676d0/image-120x50%20%282%29.png",
+        "signatureTitleName1": "Smti R S Manners MCS",
+        "signatureTitleDesignation1": "Director Directorate of Educational Research and Training",
+        "signatureImg2": "",
+        "signatureTitleName2": "",
+        "signatureTitleDesignation2": ""
+      },
+      "issuer": "Directorate of Educational Research and Training Government of Meghalaya",
+      "criteria": {
+        "validationText": "Complete validation message",
+        "expression": "C1&&C3",
+        "conditions": {
+          "C1": {
+            "validationText": "Project Should be submitted.",
+            "expression": "C1",
+            "conditions": {
+              "C1": {
+                "scope": "project",
+                "key": "status",
+                "operator": "==",
+                "value": "submitted"
+              }
+            }
+          },
+          "C2": {
+            "validationText": "Evidence project level validation",
+            "expression": "C1",
+            "conditions": {
+              "C1": {
+                "scope": "project",
+                "key": "attachments",
+                "function": "count",
+                "filter": {
+                  "key": "type",
+                  "value": "all"
+                },
+                "operator": ">=",
+                "value": "1"
+              }
+            }
+          },
+          "C3": {
+            "validationText": "Evidence task level validation",
+            "expression": "70aa6379-df7f-4033-a653-d58e45adff24&&c43eab58-cb4d-4a6d-a6ee-ab63952e4e43",
+            "conditions": {
+              "70aa6379-df7f-4033-a653-d58e45adff24": {
+                "scope": "task",
+                "key": "attachments",
+                "function": "count",
+                "filter": {
+                  "key": "type",
+                  "value": "all"
+                },
+                "operator": ">=",
+                "value": "8",
+                "taskDetails": [
+                  "70aa6379-df7f-4033-a653-d58e45adff24"
+                ]
+              },
+              "c43eab58-cb4d-4a6d-a6ee-ab63952e4e43": {
+                "scope": "task",
+                "key": "attachments",
+                "function": "count",
+                "filter": {
+                  "key": "type",
+                  "value": "all"
+                },
+                "operator": ">=",
+                "value": "6",
+                "taskDetails": [
+                  "c43eab58-cb4d-4a6d-a6ee-ab63952e4e43"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "testCreateProjectWithInvalidPayload": {
+    "id": 587,
+    "title": 12345,
+    "categories": "teachers, students, community",
+    "objective": null,
+    "recommended_duration": {
+      "number": "two",
+      "duration": 2
+    },
+    "keywords": false,
+    "recommended_for": "hm, head_teacher, principal",
+    "languages": [
+      123,
+      true
+    ],
+    "learning_resources": [
+      {
+        "name": 9876,
+        "url": 123
+      }
+    ],
+    "licenses": [],
+    "formMeta": {
+      "formValidation": "VALID",
+      "isCertificateSelected": 1,
+      "isProjectEvidenceSelected": "false",
+      "taskEvidenceSelected": []
+    },
+    "tasks": [
+      {
+        "id": null,
+        "name": 5678,
+        "is_mandatory": "true",
+        "allow_evidences": "yes",
+        "evidence_details": {
+          "file_types": "images, document",
+          "min_no_of_evidences": "five"
+        },
+        "learning_resources": [
+          {
+            "name": true,
+            "url": null
+          }
+        ],
+        "children": {},
+        "type": 123,
+        "sequence_no": "one",
+        "solution_details": null
+      }
+    ],
+    "certificate": {
+      "base_template_id": "1",
+      "base_template_url": false
+    }
+  }
+}

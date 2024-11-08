@@ -34,21 +34,23 @@ public class SelfCreationPortalBaseTest extends MentorBase {
             e.printStackTrace();
         }
         return response;
-    }public static Response loginToScpContentCreator(String loginId, String password) {
-        try {
-            RestAssured.baseURI = BASE_URL;
-            response = given().contentType("application/x-www-form-urlencoded; charset=utf-8").formParam("email", loginId).formParam("password", password).post(new URI(PropertyLoader.PROP_LIST.get("scp.login.endpointasuser").toString()));
-            if (response == null) {
-                logger.info("No response received login to the scp is failed");
-                System.exit(-1);
-            }
-            X_AUTH_TOKEN_CC = response.body().jsonPath().get("result.access_token");
-            logger.info(response.prettyPrint());
-            return response;
-        } catch (Exception e) {
-            logger.info(e.getMessage());
-            e.printStackTrace();
-        }
-        return response;
     }
+
+//    public static Response loginToScpContentCreator(String loginId, String password) {
+//        try {
+//            RestAssured.baseURI = BASE_URL;
+//            response = given().contentType("application/x-www-form-urlencoded; charset=utf-8").formParam("email", loginId).formParam("password", password).post(new URI(PropertyLoader.PROP_LIST.get("scp.login.endpointasuser").toString()));
+//            if (response == null) {
+//                logger.info("No response received login to the scp is failed");
+//                System.exit(-1);
+//            }
+//            X_AUTH_TOKEN_CC = response.body().jsonPath().get("result.access_token");
+//            logger.info(response.prettyPrint());
+//            return response;
+//        } catch (Exception e) {
+//            logger.info(e.getMessage());
+//            e.printStackTrace();
+//        }
+//        return response;
+//    }
 }

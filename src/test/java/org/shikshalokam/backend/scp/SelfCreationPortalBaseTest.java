@@ -14,7 +14,6 @@ import static io.restassured.RestAssured.given;
 public class SelfCreationPortalBaseTest extends MentorBase {
     private static final Logger logger = LogManager.getLogger(SelfCreationPortalBaseTest.class);
     public static String X_AUTH_TOKEN = null;
-    public static String X_AUTH_TOKEN_CC = null;
     public static Response response = null;
     public static String BASE_URL = PropertyLoader.PROP_LIST.getProperty("scp.qa.api.base.url");
 

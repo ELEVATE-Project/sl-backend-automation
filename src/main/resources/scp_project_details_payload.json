@@ -303,5 +303,272 @@
       "base_template_id": "1",
       "base_template_url": false
     }
+  },
+  "testCreateProjectWithCertificate": {
+    "id": "588",
+    "title": "Effective Classroom Management",
+    "categories": ["teachers", "students"],
+    "objective": "Teachers will learn strategies to manage classrooms effectively.",
+    "recommended_duration": { "number": "3", "duration": "months" },
+    "keywords": "Classroom Management, Teacher Training",
+    "recommended_for": ["teacher", "principal"],
+    "languages": ["en", "hi"],
+    "learning_resources": [
+      { "name": "Classroom Management Techniques", "url": "https://diksha.gov.in/play/content/123456" }
+    ],
+    "licenses": "cc_by_nc",
+    "formMeta": {
+      "formValidation": {
+        "projectDetails": "VALID",
+        "tasks": "VALID",
+        "subTasks": "VALID",
+        "certificates": "VALID"
+      },
+      "isCertificateSelected": "1",
+      "isProjectEvidenceSelected": "1",
+      "taskEvidenceSelected": { "abc123": 1, "xyz456": 1 }
+    },
+    "tasks": [
+      {
+        "id": "abc123",
+        "name": "Watch the Classroom Management Video",
+        "is_mandatory": true,
+        "allow_evidences": true,
+        "evidence_details": {
+          "file_types": ["images", "document", "video"],
+          "min_no_of_evidences": 3
+        },
+        "learning_resources": [
+          { "name": "Classroom Management Video", "url": "https://diksha.gov.in/play/content/789101" }
+        ],
+        "children": [],
+        "type": "content",
+        "sequence_no": 1
+      }
+    ],
+    "certificate": {
+      "base_template_id": 2,
+      "base_template_url": "https://example.com/certificates/classroom_management.svg",
+      "code": "classroom_management_certificate",
+      "name": "Classroom Management Certificate",
+      "issuer": "Teacher Training Institute",
+      "criteria": {
+        "validationText": "Complete the project tasks to receive the certificate.",
+        "expression": "C1&&C2",
+        "conditions": {
+          "C1": {
+            "validationText": "Task 1 completed",
+            "expression": "taskCompleted",
+            "conditions": {
+              "taskCompleted": {
+                "scope": "task",
+                "key": "status",
+                "operator": "==",
+                "value": "completed"
+              }
+            }
+          },
+          "C2": {
+            "validationText": "Project evidence submitted",
+            "expression": "evidenceSubmitted",
+            "conditions": {
+              "evidenceSubmitted": {
+                "scope": "project",
+                "key": "evidence",
+                "operator": ">=",
+                "value": "1"
+              }
+            }
+          }
+        }
+      }
+    },
+    "subtasks": []
+  },
+  "testCreateProjectWithoutCertificate": {
+    "id": "589",
+    "title": "Effective Classroom Management",
+    "categories": ["teachers"],
+    "objective": "Teachers will learn strategies to manage classrooms effectively.",
+    "recommended_duration": { "number": "2", "duration": "months" },
+    "keywords": "Classroom Management, Teacher Training",
+    "recommended_for": ["teacher"],
+    "languages": ["en", "bn"],
+    "learning_resources": [
+      { "name": "Basic Math Skills Tutorial", "url": "https://diksha.gov.in/play/content/112233" }
+    ],
+    "licenses": "cc_by_nc",
+    "formMeta": {
+      "formValidation": {
+        "projectDetails": "VALID",
+        "tasks": "VALID",
+        "subTasks": "VALID",
+        "certificates": "INVALID"
+      },
+      "isCertificateSelected": "0",
+      "isProjectEvidenceSelected": "1",
+      "taskEvidenceSelected": { "def456": 1 }
+    },
+    "tasks": [
+      {
+        "id": "def456",
+        "name": "Complete Math Practice Test",
+        "is_mandatory": true,
+        "allow_evidences": true,
+        "evidence_details": {
+          "file_types": ["document"],
+          "min_no_of_evidences": 2
+        },
+        "learning_resources": [
+          { "name": "Math Test Guide", "url": "https://diksha.gov.in/play/content/456789" }
+        ],
+        "children": [],
+        "type": "content",
+        "sequence_no": 1
+      }
+    ],
+    "certificate": null,
+    "subtasks": []
+  },
+  "testCreateProjectWithNoSubtasks": {
+    "id": "590",
+    "title": "Effective Classroom Management",
+    "categories": ["teachers"],
+    "objective": "Teachers will learn strategies to manage classrooms effectively.",
+    "recommended_duration": { "number": "1", "duration": "month" },
+    "keywords": "Classroom Management, Teacher Training",
+    "recommended_for": ["teacher", "trainer"],
+    "languages": ["en"],
+    "learning_resources": [
+      { "name": "Digital Literacy Basics", "url": "https://diksha.gov.in/play/content/223344" }
+    ],
+    "licenses": "cc_by_nc",
+    "formMeta": {
+      "formValidation": {
+        "projectDetails": "VALID",
+        "tasks": "VALID",
+        "subTasks": "INVALID",
+        "certificates": "VALID"
+      },
+      "isCertificateSelected": "0",
+      "isProjectEvidenceSelected": "0",
+      "taskEvidenceSelected": { "ghi789": 1 }
+    },
+    "tasks": [
+      {
+        "id": "ghi789",
+        "name": "Complete Digital Literacy Quiz",
+        "is_mandatory": true,
+        "allow_evidences": true,
+        "evidence_details": {
+          "file_types": ["document"],
+          "min_no_of_evidences": 2
+        },
+        "learning_resources": [
+          { "name": "Digital Literacy Quiz Guide", "url": "https://diksha.gov.in/play/content/778899" }
+        ],
+        "children": [],
+        "type": "content",
+        "sequence_no": 1
+      }
+    ],
+    "certificate": null,
+    "subtasks": []
+  },
+  "testCreateProjectWithOnlyMandatoryFields": {
+    "id": "591",
+    "title": "Effective Classroom Management",
+    "categories": ["students"],
+    "objective": "Teachers will learn strategies to manage classrooms effectively.",
+    "recommended_duration": { "number": "3", "duration": "months" },
+    "keywords": "Classroom Management, Teacher Training",
+    "recommended_for": ["student"],
+    "languages": ["en"],
+    "learning_resources": [],
+    "licenses": "cc_by_nc",
+    "formMeta": {
+      "formValidation": {
+        "projectDetails": "VALID",
+        "tasks": "VALID",
+        "subTasks": "INVALID",
+        "certificates": "INVALID"
+      },
+      "isCertificateSelected": "0",
+      "isProjectEvidenceSelected": "0",
+      "taskEvidenceSelected": {}
+    },
+    "tasks": [
+      {
+        "id": "jkl012",
+        "name": "Complete Coding Practice Exercises",
+        "is_mandatory": true,
+        "allow_evidences": false,
+        "evidence_details": {},
+        "learning_resources": [],
+        "children": [],
+        "type": "content",
+        "sequence_no": 1
+      }
+    ],
+    "certificate": null,
+    "subtasks": []
+  },
+  "testUpdateProjectWithCertificate": {
+    "id": "590",
+    "title": "Updated Classroom Management",
+    "categories": ["teachers"],
+    "objective": "Teachers will now learn advanced strategies to manage classrooms effectively.",
+    "recommended_duration": { "number": "1", "duration": "month" },
+    "keywords": "Advanced Classroom Management, Teacher Training",
+    "recommended_for": ["teacher", "trainer"],
+    "languages": ["en"],
+    "learning_resources": [
+      { "name": "Digital Literacy Basics", "url": "https://diksha.gov.in/play/content/223344" }
+    ],
+    "licenses": "cc_by_nc",
+    "formMeta": {
+      "formValidation": {
+        "projectDetails": "VALID",
+        "tasks": "VALID",
+        "subTasks": "INVALID",
+        "certificates": "VALID"
+      },
+      "isCertificateSelected": "1",
+      "isProjectEvidenceSelected": "0",
+      "taskEvidenceSelected": { "ghi789": 1 }
+    },
+    "tasks": [
+      {
+        "id": "ghi789",
+        "name": "Complete Advanced Digital Literacy Quiz",
+        "is_mandatory": true,
+        "allow_evidences": true,
+        "evidence_details": {
+          "file_types": ["document"],
+          "min_no_of_evidences": 2
+        },
+        "learning_resources": [
+          { "name": "Advanced Digital Literacy Quiz Guide", "url": "https://diksha.gov.in/play/content/778899" }
+        ],
+        "children": [],
+        "type": "content",
+        "sequence_no": 1
+      }
+    ],
+    "certificate": {
+      "base_template_id": 3,
+      "base_template_url": "https://example.com/certificates/advanced_digital_literacy.svg",
+      "code": "updated_classroom_management_certificate",
+      "name": "Updated Classroom Management Certificate",
+      "issuer": "Updated Teacher Training Institute",
+      "criteria": {
+        "validationText": "Complete the updated project tasks to receive the certificate.",
+        "conditions": {
+          "C1": "Complete all tasks.",
+          "C2": "Submit evidence for each task."
+        }
+      }
+    },
+    "subtasks": []
   }
 }

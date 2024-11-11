@@ -139,7 +139,7 @@ public class TestElevateBulkEntityCRUDOperations extends ElevateProjectBaseTest 
             }
             System.out.println("keylist = " + entityId);
             for (String EntityID : entityId) {
-                CSVcontent = CSVcontent.replaceFirst("SYSTEM_Id", EntityID.replaceAll("[\\[\\]]", ""));
+                CSVcontent = CSVcontent.replaceFirst("SYSTEM_Id", EntityID);
             }
             Files.write(Paths.get(targetPath), CSVcontent.getBytes());
             logger.info("Updated Content:\n\n" + CSVcontent);

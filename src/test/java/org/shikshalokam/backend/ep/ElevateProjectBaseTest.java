@@ -102,7 +102,7 @@ public class ElevateProjectBaseTest extends MentorBase {
 
     public String getSystemId(String externalID) {
         Response response = fetchEntitydetails(externalID);
-        entity_Id = response.jsonPath().getString("result._id");
+        entity_Id = response.jsonPath().getString("result._id").replaceAll("[\\[\\]]", "");
         Assert.assertTrue(response.asString().contains(externalID), "externalId not found");
         logger.info("Entity Id fetched successfully!! = " + entity_Id);
         return entity_Id;

@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.shikshalokam.backend.MentorBase;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -23,19 +24,9 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
     private static final Logger logger = LogManager.getLogger(TestScpProjectCRUDOperations.class);
     private URI projectCreateEndpoint, projectUpdateEndpoint, getProjectDetailsEndpoint, projectDeletionEndpoint;
     private Integer createdId;
-    private String orgAdminToken;
     private String contentCreatorToken;
 
-    @BeforeMethod
-    public void setupForOrgAdmin() {
-        logger.info("Logging in as Org Admin");
-        orgAdminToken = String.valueOf(loginToScp(
-                PROP_LIST.get("scp.qa.admin.login.user").toString(),
-                PROP_LIST.get("scp.qa.admin.login.password").toString()
-        ));
-    }
-
-    @BeforeMethod(dependsOnMethods = "setupForOrgAdmin")
+    @BeforeMethod()
     public void setupForContentCreator() {
         logger.info("Logging in as Content Creator");
         contentCreatorToken = String.valueOf(loginToScp(
@@ -43,18 +34,6 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
                 PROP_LIST.get("sl.scp.passwordforcontentcreator").toString()
         ));
     }
-
-//    @BeforeTest
-//    public void init() {
-//        logger.info("Logging into the application :");
-//        loginToScpContentCreator(PROP_LIST.get("sl.scp.userascontentcreator").toString(), PROP_LIST.get("sl.scp.passwordforcontentcreator").toString());
-//        // Initialize the projectCreateEndpoint URI
-//        try {
-//            projectCreateEndpoint = new URI(PROP_LIST.get("scp.create.project.endpoint").toString());
-//        } catch (URISyntaxException e) {
-//            throw new RuntimeException("Invalid URI for createEntityTypeEndpoint", e);
-//        }
-//    }
 
     @Test(description = "Verifies the functionality of creating new project with valid payload.")
     public void testCreateProjectWithValidPayload() throws Exception {
@@ -67,7 +46,7 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
         JSONObject createRequestBody = createProject(requestBody);
 
         // Call updatePermission with the created requestBody
-        Response response = createProjectRequest(createRequestBody, contentCreatorToken);
+        Response response = createProjectRequest(createRequestBody);
 
         // Log the status code and response body
         int statusCode = response.getStatusCode();
@@ -100,7 +79,7 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
         JSONObject createRequestBody = createProject(requestBody);
 
         // Call updatePermission with the created requestBody
-        Response response = createProjectRequest(createRequestBody, contentCreatorToken);
+        Response response = createProjectRequest(createRequestBody);
 
         // Log the status code and response body
         int statusCode = response.getStatusCode();
@@ -128,7 +107,7 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
         JSONObject createRequestBody = updateProject(requestBody);
 
         // Call updateRequest with the created requestBody
-        Response response = updateRequest(createRequestBody, contentCreatorToken);
+        Response response = updateRequest(createRequestBody);
 
         // Log the status code and response body
         int statusCode = response.getStatusCode();
@@ -156,7 +135,7 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
         JSONObject createRequestBody = updateProject(requestBody);
 
         // Call updateRequest with the created requestBody
-        Response response = updateRequest(createRequestBody, contentCreatorToken);
+        Response response = updateRequest(createRequestBody);
 
         // Log the status code and response body
         int statusCode = response.getStatusCode();
@@ -173,7 +152,7 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
         logger.info("Started calling the getProjectDetails API valid project ID.");
 
         // Call updatePermission with the created requestBody
-        Response response = getProjectDetailsRequest(createdId, contentCreatorToken);
+        Response response = getProjectDetailsRequest(createdId);
 
         // Log the status code and response body
         response.prettyPrint();
@@ -188,7 +167,7 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
         logger.info("Started calling the getProjectDetails API Invalid project ID.");
         int invalidId = Integer.parseInt((PROP_LIST.get("scp.project.details.invalidId").toString()));
 
-        Response response = getProjectDetailsRequest(invalidId, contentCreatorToken);
+        Response response = getProjectDetailsRequest(invalidId);
 
         // Log the status code and response body
         response.prettyPrint();
@@ -203,7 +182,7 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
         logger.info("Started calling the delete project API with project id");
 
         // Call delete project with the created requestBody
-        Response response = projectDeleteRequest(createdId, contentCreatorToken);
+        Response response = projectDeleteRequest(createdId);
 
         // Log the status code and response body
         response.prettyPrint();
@@ -218,7 +197,7 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
         logger.info("Started calling the deleting project API Invalid project ID.");
         int invalidId = Integer.parseInt((PROP_LIST.get("scp.project.details.invalidId").toString()));
 
-        Response response = getProjectDetailsRequest(invalidId, contentCreatorToken);
+        Response response = getProjectDetailsRequest(invalidId);
 
         // Log the status code and response body
         response.prettyPrint();
@@ -235,13 +214,8 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
         return requestBody;
     }
 
-    private Response createProjectRequest(JSONObject requestBody, String token) {
-        try {
-            projectCreateEndpoint = new URI(PROP_LIST.get("scp.create.project.endpoint").toString());
-        } catch (URISyntaxException e) {
-            throw new RuntimeException("Invalid URI for projectCreateEndpoint", e);
-        }
-
+    private Response createProjectRequest(JSONObject requestBody) {
+        projectCreateEndpoint = MentorBase.createURI(PROP_LIST.get("scp.create.project.endpoint").toString());
         // Make the POST request to update the permission
         Response response = given()
                 .header("X-auth-token", "bearer " + X_AUTH_TOKEN)
@@ -262,12 +236,8 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
         return requestBody;
     }
 
-    private Response updateRequest(JSONObject requestBody, String token) {
-        try {
-            projectUpdateEndpoint = new URI(PROP_LIST.get("scp.update.project.endpoint").toString());
-        } catch (URISyntaxException e) {
-            throw new RuntimeException("Invalid URI for updateProjectEndpoint", e);
-        }
+    private Response updateRequest(JSONObject requestBody) {
+        projectUpdateEndpoint = MentorBase.createURI(PROP_LIST.get("scp.update.project.endpoint").toString());
         // Make the POST request to update the permission
         Response response = given()
                 .header("X-auth-token", "bearer " + X_AUTH_TOKEN)
@@ -283,13 +253,8 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
     }
 
     // Method to handle the getProjectDetails API request with project ID
-    private Response getProjectDetailsRequest(Integer id, String token) {
-        try {
-            getProjectDetailsEndpoint = new URI(PROP_LIST.get("scp.qa.projectdetails").toString());
-        } catch (URISyntaxException e) {
-            throw new RuntimeException("Invalid URI for getProjectDetails", e);
-        }
-
+    private Response getProjectDetailsRequest(Integer id) {
+        getProjectDetailsEndpoint = MentorBase.createURI(PROP_LIST.get("scp.qa.projectdetails").toString());
         // Make the GET request with the project ID as a path parameter
         Response response = given()
                 .header("X-auth-token", "bearer " + X_AUTH_TOKEN)
@@ -307,13 +272,8 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
     }
 
     //Method to delete entityType
-    private Response projectDeleteRequest(Integer id, String token) {
-        try {
-            projectDeletionEndpoint = new URI(PROP_LIST.get("scp.delete.project.endpoint").toString());
-        } catch (URISyntaxException e) {
-            throw new RuntimeException("Invalid URI for deleteProjectEndpoint", e);
-        }
-
+    private Response projectDeleteRequest(Integer id) {
+        projectDeletionEndpoint = MentorBase.createURI(PROP_LIST.get("scp.delete.project.endpoint").toString());
         // Make the DELETE project request
         Response response = given()
                 .header("X-auth-token", "bearer " + X_AUTH_TOKEN)

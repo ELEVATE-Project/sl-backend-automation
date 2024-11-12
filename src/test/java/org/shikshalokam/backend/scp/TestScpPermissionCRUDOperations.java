@@ -6,7 +6,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.shikshalokam.backend.MentorBase;
-import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
@@ -18,13 +17,15 @@ import java.net.URISyntaxException;
 import static io.restassured.RestAssured.given;
 import static org.shikshalokam.backend.PropertyLoader.PROP_LIST;
 import static org.testng.Assert.assertEquals;
+import org.testng.annotations.BeforeMethod;
+
 
 public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest {
     private static final Logger logger = LogManager.getLogger(TestScpPermissionCRUDOperations.class);
     private URI createPermissionEndpoint, updatePermissionEndpoint, permissionListApiEndpoint, deletePermissionEndpoint, listPermissionsByRoleEndpoint;
     private int createdId;
 
-    @BeforeTest
+    @BeforeMethod
     public void init() {
         logger.info("Logging into the application:");
 

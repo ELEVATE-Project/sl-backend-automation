@@ -351,10 +351,10 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
         logger.info("Started calling the UpdateProject API with invalid payload:");
 
         // Load JSON payload and ensure the file exists
-        JSONObject requestBody = loadJsonPayload("testCreateProjectWithValidPayload");
+        JSONObject requestBody = loadJsonPayload("testCreateProjectWithInvalidPayload");
 
         // Use random strings for all values to create an invalid payload
-        requestBody.put("title", " " + RandomStringUtils.randomAlphabetic(8));
+        requestBody.put("title", "!@$@#SDASEWwsa");
         requestBody.put("objective", " " + RandomStringUtils.randomAlphabetic(20));
 
         // Make the API call and verify the response

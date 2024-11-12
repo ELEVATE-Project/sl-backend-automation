@@ -24,7 +24,7 @@
                     <include name="testUpdatePermissionWithEmptyFieldsPayload"/>
                     <include name="testGetPermissionsWithValidPayload"/>
                     <include name="testGetPermissionsApiWithInvalidToken"/>
-                    <include name="testDeletePermissionById"/>
+                    <include name="testUpdatedPermissionDeletionById"/>
                     <include name="testGetListPermissionsByRole"/>
                 </methods>
             </class>

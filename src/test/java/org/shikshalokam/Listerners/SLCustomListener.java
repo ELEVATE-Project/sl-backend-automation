@@ -32,6 +32,9 @@ public class SLCustomListener implements ITestListener, ISuiteListener {
         if (Boolean.parseBoolean(PropertyLoader.PROP_LIST.getProperty("sl.capture.screenshot.on.failure"))) {
             extent.setSystemInfo("Browser", String.valueOf(PWBrowser));
         }
+        // Load environment property and set it in the Extent report as "NAME"
+        String environment = PropertyLoader.PROP_LIST.getProperty("environment", "Unknown Environment");
+        extent.setSystemInfo("ENVIRONMENT", environment);
         extent.setSystemInfo("OS", System.getProperty("os.name"));
         extent.setSystemInfo("OS Version", System.getProperty("os.version"));
         extent.setSystemInfo("Java Version", System.getProperty("java.version"));

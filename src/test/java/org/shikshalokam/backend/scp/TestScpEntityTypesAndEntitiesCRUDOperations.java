@@ -6,6 +6,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONArray;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.json.simple.JSONObject;
@@ -30,7 +31,7 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
     private String entityTypeValue;
     private String entityValue;
 
-    @BeforeTest
+    @BeforeMethod
     public void init() {
         logger.info("Logging into the application:");
 
@@ -128,6 +129,7 @@ public class TestScpEntityTypesAndEntitiesCRUDOperations extends SelfCreationPor
 
         // Validate response code for empty fields (usually 400)
         Assert.assertEquals(statusCode, 400, "Status code should be 400 for empty fields payload");
+        logger.info("Token__id-->>" + X_AUTH_TOKEN);
 
         logger.info("Ended calling the EntityTypeCreation API with valid payload.");
     }

@@ -52,6 +52,8 @@
                 <methods>
                     <include name="testAddingValidEntity"/>
                     <include name="testAddingInvalidEntity"/>
+                    <include name="testUpdatingEntity"/>
+
                 </methods>
             </class>
         </classes>

@@ -2,9 +2,10 @@ package org.shikshalokam.backend.scp;
 
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import org.apache.commons.lang3.RandomStringUtils;  // Import Apache Commons Lang
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.shikshalokam.backend.MentorBase;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.json.simple.JSONObject;
@@ -38,7 +39,7 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
         }
     }
 
-    @Test(priority = 1 , description = "Verifies the functionality of creating new user's permission with valid payload.")
+    @Test(priority = 1, description = "Verifies the functionality of creating new user's permission with valid payload.")
     public void testCreatePermissionWithValidPayload() {
         logger.info("Started calling the CreatePermission API with valid payload:");
 
@@ -60,7 +61,7 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
         logger.info("Ended calling the CreatePermission API with valid payload.");
     }
 
-    @Test(priority = 2 , description = "Verifies the functionality of permission creation when the payload contains invalid payload")
+    @Test(description = "Verifies the functionality of permission creation when the payload contains invalid payload")
     public void testCreatePermissionWithInvalidPayload() {
         logger.info("Started calling the CreatePermission API with invalid payload:");
 
@@ -77,7 +78,7 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
         logger.info("Ended calling the CreatePermission API with invalid payload.");
     }
 
-    @Test(priority = 3 , description = "Verifies the functionality of permission creation with empty fields payload")
+    @Test(priority = 3, description = "Verifies the functionality of permission creation with empty fields payload")
     public void testCreatePermissionWithEmptyFields() {
         logger.info("Started calling the CreatePermission API with empty fields payload:");
 
@@ -94,7 +95,7 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
         logger.info("Ended calling the CreatePermission API with empty fields payload.");
     }
 
-    @Test(dependsOnMethods = "testCreatePermissionWithValidPayload", priority = 4 , description = "Verifies the functionality of updating user's permission with valid payload.")
+    @Test(priority = 2, dependsOnMethods = "testCreatePermissionWithValidPayload", description = "Verifies the functionality of updating user's permission with valid payload.")
     public void testUpdatePermissionWithValidPayload() {
         logger.info("Started calling the UpdatePermission API with valid payload:");
 
@@ -113,7 +114,7 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
         logger.info("Ended calling the UpdatePermission API with valid payload.");
     }
 
-    @Test(dependsOnMethods = "testCreatePermissionWithInvalidPayload", priority = 5 , description = "Verifies the functionality of updating user's permission with Invalid payload.")
+    @Test(dependsOnMethods = "testCreatePermissionWithInvalidPayload", priority = 5, description = "Verifies the functionality of updating user's permission with Invalid payload.")
     public void testUpdatePermissionWithInvalidPayload() {
         logger.info("Started calling the UpdatePermission API with Invalid payload:");
 
@@ -133,7 +134,7 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
         logger.info("Ended calling the UpdatePermission API with valid payload.");
     }
 
-    @Test(dependsOnMethods = "testCreatePermissionWithEmptyFields", priority = 6 , description = "Verifies the functionality of updating user's permission with Invalid payload.")
+    @Test(dependsOnMethods = "testCreatePermissionWithEmptyFields", priority = 6, description = "Verifies the functionality of updating user's permission with Invalid payload.")
     public void testUpdatePermissionWithEmptyFieldsPayload() {
         logger.info("Started calling the UpdatePermission API with Invalid payload:");
 
@@ -153,6 +154,62 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
         logger.info("Ended calling the UpdatePermission API with valid payload.");
     }
 
+    @Test(priority = 7, description = "Verifies the getPermissions API for a valid user.")
+    public void testGetPermissionsWithValidPayload() {
+        logger.info("Started calling the GetPermissions API with valid token.");
+
+        Response response = getPermissions(true);
+        response.prettyPrint();
+
+        // Validate response code
+        assertEquals(response.getStatusCode(), 200, "Failed to fetch permissions.");
+        logger.info("Permissions retrieved successfully.");
+    }
+
+    @Test(priority = 8, description = "Verifies the getPermissions API with an invalid token.")
+    public void testGetPermissionsApiWithInvalidToken() {
+        logger.info("Started calling the GetPermissions API with an invalid token.");
+
+        Response response = getPermissions(false);
+
+        // Validate response code for invalid token
+        assertEquals(response.getStatusCode(), 401, "Expected 401 Unauthorized error.");
+        logger.info("Received expected error for invalid token.");
+    }
+
+    @Test(priority = 10, dependsOnMethods = "testCreatePermissionWithValidPayload", description = "Verifies the functionality of deleting user's permission by ID.")
+    public void testUpdatedPermissionDeletionById() {
+        logger.info("Started calling the DeletePermission API with valid ID.");
+
+        Response response = deletePermissionById();
+
+        // Log the status code and response body
+        int statusCode = response.getStatusCode();
+        response.prettyPrint();
+
+        // Validate response code is 202 for a successful deletion
+        Assert.assertEquals(statusCode, 202, "Status code should be 202 for successful deletion");
+
+        logger.info("Ended calling the DeletePermission API with valid ID.");
+    }
+
+    @Test(priority = 9, description = "Verifies the functionality of retrieving permissions list based on a specific role.")
+    public void testGetListPermissionsByRole() {
+        logger.info("Started calling the GetListPermissionsByRole API with a valid role.");
+
+        // Call getListPermissionsByRole with a specific role
+        Response response = getListPermissionsByRole();
+
+        // Log the status code and response body
+        int statusCode = response.getStatusCode();
+        response.prettyPrint();
+
+        // Validate response code is 200 for a successful retrieval
+        assertEquals(statusCode, 200, "Status code should be 200 for valid role.");
+
+        logger.info("Ended calling the GetPermissionsByRole API with a valid role.");
+    }
+
     // Method to create a permission
     private Response createPermission(String prefix, String module, String requestType, String apiPath, String status) {
         JSONObject requestBody = new JSONObject();
@@ -169,6 +226,7 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
         // Make the POST request
         Response response = given()
                 .header("X-auth-token", "bearer " + X_AUTH_TOKEN)
+                .log().all()
                 .contentType(ContentType.JSON)
                 .body(requestBody.toString())
                 .when().post(createPermissionEndpoint);
@@ -176,65 +234,10 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
         return response;
     }
 
-    @Test(priority = 7 , description = "Verifies the getPermissions API for a valid user.")
-    public void testGetPermissionsWithValidPayload() {
-        logger.info("Started calling the GetPermissions API with valid token.");
 
-        Response response = getPermissions(true);
-        response.prettyPrint();
-
-        // Validate response code
-        assertEquals(response.getStatusCode(), 200, "Failed to fetch permissions.");
-        logger.info("Permissions retrieved successfully.");
-    }
-
-    @Test(priority = 8 , description = "Verifies the getPermissions API with an invalid token.")
-    public void testGetPermissionsApiWithInvalidToken() {
-        logger.info("Started calling the GetPermissions API with an invalid token.");
-
-        Response response = getPermissions(false);
-
-        // Validate response code for invalid token
-        assertEquals(response.getStatusCode(), 401, "Expected 401 Unauthorized error.");
-        logger.info("Received expected error for invalid token.");
-    }
-    @Test(priority = 9 , description = "Verifies the functionality of deleting user's permission by ID.")
-    public void testDeletePermissionById() {
-        logger.info("Started calling the DeletePermission API with valid ID.");
-
-        Response response = deletePermissionById(createdId);
-
-        // Log the status code and response body
-        int statusCode = response.getStatusCode();
-        response.prettyPrint();
-
-        // Validate response code is 200 for a successful deletion
-        Assert.assertEquals(statusCode, 202, "Status code should be 200 for successful deletion");
-
-        logger.info("Ended calling the DeletePermission API with valid ID.");
-    }
-    @Test(priority = 10, description = "Verifies the functionality of retrieving permissions list based on a specific role.")
-    public void testGetListPermissionsByRole() {
-        logger.info("Started calling the GetListPermissionsByRole API with a valid role.");
-
-        // Call getListPermissionsByRole with a specific role
-        Response response = getListPermissionsByRole("admin");  // Replace "admin" with the actual role to test
-
-        // Log the status code and response body
-        int statusCode = response.getStatusCode();
-        response.prettyPrint();
-
-        // Validate response code is 200 for a successful retrieval
-        assertEquals(statusCode, 200, "Status code should be 200 for valid role.");
-
-        logger.info("Ended calling the GetPermissionsByRole API with a valid role.");
-    }
     // Method to create request body for update permission
     private JSONObject createRequestBodyForUpdate(String codePrefix, String module, String requestType, String apiPath, String status) {
         JSONObject requestBody = new JSONObject();
-        String code = codePrefix + RandomStringUtils.randomAlphabetic(8).toLowerCase();
-        System.out.println(code);
-        System.out.println("code");
         requestBody.put("code", codePrefix + RandomStringUtils.randomAlphabetic(8).toLowerCase());
         requestBody.put("module", module);
         JSONArray requestTypeArray = new JSONArray();
@@ -247,30 +250,26 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
     }
 
     private Response updatePermission(JSONObject requestBody) {
-        try {
-            updatePermissionEndpoint = new URI(PROP_LIST.get("scp.update.permission.endpoint").toString() + "/" + createdId);
-        } catch (URISyntaxException e) {
-            throw new RuntimeException("Invalid URI for updatePermissionEndpoint", e);
-        }
-
+        updatePermissionEndpoint = MentorBase.createURI(PROP_LIST.get("scp.update.permission.endpoint").toString());
         // Make the POST request to update the permission
         Response response = given()
                 .header("X-auth-token", "bearer " + X_AUTH_TOKEN)
+                .log().all()
+                .pathParams("id", createdId)
                 .contentType(ContentType.JSON)
                 .body(requestBody.toString())
-                .when().post(updatePermissionEndpoint);
+                .when().post(updatePermissionEndpoint + "/{id}");
 
         return response;
     }
 
     // Method to handle the getPermissions API request
     private Response getPermissions(Boolean validToken) {
-        String temp_X_AUTH_TOKEN=X_AUTH_TOKEN;
-        Response local =null;
+        String temp_X_AUTH_TOKEN = X_AUTH_TOKEN;
+        Response local = null;
         try {
-            if (!validToken)
-            {
-                X_AUTH_TOKEN="junk";
+            if (!validToken) {
+                X_AUTH_TOKEN = "junk";
             }
 
 
@@ -279,7 +278,7 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
             throw new RuntimeException("Invalid URI for getPermissionEndpoint", e);
         }
 
-        local=given()
+        local = given()
                 .header("X-auth-token", "bearer " + X_AUTH_TOKEN)
                 .contentType(ContentType.JSON)
                 .when()
@@ -287,25 +286,25 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
                 .then()
                 .extract().response();
         // Make the GET request without a request body
-        X_AUTH_TOKEN=temp_X_AUTH_TOKEN;
+        X_AUTH_TOKEN = temp_X_AUTH_TOKEN;
         return local;
     }
+
     // Method to delete permission by ID
-    private Response deletePermissionById(int createdId) {
-        try {
-             deletePermissionEndpoint = new URI(PROP_LIST.get("scp.delete.permission.endpoint").toString() + createdId);
-            return given()
-                    .header("X-auth-token", "bearer " +X_AUTH_TOKEN)
-                    .contentType(ContentType.JSON)
-                    .when().delete(deletePermissionEndpoint)
-                    .then()
-                    .extract().response();
-        } catch (URISyntaxException e) {
-            throw new RuntimeException("Invalid URI for deletePermissionEndpoint", e);
-        }
+    private Response deletePermissionById() {
+        deletePermissionEndpoint = MentorBase.createURI(PROP_LIST.get("scp.delete.permission.endpoint").toString());
+
+        return given()
+                .header("X-auth-token", "bearer " + X_AUTH_TOKEN)
+                .pathParams("id",createdId)
+                .contentType(ContentType.JSON)
+                .when().delete(deletePermissionEndpoint + "{id}")
+                .then()
+                .extract().response();
     }
+
     // Method to get listPermission By Role
-    private Response getListPermissionsByRole(String role) {
+    private Response getListPermissionsByRole() {
         try {
             // Construct the endpoint URI
             listPermissionsByRoleEndpoint = new URI(PROP_LIST.get("scp.qa.listPermissionByRole.endpoint").toString());
@@ -314,7 +313,6 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
             return given()
                     .header("X-auth-token", "bearer " + X_AUTH_TOKEN)
                     .contentType(ContentType.JSON)
-                    .queryParam("role", role)
                     .when()
                     .get(listPermissionsByRoleEndpoint)
                     .then()
@@ -322,4 +320,5 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
         } catch (URISyntaxException e) {
             throw new RuntimeException("Invalid URI for listPermissionsByRoleEndpoint", e);
         }
-    }}
+    }
+}

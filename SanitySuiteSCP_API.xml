@@ -48,6 +48,27 @@
                 </methods>
             </class>
 
+            <class name="org.shikshalokam.backend.scp.TestScpProjectCRUDOperations">
+                <methods>
+                    <include name="testCreateProjectWithValidPayload"/>
+                    <include name="testCreateProjectWithCertificate"/>
+                    <include name="testCreateProjectWithoutCertificate"/>
+                    <include name="testCreateProjectWithNoSubtasks"/>
+                    <include name="testCreateProjectWithOnlyMandatoryFields"/>
+                    <include name="testCreateProjectWithInvalidPayload"/>
+                    <include name="testUpdateProjectWithValidPayload"/>
+                    <include name="testUpdateProjectWithCertificate"/>
+                    <include name="testUpdateProjectWithoutCertificate"/>
+                    <include name="testUpdateProjectWithNoSubtasks"/>
+                    <include name="testUpdateProjectWithOnlyMandatoryFields"/>
+                    <include name="testUpdateProjectWithInValidPayload"/>
+                    <include name="testGetProjectDetailsWithValidProjectId"/>
+                    <include name="testGetProjectDetailsWithInValidProjectId"/>
+                    <include name="testDeleteProjectWithValidProjectId"/>
+                    <include name="testDeletingNotTheExistingOne"/>
+                </methods>
+            </class>
+
             <class name="org.shikshalokam.backend.scp.TestGetReviewerList">
                 <methods>
                     <include name="testGetReviewerList"/>

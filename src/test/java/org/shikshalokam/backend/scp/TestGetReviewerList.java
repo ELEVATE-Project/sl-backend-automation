@@ -7,6 +7,7 @@ import static org.testng.Assert.*;
 import io.restassured.response.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -16,7 +17,7 @@ import java.net.URISyntaxException;
 public class TestGetReviewerList extends SelfCreationPortalBaseTest {
     private static final Logger logger = LogManager.getLogger(TestGetReviewerList.class);
 
-    @BeforeTest
+    @BeforeMethod
     public void init() {
         logger.info("Logging into the application:");
         loginToScp(

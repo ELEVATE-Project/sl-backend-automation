@@ -5,6 +5,7 @@ import io.restassured.response.Response;
 import org.apache.commons.lang3.RandomStringUtils;  // Import Apache Commons Lang
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.json.simple.JSONObject;
@@ -22,7 +23,7 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
     private URI createPermissionEndpoint, updatePermissionEndpoint, permissionListApiEndpoint;
     private int createdId;
 
-    @BeforeTest
+    @BeforeMethod
     public void init() {
         logger.info("Logging into the application:");
 
@@ -232,12 +233,11 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
 
     // Method to handle the getPermissions API request
     private Response getPermissions(Boolean validToken) {
-        String temp_X_AUTH_TOKEN=X_AUTH_TOKEN;
-        Response local =null;
+        String temp_X_AUTH_TOKEN = X_AUTH_TOKEN;
+        Response local = null;
         try {
-            if (!validToken)
-            {
-                X_AUTH_TOKEN="junk";
+            if (!validToken) {
+                X_AUTH_TOKEN = "junk";
             }
 
 
@@ -246,7 +246,7 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
             throw new RuntimeException("Invalid URI for getPermissionEndpoint", e);
         }
 
-        local=given()
+        local = given()
                 .header("X-auth-token", "bearer " + X_AUTH_TOKEN)
                 .contentType(ContentType.JSON)
                 .when()
@@ -254,7 +254,7 @@ public class TestScpPermissionCRUDOperations extends SelfCreationPortalBaseTest 
                 .then()
                 .extract().response();
         // Make the GET request without a request body
-        X_AUTH_TOKEN=temp_X_AUTH_TOKEN;
+        X_AUTH_TOKEN = temp_X_AUTH_TOKEN;
         return local;
     }
 }

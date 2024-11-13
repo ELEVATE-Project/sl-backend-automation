@@ -251,7 +251,7 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
 
         // Modify values for updating
         requestBody.put("title", "Updated Project Title with Certificate");
-        requestBody.put("objective", "Updated objective for project with certificate.");
+        requestBody.put("objective", "Updated objective for project with certificate");
         requestBody.put("keywords", "Updated, Classroom Management");
 
         // Make the API call to update the project
@@ -263,7 +263,7 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
         Assert.assertEquals(statusCode, 202, "Status code should be 202");
 
         // Validate the updated content
-        validateUpdatedProjectContent(createdId, "Updated Project Title with Certificate", "Updated objective for project with certificate.", "Updated, Classroom Management");
+        validateUpdatedProjectContent(createdId, "Updated Project Title with Certificate", "Updated objective for project with certificate", "Updated, Classroom Management");
 
         logger.info("Ended calling the UpdateProject API with certificates.");
     }
@@ -277,7 +277,7 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
 
         // Modify values for updating
         requestBody.put("title", "Updated Project Title without Certificate");
-        requestBody.put("objective", "Updated objective for project without certificate.");
+        requestBody.put("objective", "Updated objective for project without certificate");
         requestBody.put("keywords", "Updated, Training");
 
         // Make the API call to update the project
@@ -289,7 +289,7 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
         Assert.assertEquals(statusCode, 202, "Status code should be 202");
 
         // Validate the updated content
-        validateUpdatedProjectContent(createdId, "Updated Project Title without Certificate", "Updated objective for project without certificate.", "Updated, Training");
+        validateUpdatedProjectContent(createdId, "Updated Project Title without Certificate", "Updated objective for project without certificate", "Updated, Training");
 
         logger.info("Ended calling the UpdateProject API without certificates.");
     }
@@ -303,7 +303,7 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
 
         // Modify values for updating
         requestBody.put("title", "Updated Project Title with No Subtasks");
-        requestBody.put("objective", "Updated objective for project with no subtasks.");
+        requestBody.put("objective", "Updated objective for project with no subtasks");
         requestBody.put("keywords", "Updated, Subtask-less");
 
         // Make the API call to update the project
@@ -315,7 +315,7 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
         Assert.assertEquals(statusCode, 202, "Status code should be 202");
 
         // Validate the updated content
-        validateUpdatedProjectContent(createdId, "Updated Project Title with No Subtasks", "Updated objective for project with no subtasks.", "Updated, Subtask-less");
+        validateUpdatedProjectContent(createdId, "Updated Project Title with No Subtasks", "Updated objective for project with no subtasks", "Updated, Subtask-less");
 
         logger.info("Ended calling the UpdateProject API with no subtasks.");
     }
@@ -329,7 +329,7 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
 
         // Modify values for updating
         requestBody.put("title", "Updated Project Title with Only Mandatory Fields");
-        requestBody.put("objective", "Updated objective for project with only mandatory fields.");
+        requestBody.put("objective", "Updated objective for project with only mandatory fields");
         requestBody.put("keywords", "Updated, Basic");
 
         // Make the API call to update the project
@@ -341,7 +341,7 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
         Assert.assertEquals(statusCode, 202, "Status code should be 202");
 
         // Validate the updated content
-        validateUpdatedProjectContent(createdId, "Updated Project Title with Only Mandatory Fields", "Updated objective for project with only mandatory fields.", "Updated, Basic");
+        validateUpdatedProjectContent(createdId, "Updated Project Title with Only Mandatory Fields", "Updated objective for project with only mandatory fields", "Updated, Basic");
 
         logger.info("Ended calling the UpdateProject API with only mandatory fields.");
     }
@@ -537,7 +537,7 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
         Assert.assertEquals(response.jsonPath().getString("result.title"), "Effective Classroom Management", "Project title mismatch");
 
         // Validate the project objective
-        Assert.assertEquals(response.jsonPath().getString("result.objective"), "Teachers will learn strategies to manage classrooms effectively.", "Project objective mismatch");
+        Assert.assertEquals(response.jsonPath().getString("result.objective"), "Teachers will learn strategies to manage classrooms effectively", "Project objective mismatch");
 
         // Validate the keywords
         Assert.assertEquals(response.jsonPath().getString("result.keywords"), "Classroom Management, Teacher Training", "Project keywords mismatch");
@@ -562,7 +562,7 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
             // Validate the certificate criteria
             Map<String, Object> criteria = (Map<String, Object>) certificate.get("criteria");
             Assert.assertNotNull(criteria, "Certificate criteria should not be null");
-            Assert.assertEquals(criteria.get("validationText"), "Complete the project tasks to receive the certificate.", "Certificate validation text mismatch");
+            Assert.assertEquals(criteria.get("validationText"), "Complete the project tasks to receive the certificate", "Certificate validation text mismatch");
 
             // Validate conditions C1 and C2
             Map<String, Object> conditions = (Map<String, Object>) criteria.get("conditions");

@@ -46,6 +46,15 @@
                     <include name="testDeleteModules"/>
                 </methods>
             </class>
+            <class name="org.shikshalokam.backend.TestRolePermissionMapping">
+                <methods>
+                    <include name="testCreatePermissionMapping"/>
+                    <include name="testCreatePermissionMapping_MissingRequiredFields"/>
+                    <include name="testDeletePermissionMapping"/>
+                    <include name="testDeletePermissionMapping_MissingRequiredFields"/>
+                </methods>
+
+            </class>
         </classes>
     </test> <!-- Test -->
 </suite> <!-- Suite -->

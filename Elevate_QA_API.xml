@@ -53,6 +53,8 @@
                     <include name="testAddingValidEntity"/>
                     <include name="testAddingInvalidEntity"/>
                     <include name="testUpdatingEntity"/>
+                    <include name="testUpdateEntityToDifferentEntityType"/>
+                    <include name="testUpdateInvalidEntity"/>
                     <include name="testFetchValidEntityDetails"/>
                     <include name="testMappingEntities"/>
                     <include name="fetchEntityListBasedOnEntityId"/>

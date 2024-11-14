@@ -1,12 +1,9 @@
-<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="SanitySuiteEP">
     <listeners>
         <listener class-name="org.shikshalokam.Listerners.SLCustomListener"/>
     </listeners>
-
     <test name="Test">
         <classes>
-
             <class name="org.shikshalokam.backend.ep.TestElevateLogin">
                 <methods>
                     <include name="testLoginWithValidCredentials"/>
@@ -14,7 +11,6 @@
                     <include name="testLoginWithEmptyFields"/>
                 </methods>
             </class>
-
             <class name="org.shikshalokam.backend.ep.TestElevateEntityTypeCRUDOperations">
                 <methods>
                     <include name="testCreatingSingleEntityType"/>
@@ -30,7 +26,6 @@
                     <include name="testBulkUpdateEntityTypeWithValidCsv"/>
                 </methods>
             </class>
-
             <class name="org.shikshalokam.backend.ep.TestCRUDUserRoleExtensionOperations">
                 <methods>
                     <include name="testCreateValidUserRoleExtension"/>
@@ -40,23 +35,24 @@
                     <include name="testDeleteUserRoleExtension"/>
                 </methods>
             </class>
-
             <class name="org.shikshalokam.backend.ep.TestElevateBulkEntityCRUDOperations">
                 <methods>
                     <include name="testValidEntityBulkCreate"/>
                     <include name="testValidEntityBulkUpdate"/>
                 </methods>
-
             </class>
             <class name="org.shikshalokam.backend.ep.TestElevateEntityCRUDOperations">
                 <methods>
                     <include name="testAddingValidEntity"/>
                     <include name="testAddingInvalidEntity"/>
                     <include name="testUpdatingEntity"/>
-
+                    <include name="testUpdateEntityToDifferentEntityType"/>
+                    <include name="testUpdateInvalidEntity"/>
+                    <include name="testFetchValidEntityDetails"/>
+                    <include name="testMappingEntities"/>
+                    <include name="fetchEntityListBasedOnEntityId"/>
                 </methods>
             </class>
         </classes>
     </test>
 </suite>
-

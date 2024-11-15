@@ -26,7 +26,6 @@ public class TestElevateEntityCRUDOperations extends ElevateProjectBaseTest {
     private String updatedEntityName = RandomStringUtils.randomAlphabetic(10);
     private String updatedEntityExternalId = RandomStringUtils.randomAlphabetic(10);
 
-
     @BeforeMethod
     public void setUp() {
         loginToElevate(
@@ -36,8 +35,7 @@ public class TestElevateEntityCRUDOperations extends ElevateProjectBaseTest {
 
     @Test(description = "Adding a valid entity")
     public void testAddingValidEntity() {
-        logger.info("**************************" + randomExternalId);
-        Response response = addEntity(randomEntityName, PropertyLoader.PROP_LIST.getProperty("elevate.qa.automation.entitytype.Id"), randomExternalId, PropertyLoader.PROP_LIST.getProperty("elevate.qa.automation.entitytype.name"));
+        Response response = addEntity(randomEntityName, randomExternalId, PropertyLoader.PROP_LIST.getProperty("elevate.qa.automation.entitytype.name"));
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertEquals(response.jsonPath().getString("message"), "ENTITY_ADDED");
         logger.info("Validation of entity addition is successful.");
@@ -45,7 +43,7 @@ public class TestElevateEntityCRUDOperations extends ElevateProjectBaseTest {
 
     @Test(description = "Adding a invalid entity")
     public void testAddingInvalidEntity() {
-        Response response = addEntity("", PropertyLoader.PROP_LIST.getProperty("elevate.qa.automation.entitytype.Id"), "", PropertyLoader.PROP_LIST.getProperty("elevate.qa.automation.entitytype.name"));
+        Response response = addEntity("", "", PropertyLoader.PROP_LIST.getProperty("elevate.qa.automation.entitytype.name"));
         Assert.assertEquals(response.getStatusCode(), 400);
         Assert.assertTrue(response.asString().contains("The name field cannot be empty."));
         logger.info("Validation of invalid entity addition is successful.");
@@ -53,7 +51,6 @@ public class TestElevateEntityCRUDOperations extends ElevateProjectBaseTest {
 
     @Test(description = "Updating the entity with a random name", dependsOnMethods = "testAddingValidEntity")
     public void testUpdateValidEntity() {
-        logger.info("**************************" + randomExternalId);
         getSystemId(randomExternalId);
         Response response = updateEntity(entity_Id, updatedEntityName, updatedEntityExternalId, PropertyLoader.PROP_LIST.getProperty("elevate.qa.automation.entitytype.name"));
         Assert.assertEquals(response.getStatusCode(), 200);
@@ -67,7 +64,7 @@ public class TestElevateEntityCRUDOperations extends ElevateProjectBaseTest {
         Response response = updateEntity(entity_Id, updatedEntityName, updatedEntityExternalId, PropertyLoader.PROP_LIST.getProperty("elevate.qa.update.entitytype.name"));
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertTrue(response.asString().contains(updatedEntityName), "entity not found");
-        // Reverting the entity back to it's original entity type
+        // Reverting the entity back to its original entity type
         updateEntity(entity_Id, updatedEntityName, updatedEntityExternalId, PropertyLoader.PROP_LIST.getProperty("elevate.qa.automation.entitytype.name"));
         logger.info("Validations related to updating an entity to a different entity type is verified");
     }
@@ -111,30 +108,32 @@ public class TestElevateEntityCRUDOperations extends ElevateProjectBaseTest {
     }
 
     @Test(description = "Mapping the entities to parent entity using CSV upload")
-    public void testMappingEntities() {
-        addEntity(randomEntityName, PropertyLoader.PROP_LIST.getProperty("elevate.qa.automation.entitytype.Id"), randomExternalId, PropertyLoader.PROP_LIST.getProperty("elevate.qa.automation.entitytype.name"));
-        updateCSVWithChildAndParentEntityNames("src/main/resources/entities_mapping_ElevateProject.csv", "target/classes/entities_mapping_ElevateProject.csv", PropertyLoader.PROP_LIST.getProperty("elevate.qa.parent.entity.externalId"), randomExternalId);
-        Response response = uploadMappingCSV("target/classes/entities_mapping_ElevateProject.csv", PropertyLoader.PROP_LIST.getProperty("elevate.qa.mapping.entity.endpoint"));
+    public void testBulkMappingEntities() {
+        addEntity(randomEntityName, randomExternalId, PropertyLoader.PROP_LIST.getProperty("elevate.qa.automation.entitytype.name"));
+        updateCSVWithChildAndParentEntityNames("src/main/resources/entities_mapping_ElevateProject.csv", "target/classes/entities_mapping_ElevateProject.csv", PropertyLoader.PROP_LIST.getProperty("elevate.qa.parent/automation.entity.externalId"));
+        Response response = bulkUploadMappingCSV("target/classes/entities_mapping_ElevateProject.csv", PropertyLoader.PROP_LIST.getProperty("elevate.qa.mapping.entity.endpoint"));
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertTrue(response.asString().contains("ENTITY_INFORMATION_UPDATE"));
+        Assert.assertEquals(response.jsonPath().getString("result.success"), "true", "String message");
         logger.info("Validations related to Mapping entities are verified");
     }
 
-    @Test(description = "Fetching the list of entities by using the entity Id", dependsOnMethods = "testMappingEntities")
+    @Test(description = "Fetching the list of entities by using the entity Id")
     public void fetchEntityListBasedOnEntityId() {
-        getSystemId(PropertyLoader.PROP_LIST.getProperty("elevate.qa.parent.entity.externalId"));
+        getSystemId(String.valueOf(PropertyLoader.PROP_LIST.getProperty("elevate.qa.parent.entity.externalId")));
         Response response = fetchEntityListBasedOnEntityId(entity_Id, "1", "100", "Automation_Entitytype");
         Assert.assertEquals(response.getStatusCode(), 200);
-        Assert.assertTrue(response.asString().contains(randomEntityName), "Entity not found in the list");
+        Assert.assertTrue(response.asString().contains("ENTITY_INFORMATION_FETCHED"), "Entity not found in the list");
         logger.info("Entity count = " + response.jsonPath().getString("count"));
         logger.info("Validations related to fetching entity list based on entity Id is verified");
     }
 
     // Method to add the entity
-    private Response addEntity(String entityName, String entityTypeId, String externalId, String entityTypeName) {
+    private Response addEntity(String entityName, String externalId, String entityTypeName) {
+        getEntitytype_Id(entityTypeName);
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("name", entityName);
-        requestBody.put("entityType", entityTypeId);
+        requestBody.put("entityType", entityType_Id);
         requestBody.put("externalId", externalId);
         Response response = given()
                 .header("internal-access-token", INTERNAL_ACCESS_TOKEN)
@@ -183,35 +182,44 @@ public class TestElevateEntityCRUDOperations extends ElevateProjectBaseTest {
     }
 
     // Method to fill the mapping CSV with child entity ID's
-    private void updateCSVWithChildAndParentEntityNames(String sourcePath, String targetPath, String parentEntityID, String ChildEntityId) {
+    private void updateCSVWithChildAndParentEntityNames(String sourcePath, String targetPath, String parentEntityID) {
         try {
+            // Read the initial CSV content
             String CSVcontent = new String(Files.readAllBytes(Paths.get(sourcePath)));
             logger.info("Original Content:\n" + CSVcontent);
-            List<String> parentEntityId;
-            parentEntityId = Collections.singletonList(getSystemId(parentEntityID));
-            for (String parentEntity_Id : parentEntityId) {
-                CSVcontent = CSVcontent.replaceFirst("parentEntity_Id", parentEntity_Id);
-                Files.write(Paths.get(targetPath), CSVcontent.getBytes());
-                logger.info("Updated Content:\n" + CSVcontent);
-            }
+            String parentEntityIdSystem = getSystemId(parentEntityID);
+            CSVcontent = CSVcontent.replaceAll("parentEntity_Id", parentEntityIdSystem);
 
-            String CSVcontentChild = new String(Files.readAllBytes(Paths.get(targetPath)));
-            logger.info("Original Content:\n" + CSVcontentChild);
-            List<String> childEntityID;
-            childEntityID = Collections.singletonList(getSystemId(ChildEntityId));
-            for (String childEntity : childEntityID) {
-                CSVcontentChild = CSVcontentChild.replaceFirst("childEntity_ID", childEntity);
-                Files.write(Paths.get(targetPath), CSVcontentChild.getBytes());
-                logger.info("Updated Content:\n" + CSVcontentChild);
-            }
+            Map<String, String> externalEntityIDs = new HashMap<>();
+            for (int i = 1; i <= 3; i++) {
+                String mappingEntityName = randomEntityName + RandomStringUtils.randomAlphanumeric(3);
+                String mappingEntityExternalId = randomExternalId + RandomStringUtils.randomAlphanumeric(3);
 
-        } catch (IOException e) {
+                addEntity(mappingEntityName, mappingEntityExternalId, "Automation_Entitytype");
+                externalEntityIDs.put("External_Id_" + i, mappingEntityExternalId);
+            }
+            logger.info(externalEntityIDs);
+            Map<String, String> childEntityIds = new HashMap<>();
+            for (Map.Entry<String, String> entry : externalEntityIDs.entrySet()) {
+                String externalId = entry.getValue();
+                String systemId = getSystemId(externalId);
+                childEntityIds.put(entry.getKey().replace("External_Id", "childEntity_ID"), systemId);
+            }
+            for (Map.Entry<String, String> entry : childEntityIds.entrySet()) {
+                String childEntity_ID = entry.getKey();
+                String childEntity = entry.getValue();
+                CSVcontent = CSVcontent.replaceAll(childEntity_ID, childEntity);
+            }
+            Files.write(Paths.get(targetPath), CSVcontent.getBytes());
+            logger.info("Final Updated Content:\n" + CSVcontent);
+        } catch (
+                IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     //Method to Map the child entity to parent entity using an CSV
-    private Response uploadMappingCSV(String targetPath, String endpoint) {
+    private Response bulkUploadMappingCSV(String targetPath, String endpoint) {
         File csvFile = new File(targetPath);
         if (!csvFile.exists()) {
             logger.error("CSV file does not exist: " + csvFile.getAbsolutePath());
@@ -227,16 +235,3 @@ public class TestElevateEntityCRUDOperations extends ElevateProjectBaseTest {
         return response;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

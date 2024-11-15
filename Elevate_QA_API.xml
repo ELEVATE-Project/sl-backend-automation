@@ -35,6 +35,7 @@
                     <include name="testDeleteUserRoleExtension"/>
                 </methods>
             </class>
+
             <class name="org.shikshalokam.backend.ep.TestElevateBulkEntityCRUDOperations">
                 <methods>
                     <include name="testValidEntityBulkCreate"/>

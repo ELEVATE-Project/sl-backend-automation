@@ -39,6 +39,7 @@ public class TestElevateEntityCRUDOperations extends ElevateProjectBaseTest {
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertEquals(response.jsonPath().getString("message"), "ENTITY_ADDED");
         logger.info("Validation of entity addition is successful.");
+        getSystemId(randomExternalId);
     }
 
     @Test(description = "Adding a invalid entity")
@@ -51,7 +52,6 @@ public class TestElevateEntityCRUDOperations extends ElevateProjectBaseTest {
 
     @Test(description = "Updating the entity with a random name", dependsOnMethods = "testAddingValidEntity")
     public void testUpdateValidEntity() {
-        getSystemId(randomExternalId);
         Response response = updateEntity(entity_Id, updatedEntityName, updatedEntityExternalId, PropertyLoader.PROP_LIST.getProperty("elevate.qa.automation.entitytype.name"));
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertTrue(response.asString().contains(updatedEntityName), "entity not found");
@@ -110,7 +110,7 @@ public class TestElevateEntityCRUDOperations extends ElevateProjectBaseTest {
     @Test(description = "Mapping the entities to parent entity using CSV upload")
     public void testBulkMappingEntities() {
         addEntity(randomEntityName, randomExternalId, PropertyLoader.PROP_LIST.getProperty("elevate.qa.automation.entitytype.name"));
-        updateCSVWithChildAndParentEntityNames("src/main/resources/entities_mapping_ElevateProject.csv", "target/classes/entities_mapping_ElevateProject.csv", PropertyLoader.PROP_LIST.getProperty("elevate.qa.parent/automation.entity.externalId"));
+        updateCSVWithChildAndParentEntityNames("src/main/resources/entities_mapping_ElevateProject.csv", "target/classes/entities_mapping_ElevateProject.csv", PropertyLoader.PROP_LIST.getProperty("elevate.qa.parent.entity.externalId"));
         Response response = bulkUploadMappingCSV("target/classes/entities_mapping_ElevateProject.csv", PropertyLoader.PROP_LIST.getProperty("elevate.qa.mapping.entity.endpoint"));
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertTrue(response.asString().contains("ENTITY_INFORMATION_UPDATE"));
@@ -143,6 +143,7 @@ public class TestElevateEntityCRUDOperations extends ElevateProjectBaseTest {
                 .queryParam("type", entityTypeName)
                 .post(PropertyLoader.PROP_LIST.getProperty("elevate.qa.entityadd.endpoint"));
         response.prettyPrint();
+        //getSystemId(randomExternalId);
         return response;
     }
 

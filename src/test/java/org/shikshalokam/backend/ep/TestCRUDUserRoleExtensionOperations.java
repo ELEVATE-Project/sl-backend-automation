@@ -78,25 +78,6 @@ public class TestCRUDUserRoleExtensionOperations extends ElevateProjectBaseTest 
         logger.info("Ended DeleteUserRoleExtension with assertions completed");
     }
 
-    private Response createUserRoleExtension(String title, String userRoleId, String entityType, String entityTypeId) {
-        HashMap<String, Object> requestBody = new HashMap<>();
-        requestBody.put("title", title);
-        requestBody.put("userRoleId", userRoleId);
-        requestBody.put("code", userRoleId);
-        requestBody.put("entityTypes",List.of(new HashMap<String, String>() {{
-            put("entityType", entityType);
-            put("entityTypeId", entityTypeId);
-        }}));
-        Response response = given()
-                .header("X-auth-token", X_AUTH_TOKEN)
-                .header("internal-access-token", INTERNAL_ACCESS_TOKEN)
-                .contentType(ContentType.JSON)
-                .body(requestBody)
-                .when().post(PROP_LIST.getProperty("createUserRoleExtensionEndpoint"));
-        response.prettyPrint();
-        return response;
-    }
-
     private Response updateUserRoleExtension(String title, String entityType, String entityTypeId) {
         HashMap<String, Object> requestBody = new HashMap<>();
         requestBody.put("title", title);

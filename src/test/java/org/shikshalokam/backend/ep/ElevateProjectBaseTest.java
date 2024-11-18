@@ -1,6 +1,7 @@
 package org.shikshalokam.backend.ep;
 
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,9 +14,11 @@ import org.testng.Assert;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
+import static org.shikshalokam.backend.PropertyLoader.PROP_LIST;
 import static org.testng.AssertJUnit.fail;
 
 public class ElevateProjectBaseTest extends MentorBase {
@@ -100,11 +103,31 @@ public class ElevateProjectBaseTest extends MentorBase {
         return response;
     }
 
-    public String getSystemId(String externalID) {
+    public String getEntityId(String externalID) {
         Response response = fetchEntitydetails(externalID);
         entity_Id = response.jsonPath().getString("result._id").replaceAll("[\\[\\]]", "");
         Assert.assertTrue(response.asString().contains(externalID), "externalId not found");
         logger.info("Entity Id fetched successfully!! = " + entity_Id);
         return entity_Id;
     }
+
+    public Response createUserRoleExtension(String title, String userRoleId, String entityType, String entityTypeId) {
+        HashMap<String, Object> requestBody = new HashMap<>();
+        requestBody.put("title", title);
+        requestBody.put("userRoleId", userRoleId);
+        requestBody.put("code", userRoleId);
+        requestBody.put("entityTypes", List.of(new HashMap<String, String>() {{
+            put("entityType", entityType);
+            put("entityTypeId", entityTypeId);
+        }}));
+        Response response = given()
+                .header("X-auth-token", X_AUTH_TOKEN)
+                .header("internal-access-token", INTERNAL_ACCESS_TOKEN)
+                .contentType(ContentType.JSON)
+                .body(requestBody)
+                .when().post(PROP_LIST.getProperty("createUserRoleExtensionEndpoint"));
+        response.prettyPrint();
+        return response;
+    }
+
 }

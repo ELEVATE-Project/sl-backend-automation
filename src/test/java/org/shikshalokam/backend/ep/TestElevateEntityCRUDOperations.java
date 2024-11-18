@@ -39,7 +39,7 @@ public class TestElevateEntityCRUDOperations extends ElevateProjectBaseTest {
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertEquals(response.jsonPath().getString("message"), "ENTITY_ADDED");
         logger.info("Validation of entity addition is successful.");
-        getSystemId(randomExternalId);
+        getEntityId(randomExternalId);
     }
 
     @Test(description = "Adding a invalid entity")
@@ -60,7 +60,7 @@ public class TestElevateEntityCRUDOperations extends ElevateProjectBaseTest {
 
     @Test(description = "Updating the entity to a different entity type", dependsOnMethods = "testAddingValidEntity")
     public void testUpdateEntityToDifferentEntityType() {
-        getSystemId(randomExternalId);
+        getEntityId(randomExternalId);
         Response response = updateEntity(entity_Id, updatedEntityName, updatedEntityExternalId, PropertyLoader.PROP_LIST.getProperty("elevate.qa.update.entitytype.name"));
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertTrue(response.asString().contains(updatedEntityName), "entity not found");
@@ -120,7 +120,7 @@ public class TestElevateEntityCRUDOperations extends ElevateProjectBaseTest {
 
     @Test(description = "Fetching the list of entities by using the entity Id")
     public void fetchEntityListBasedOnEntityId() {
-        getSystemId(String.valueOf(PropertyLoader.PROP_LIST.getProperty("elevate.qa.parent.entity.externalId")));
+        getEntityId(String.valueOf(PropertyLoader.PROP_LIST.getProperty("elevate.qa.parent.entity.externalId")));
         Response response = fetchEntityListBasedOnEntityId(entity_Id, "1", "100", "Automation_Entitytype");
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertTrue(response.asString().contains("ENTITY_INFORMATION_FETCHED"), "Entity not found in the list");
@@ -143,7 +143,7 @@ public class TestElevateEntityCRUDOperations extends ElevateProjectBaseTest {
                 .queryParam("type", entityTypeName)
                 .post(PropertyLoader.PROP_LIST.getProperty("elevate.qa.entityadd.endpoint"));
         response.prettyPrint();
-        //getSystemId(randomExternalId);
+        //getEntityId(randomExternalId);
         return response;
     }
 
@@ -188,7 +188,7 @@ public class TestElevateEntityCRUDOperations extends ElevateProjectBaseTest {
             // Read the initial CSV content
             String CSVcontent = new String(Files.readAllBytes(Paths.get(sourcePath)));
             logger.info("Original Content:\n" + CSVcontent);
-            String parentEntityIdSystem = getSystemId(parentEntityID);
+            String parentEntityIdSystem = getEntityId(parentEntityID);
             CSVcontent = CSVcontent.replaceAll("parentEntity_Id", parentEntityIdSystem);
 
             Map<String, String> externalEntityIDs = new HashMap<>();
@@ -203,7 +203,7 @@ public class TestElevateEntityCRUDOperations extends ElevateProjectBaseTest {
             Map<String, String> childEntityIds = new HashMap<>();
             for (Map.Entry<String, String> entry : externalEntityIDs.entrySet()) {
                 String externalId = entry.getValue();
-                String systemId = getSystemId(externalId);
+                String systemId = getEntityId(externalId);
                 childEntityIds.put(entry.getKey().replace("External_Id", "childEntity_ID"), systemId);
             }
             for (Map.Entry<String, String> entry : childEntityIds.entrySet()) {

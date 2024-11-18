@@ -25,6 +25,8 @@ public class TestElevateEntityCRUDOperations extends ElevateProjectBaseTest {
     private String randomExternalId = RandomStringUtils.randomAlphabetic(10);
     private String updatedEntityName = RandomStringUtils.randomAlphabetic(10);
     private String updatedEntityExternalId = RandomStringUtils.randomAlphabetic(10);
+    private String userRolenametitle = RandomStringUtils.randomAlphabetic(10);
+    private String userRoleId = RandomStringUtils.randomAlphabetic(10);
 
     @BeforeMethod
     public void setUp() {
@@ -126,6 +128,19 @@ public class TestElevateEntityCRUDOperations extends ElevateProjectBaseTest {
         Assert.assertTrue(response.asString().contains("ENTITY_INFORMATION_FETCHED"), "Entity not found in the list");
         logger.info("Entity count = " + response.jsonPath().getString("count"));
         logger.info("Validations related to fetching entity list based on entity Id is verified");
+    }
+
+    @Test(description = "Fetch targeted roles for updated entity")
+    public void testFetchTargetedRolesForEntity() {
+        createUserRoleExtension(userRolenametitle, userRoleId, PropertyLoader.PROP_LIST.getProperty("elevate.qa.automation.entitytype.name"), PropertyLoader.PROP_LIST.getProperty("elevate.qa.automation.entitytype.Id"));
+        getEntityId(PropertyLoader.PROP_LIST.getProperty("elevate.qa.parent.entity.externalId"));
+        Response response = fetchTargetedRoles(entity_Id);
+        Assert.assertEquals(response.getStatusCode(), 200, "roles not found");
+        Assert.assertTrue(response.asString().contains(userRolenametitle));
+        Assert.assertEquals(response.jsonPath().getString("message"), "ROLES_FETCHED_SUCCESSFULLY", "Roles fetching failed");
+        List<?> rolesData = response.jsonPath().getList("result.data");
+        Assert.assertTrue(rolesData.size() > 0, "Expected non-empty roles data for the entity");
+        logger.info("validation related to entity targeted roles is verified");
     }
 
     // Method to add the entity
@@ -232,6 +247,18 @@ public class TestElevateEntityCRUDOperations extends ElevateProjectBaseTest {
                 .header("Content-Type", "multipart/form-data")
                 .post(endpoint);
         logger.info("Response Status Code: " + response.getStatusCode());
+        response.prettyPrint();
+        return response;
+    }
+
+    // Method to fetch targeted roles for a given entity ID
+    private Response fetchTargetedRoles(String entityId) {
+        Response response = given()
+                .header("internal-access-token", INTERNAL_ACCESS_TOKEN)
+                .header("x-auth-token", X_AUTH_TOKEN)
+                .header("Content-Type", "application/json")
+                .pathParam("entity_id", entityId)
+                .get(PropertyLoader.PROP_LIST.getProperty("elevate.qa.targetedroles.endpoint") + "{entity_id}");
         response.prettyPrint();
         return response;
     }

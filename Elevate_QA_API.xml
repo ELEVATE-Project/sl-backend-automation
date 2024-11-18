@@ -52,6 +52,7 @@
                     <include name="testFetchValidEntityDetails"/>
                     <include name="testMappingEntities"/>
                     <include name="fetchEntityListBasedOnEntityId"/>
+                    <include name="testFetchTargetedRolesForEntity"/>
                 </methods>
             </class>
         </classes>

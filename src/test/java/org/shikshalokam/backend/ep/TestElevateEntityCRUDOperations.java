@@ -188,10 +188,8 @@ public class TestElevateEntityCRUDOperations extends ElevateProjectBaseTest {
             // Read the initial CSV content
             String CSVcontent = new String(Files.readAllBytes(Paths.get(sourcePath)));
             logger.info("Original Content:\n" + CSVcontent);
-            logger.info("*******************************" + parentEntityID);
             String parentEntityIdSystem = getSystemId(parentEntityID);
             CSVcontent = CSVcontent.replaceAll("parentEntity_Id", parentEntityIdSystem);
-            logger.info("*******************************");
 
             Map<String, String> externalEntityIDs = new HashMap<>();
             for (int i = 1; i <= 3; i++) {

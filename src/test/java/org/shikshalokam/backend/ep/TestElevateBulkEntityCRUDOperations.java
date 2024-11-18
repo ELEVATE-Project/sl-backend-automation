@@ -133,7 +133,7 @@ public class TestElevateBulkEntityCRUDOperations extends ElevateProjectBaseTest 
             HashMap<String, String> map = new HashMap<>();
             List<String> entityId = new ArrayList<>();
             for (String external_id : randomEntityId) {
-                String entity_Id = getSystemId(external_id);
+                String entity_Id = getEntityId(external_id);
                 map.put(external_id, entity_Id);
                 entityId.add(entity_Id);
             }

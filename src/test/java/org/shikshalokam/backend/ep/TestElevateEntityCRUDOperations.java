@@ -143,6 +143,51 @@ public class TestElevateEntityCRUDOperations extends ElevateProjectBaseTest {
         logger.info("validation related to entity targeted roles is verified");
     }
 
+    @Test(description = "Test case for fetching entity related entities")
+    public void testValidRelatedEntitiesBasedOnEntity() {
+        getEntityId(PropertyLoader.PROP_LIST.getProperty("elevate.qa.parent.entity.externalId"));
+        Response response = relatedEntitiesBasedOnEntityId(entity_Id);
+        Assert.assertEquals(response.getStatusCode(), 200);
+        Assert.assertEquals(response.jsonPath().get("message"), "ENTITY_FETCHED");
+        logger.info("Validations related to fetching entity related entities is verified");
+    }
+
+    @Test(description = "Negative test case for fetching entity related entities with out the path parameter")
+    public void testInvalidRelatedEntitiesBasedOnEntity() {
+        Response response = given()
+                .header("internal-access-token", INTERNAL_ACCESS_TOKEN)
+                .header("x-auth-token", X_AUTH_TOKEN)
+                .header("Content-Type", "application/json")
+                .get("entity-management/v1/entities/relatedEntities");
+        response.prettyPrint();
+        Assert.assertEquals(response.getStatusCode(), 400);
+        Assert.assertTrue(response.asString().contains("required Entity id"));
+        logger.info("Validation related to Invalid fetching of entity related entities is verified");
+    }
+
+
+    @Test(dependsOnMethods = "testAddingValidEntity", description = "Test case to get entity details using entity Id")
+    public void testValidEntityDetails() {
+        Response response = ENtitydetailsBasedonEntityId(entity_Id);
+        Assert.assertEquals(response.getStatusCode(), 200);
+        Assert.assertEquals(response.jsonPath().getString("message"), "ENTITY_INFORMATION_FETCHED");
+        logger.info("Validations related to getting entity details using entity Id is verified");
+    }
+
+    @Test(description = "Negative test case to get entity details without path parameter")
+    public void testInvalidEntityDetails() {
+        Response response = given()
+                .header("internal-access-token", INTERNAL_ACCESS_TOKEN)
+                .header("x-auth-token", X_AUTH_TOKEN)
+                .header("Content-Type", "application/json")
+                .get("entity-management/v1/entities/details");
+        response.prettyPrint();
+        Assert.assertEquals(response.getStatusCode(), 400);
+        Assert.assertTrue(response.asString().contains("required state location id"));
+        logger.info("Validations related to getting entity details without path parameter is verified");
+
+    }
+
     // Method to add the entity
     private Response addEntity(String entityName, String externalId, String entityTypeName) {
         getEntitytype_Id(entityTypeName);
@@ -259,6 +304,30 @@ public class TestElevateEntityCRUDOperations extends ElevateProjectBaseTest {
                 .header("Content-Type", "application/json")
                 .pathParam("entity_id", entityId)
                 .get(PropertyLoader.PROP_LIST.getProperty("elevate.qa.targetedroles.endpoint") + "{entity_id}");
+        response.prettyPrint();
+        return response;
+    }
+
+    //Method to fetch related entities based on entity ID
+    private Response relatedEntitiesBasedOnEntityId(String entityid) {
+        Response response = given()
+                .header("internal-access-token", INTERNAL_ACCESS_TOKEN)
+                .header("x-auth-token", X_AUTH_TOKEN)
+                .header("Content-Type", "application/json")
+                .pathParam("_id", entityid)
+                .get(PropertyLoader.PROP_LIST.getProperty("elevate.qa.entity.realated.entities") + "{_id}");
+        response.prettyPrint();
+        return response;
+    }
+
+    //Method to fetch entity details based on entity ID
+    private Response ENtitydetailsBasedonEntityId(String entityid) {
+        Response response = given()
+                .header("internal-access-token", INTERNAL_ACCESS_TOKEN)
+                .header("x-auth-token", X_AUTH_TOKEN)
+                .header("Content-Type", "application/json")
+                .pathParam("_id", entityid)
+                .get(PropertyLoader.PROP_LIST.getProperty("elevate.qa.entity.detailsbasedon.entityid.endpoint") + "{_id}");
         response.prettyPrint();
         return response;
     }

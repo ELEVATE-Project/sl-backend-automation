@@ -30,6 +30,7 @@ public class ElevateProjectBaseTest extends MentorBase {
     public static String INTERNAL_ACCESS_TOKEN = PropertyLoader.PROP_LIST.getProperty("elevate.internalaccesstoken");
     public static String entityType_Id = null;
     public static String entity_Id = null;
+    public static String createdRoleID;
 
     // method to login with required parameters
     public static Response loginToElevate(String email, String Password) {
@@ -127,7 +128,17 @@ public class ElevateProjectBaseTest extends MentorBase {
                 .body(requestBody)
                 .when().post(PROP_LIST.getProperty("createUserRoleExtensionEndpoint"));
         response.prettyPrint();
+        createdRoleID = response.jsonPath().getString("result._id");
         return response;
     }
 
+    public Response deleteUserRoleExtension(String roleID) {
+        Response response = given()
+                .header("X-auth-token", X_AUTH_TOKEN)
+                .header("internal-access-token", INTERNAL_ACCESS_TOKEN)
+                .contentType(ContentType.JSON)
+                .when().pathParam("_id", roleID).delete(PROP_LIST.getProperty("deleteUserRoleExtensionEndpoint") + "{_id}"); // Use the updated URL here
+        response.prettyPrint();
+        return response;
+    }
 }

@@ -46,17 +46,18 @@
                 <methods>
                     <include name="testAddingValidEntity"/>
                     <include name="testAddingInvalidEntity"/>
-                    <include name="testUpdatingEntity"/>
+                    <include name="testUpdateValidEntity"/>
                     <include name="testUpdateEntityToDifferentEntityType"/>
                     <include name="testUpdateInvalidEntity"/>
                     <include name="testFetchValidEntityDetails"/>
-                    <include name="testMappingEntities"/>
+                    <include name="testBulkMappingEntities"/>
                     <include name="fetchEntityListBasedOnEntityId"/>
                     <include name="testFetchTargetedRolesForEntity"/>
                     <include name="testValidRelatedEntitiesBasedOnEntity"/>
                     <include name="testInvalidRelatedEntitiesBasedOnEntity"/>
                     <include name="testValidEntityDetails"/>
                     <include name="testInvalidEntityDetails"/>
+                    <include name="testFetchEntitySubListUsingParentEntityID"/>
                 </methods>
             </class>
         </classes>

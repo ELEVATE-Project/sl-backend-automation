@@ -18,7 +18,6 @@ import static org.testng.Assert.*;
 public class TestCRUDUserRoleExtensionOperations extends ElevateProjectBaseTest {
 
     public static final Logger logger = LogManager.getLogger(TestCRUDUserRoleExtensionOperations.class);
-    private String createdRoleID;
     private String updatedRoleTitle = "Principal" + RandomStringUtils.randomAlphabetic(3).toLowerCase();
     private String userRoleId = RandomStringUtils.randomAlphabetic(10);
     private String userRoleTitle = "userRoleExt" + RandomStringUtils.randomAlphabetic(10).toLowerCase();
@@ -33,13 +32,13 @@ public class TestCRUDUserRoleExtensionOperations extends ElevateProjectBaseTest 
     public void testCreateValidUserRoleExtension() {
         Response response = createUserRoleExtension(userRoleTitle, userRoleId, PROP_LIST.getProperty("elevate.qa.entityType"), PROP_LIST.getProperty("elevate.qa.entityTypeId"));
         logger.info("Response Code: {}, Response Body: {}", response.getStatusCode(), response.getBody().asString());
-        createdRoleID = response.jsonPath().getString("result._id");
         assertEquals(response.getStatusCode(), 200, "User role extension creation failed with " + response.getStatusCode());
         assertNotNull(createdRoleID, "Role ID not found in the response");
         logger.info("Ended CreateUserRoleExtension with assertions completed");
+        deleteUserRoleExtension(createdRoleID);
     }
 
-    @Test (description = "creating user role extension by passing empty values")
+    @Test(description = "creating user role extension by passing empty values")
     public void testCreateInvalidUserRoleExtension() {
         Response response = createUserRoleExtension("", "", PROP_LIST.getProperty("elevate.qa.entityType"), PROP_LIST.getProperty("elevate.qa.entityTypeId"));
         logger.info("Response Code: {}, Response Body: {}", response.getStatusCode(), response.getBody().asString());
@@ -48,13 +47,13 @@ public class TestCRUDUserRoleExtensionOperations extends ElevateProjectBaseTest 
         logger.info("Ended CreateUserRoleExtension with assertions completed");
     }
 
-    @Test(dependsOnMethods = "testCreateValidUserRoleExtension", description = "Updates the user role extension")
+    @Test(description = "Updates the user role extension")
     public void testValidUpdateUserRoleExtension() {
+        createUserRoleExtension(userRoleTitle, userRoleId, PROP_LIST.getProperty("elevate.qa.entityType"), PROP_LIST.getProperty("elevate.qa.entityTypeId"));
         Response response = updateUserRoleExtension(updatedRoleTitle, PROP_LIST.getProperty("elevate.qa.entityType"), PROP_LIST.getProperty("elevate.qa.entityTypeId"));
         logger.info("Response Code: {}, Response Body: {}", response.getStatusCode(), response.getBody().asString());
         assertEquals(response.getStatusCode(), 200, "User role extension update failed with " + response.getStatusCode());
         assertEquals(response.jsonPath().getString("message"), "USER_ROLE_UPDATATED");
-
         Response responseFind = findUserRoleExtension();
         assertEquals(responseFind.getStatusCode(), 200, "User role extension update failed with " + response.getStatusCode());
         assertTrue(responseFind.getBody().asString().contains(updatedRoleTitle));
@@ -63,18 +62,23 @@ public class TestCRUDUserRoleExtensionOperations extends ElevateProjectBaseTest 
 
     @Test(dependsOnMethods = "testCreateValidUserRoleExtension", description = "Finds the user role extension by status")
     public void testFindUserRoleExtension() {
+        createUserRoleExtension(userRoleTitle, userRoleId, PROP_LIST.getProperty("elevate.qa.entityType"), PROP_LIST.getProperty("elevate.qa.entityTypeId"));
         Response response = findUserRoleExtension();
         logger.info("Response Code: {}, Response Body: {}", response.getStatusCode(), response.getBody().asString());
         assertEquals(response.getStatusCode(), 200, "User role extension find request failed with " + response.getStatusCode());
         assertTrue(response.getBody().asString().contains(userRoleTitle), "Expected role title 'Principal' not found in the response.");
         logger.info("Ended FindUserRoleExtension with assertions completed");
+        deleteUserRoleExtension(createdRoleID);
     }
 
-    @Test(dependsOnMethods = "testValidUpdateUserRoleExtension", description = "Deletes the user role extension")
+    @Test(description = "Deletes the user role extension")
     public void testDeleteUserRoleExtension() {
-        Response response = deleteUserRoleExtension(createdRoleID);
+        Response response = createUserRoleExtension(userRoleTitle, userRoleId, PROP_LIST.getProperty("elevate.qa.entityType"), PROP_LIST.getProperty("elevate.qa.entityTypeId"));
         logger.info("Response Code: {}, Response Body: {}", response.getStatusCode(), response.getBody().asString());
-        assertEquals(response.getStatusCode(), 200, "User role extension deletion failed with " + response.getStatusCode());
+        createdRoleID = response.jsonPath().getString("result._id");
+        Response responseDelete = deleteUserRoleExtension(createdRoleID);
+        logger.info("Response Code: {}, Response Body: {}", responseDelete.getStatusCode(), responseDelete.getBody().asString());
+        assertEquals(responseDelete.getStatusCode(), 200, "User role extension deletion failed with " + responseDelete.getStatusCode());
         logger.info("Ended DeleteUserRoleExtension with assertions completed");
     }
 
@@ -95,16 +99,6 @@ public class TestCRUDUserRoleExtensionOperations extends ElevateProjectBaseTest 
         return response;
     }
 
-    private Response deleteUserRoleExtension(String roleID) {
-        Response response = given()
-                .header("X-auth-token", X_AUTH_TOKEN)
-                .header("internal-access-token", INTERNAL_ACCESS_TOKEN)
-                .contentType(ContentType.JSON)
-                .when().pathParam("_id", createdRoleID).delete(PROP_LIST.getProperty("deleteUserRoleExtensionEndpoint") + "{_id}"); // Use the updated URL here
-        response.prettyPrint();
-        return response;
-    }
-
     private Response findUserRoleExtension() {
         HashMap<String, Object> requestBody = new HashMap<>();
         HashMap<String, String> query = new HashMap<>();
@@ -120,4 +114,3 @@ public class TestCRUDUserRoleExtensionOperations extends ElevateProjectBaseTest 
         return response;
     }
 }
-

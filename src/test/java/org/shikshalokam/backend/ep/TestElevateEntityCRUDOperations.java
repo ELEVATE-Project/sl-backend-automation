@@ -21,15 +21,16 @@ import static io.restassured.RestAssured.given;
 
 public class TestElevateEntityCRUDOperations extends ElevateProjectBaseTest {
     private Logger logger = LogManager.getLogger(TestElevateEntityCRUDOperations.class);
-    private String randomEntityName = RandomStringUtils.randomAlphabetic(10);
-    private String randomExternalId = RandomStringUtils.randomAlphabetic(10);
-    private String updatedEntityName = RandomStringUtils.randomAlphabetic(10);
-    private String updatedEntityExternalId = RandomStringUtils.randomAlphabetic(10);
-    private String userRolenametitle = RandomStringUtils.randomAlphabetic(10);
-    private String userRoleId = RandomStringUtils.randomAlphabetic(10);
+    private String randomEntityName = RandomStringUtils.randomAlphabetic(11);
+    private String randomExternalId = RandomStringUtils.randomAlphabetic(11);
+    private String updatedEntityName = RandomStringUtils.randomAlphabetic(11);
+    private String updatedEntityExternalId = RandomStringUtils.randomAlphabetic(11);
+    private String userRolenametitle = RandomStringUtils.randomAlphabetic(11);
+    private String userRoleId = RandomStringUtils.randomAlphabetic(11);
+    private String childEntity;
 
     @BeforeMethod
-    public void setUp() {
+    public void login() {
         loginToElevate(
                 PropertyLoader.PROP_LIST.getProperty("elevate.login.contentcreator"),
                 PropertyLoader.PROP_LIST.getProperty("elevate.login.contentcreator.password"));
@@ -37,7 +38,9 @@ public class TestElevateEntityCRUDOperations extends ElevateProjectBaseTest {
 
     @Test(description = "Adding a valid entity")
     public void testAddingValidEntity() {
-        Response response = addEntity(randomEntityName, randomExternalId, PropertyLoader.PROP_LIST.getProperty("elevate.qa.automation.entitytype.name"));
+        String uniqueName = RandomStringUtils.randomAlphabetic(3) + randomEntityName;
+        String uniqueId = RandomStringUtils.randomAlphabetic(3) + randomExternalId;
+        Response response = addEntity(uniqueName, uniqueId, PropertyLoader.PROP_LIST.getProperty("elevate.qa.automation.entitytype.name"));
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertEquals(response.jsonPath().getString("message"), "ENTITY_ADDED");
         logger.info("Validation of entity addition is successful.");
@@ -168,7 +171,7 @@ public class TestElevateEntityCRUDOperations extends ElevateProjectBaseTest {
 
     @Test(dependsOnMethods = "testAddingValidEntity", description = "Test case to get entity details using entity Id")
     public void testValidEntityDetails() {
-        Response response = ENtitydetailsBasedonEntityId(entity_Id);
+        Response response = EntitydetailsBasedonEntityId(entity_Id);
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertEquals(response.jsonPath().getString("message"), "ENTITY_INFORMATION_FETCHED");
         logger.info("Validations related to getting entity details using entity Id is verified");
@@ -185,7 +188,18 @@ public class TestElevateEntityCRUDOperations extends ElevateProjectBaseTest {
         Assert.assertEquals(response.getStatusCode(), 400);
         Assert.assertTrue(response.asString().contains("required state location id"));
         logger.info("Validations related to getting entity details without path parameter is verified");
+    }
 
+    @Test(dependsOnMethods = "testBulkMappingEntities")
+    public void testFetchEntitySubListUsingParentEntityID() {
+        getEntityId(PropertyLoader.PROP_LIST.getProperty("elevate.qa.parent.entity.externalId"));
+        Response response = fetchEntitySubListBasedOnEntityId(entity_Id, "3", "300", PropertyLoader.PROP_LIST.getProperty("elevate.qa.automation.entitytype.name"));
+        Assert.assertEquals(response.getStatusCode(), 200);
+        Assert.assertTrue(response.asString().contains("ENTITIES_FETCHED"));
+        int count = response.jsonPath().getInt("result.count");
+        Assert.assertTrue(response.asString().contains(String.valueOf(childEntity)), "check pagination, each page contains 100 entities, so keep the pagination as \n Example 1 page = 1, limit = 100 \n example 2 page = 2, limit = 200");
+        logger.info("Count of entities is " + count);
+        logger.info("Validations related to fetching entity sublist is verified ");
     }
 
     // Method to add the entity
@@ -268,7 +282,7 @@ public class TestElevateEntityCRUDOperations extends ElevateProjectBaseTest {
             }
             for (Map.Entry<String, String> entry : childEntityIds.entrySet()) {
                 String childEntity_ID = entry.getKey();
-                String childEntity = entry.getValue();
+                childEntity = entry.getValue();
                 CSVcontent = CSVcontent.replaceAll(childEntity_ID, childEntity);
             }
             Files.write(Paths.get(targetPath), CSVcontent.getBytes());
@@ -321,13 +335,28 @@ public class TestElevateEntityCRUDOperations extends ElevateProjectBaseTest {
     }
 
     //Method to fetch entity details based on entity ID
-    private Response ENtitydetailsBasedonEntityId(String entityid) {
+    private Response EntitydetailsBasedonEntityId(String entityid) {
         Response response = given()
                 .header("internal-access-token", INTERNAL_ACCESS_TOKEN)
                 .header("x-auth-token", X_AUTH_TOKEN)
                 .header("Content-Type", "application/json")
                 .pathParam("_id", entityid)
                 .get(PropertyLoader.PROP_LIST.getProperty("elevate.qa.entity.detailsbasedon.entityid.endpoint") + "{_id}");
+        response.prettyPrint();
+        return response;
+    }
+
+    //Method to fetch entity sublist using parent entity ID and entity type
+    private Response fetchEntitySubListBasedOnEntityId(String entityid, String page, String limit, String entityType) {
+        Response response = given()
+                .header("internal-access-token", INTERNAL_ACCESS_TOKEN)
+                .header("x-auth-token", X_AUTH_TOKEN)
+                .header("Content-Type", "application/json")
+                .pathParam("_id", entityid)
+                .queryParam("page", page)
+                .queryParam("limit", limit)
+                .queryParam("type", entityType)
+                .get(PropertyLoader.PROP_LIST.getProperty("elevate.qa.entity.sublist.endpoint") + "{_id}");
         response.prettyPrint();
         return response;
     }

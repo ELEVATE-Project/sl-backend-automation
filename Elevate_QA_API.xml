@@ -58,6 +58,8 @@
                     <include name="testValidEntityDetails"/>
                     <include name="testInvalidEntityDetails"/>
                     <include name="testFetchEntitySubListUsingParentEntityID"/>
+                    <include name="testfetchEntityDetailByLocationId"/>
+                    <include name="testFetchSublistOfEntitiesByEntityId"/>
                 </methods>
             </class>
         </classes>

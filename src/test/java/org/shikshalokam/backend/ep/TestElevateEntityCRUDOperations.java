@@ -193,13 +193,31 @@ public class TestElevateEntityCRUDOperations extends ElevateProjectBaseTest {
     @Test(dependsOnMethods = "testBulkMappingEntities")
     public void testFetchEntitySubListUsingParentEntityID() {
         getEntityId(PropertyLoader.PROP_LIST.getProperty("elevate.qa.parent.entity.externalId"));
-        Response response = fetchEntitySubListBasedOnEntityId(entity_Id, "3", "300", PropertyLoader.PROP_LIST.getProperty("elevate.qa.automation.entitytype.name"));
+        Response response = fetchEntitySubListBasedOnEntityId(entity_Id, "4", "400", PropertyLoader.PROP_LIST.getProperty("elevate.qa.automation.entitytype.name"));
         Assert.assertEquals(response.getStatusCode(), 200);
         Assert.assertTrue(response.asString().contains("ENTITIES_FETCHED"));
         int count = response.jsonPath().getInt("result.count");
         Assert.assertTrue(response.asString().contains(String.valueOf(childEntity)), "check pagination, each page contains 100 entities, so keep the pagination as \n Example 1 page = 1, limit = 100 \n example 2 page = 2, limit = 200");
         logger.info("Count of entities is " + count);
         logger.info("Validations related to fetching entity sublist is verified ");
+    }
+
+    @Test(description = "Test to get entities based on location ID")
+    public void testfetchEntityDetailByLocationId() {
+        getLocationID("Automation_ExternalId123");
+        Response response = fetchEntityBasedOnLocationId(location_Id);
+        Assert.assertEquals(response.getStatusCode(), 200);
+        Assert.assertTrue(response.asString().contains(location_Id), "Entity Details not fetched");
+        logger.info("Validations related to fetching entities by using location ID is verified");
+    }
+
+    @Test(description = "test to fetch sub list of entities based on entity Id")
+    public void testFetchSublistOfEntitiesByEntityId() {
+        getEntityId(PropertyLoader.PROP_LIST.getProperty("elevate.qa.parent.entity.externalId"));
+        Response response = listAllEntitiesBasedOnEntityId(entity_Id, "entityType");
+        Assert.assertEquals(response.getStatusCode(), 200);
+        Assert.assertTrue(response.asString().contains(entity_Id));
+        logger.info("Validations related to fetching the sub list of entities based on entity Id is verified");
     }
 
     // Method to add the entity
@@ -217,7 +235,6 @@ public class TestElevateEntityCRUDOperations extends ElevateProjectBaseTest {
                 .queryParam("type", entityTypeName)
                 .post(PropertyLoader.PROP_LIST.getProperty("elevate.qa.entityadd.endpoint"));
         response.prettyPrint();
-        //getEntityId(randomExternalId);
         return response;
     }
 
@@ -360,4 +377,36 @@ public class TestElevateEntityCRUDOperations extends ElevateProjectBaseTest {
         response.prettyPrint();
         return response;
     }
+
+    private Response fetchEntityBasedOnLocationId(String locationId) {
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("locationIds", new String[]{locationId});
+        Response response = given()
+                .header("internal-access-token", INTERNAL_ACCESS_TOKEN)
+                .header("x-auth-token", X_AUTH_TOKEN)
+                .header("Content-Type", "application/json")
+                .body(requestBody)
+                .post(PropertyLoader.PROP_LIST.getProperty("elevate.qa.entities.listbylocatioId"));
+        response.prettyPrint();
+        return response;
+    }
+
+    private Response listAllEntitiesBasedOnEntityId(String entityId, String requiredField) {
+        JSONObject requestBody = new JSONObject();
+        JSONArray entities = new JSONArray();
+        entities.add(entityId);
+        requestBody.put("entities", entities);
+        JSONArray field = new JSONArray();
+        field.add(requiredField);
+        requestBody.put("fields", field);
+        Response response = given()
+                .header("internal-access-token", INTERNAL_ACCESS_TOKEN)
+                .header("x-auth-token", X_AUTH_TOKEN)
+                .header("Content-Type", "application/json")
+                .body(requestBody)
+                .post("entity-management/v1/entities/listByIds");
+        response.prettyPrint();
+        return response;
+    }
+
 }

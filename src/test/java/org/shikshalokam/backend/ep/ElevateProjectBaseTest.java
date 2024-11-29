@@ -10,6 +10,7 @@ import org.json.simple.JSONObject;
 import org.shikshalokam.backend.MentorBase;
 import org.shikshalokam.backend.PropertyLoader;
 import org.testng.Assert;
+import org.testng.annotations.Test;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -31,6 +32,7 @@ public class ElevateProjectBaseTest extends MentorBase {
     public static String entityType_Id = null;
     public static String entity_Id = null;
     public static String createdRoleID;
+    public static String location_Id = null;
 
     // method to login with required parameters
     public static Response loginToElevate(String email, String Password) {
@@ -140,5 +142,13 @@ public class ElevateProjectBaseTest extends MentorBase {
                 .when().pathParam("_id", roleID).delete(PROP_LIST.getProperty("deleteUserRoleExtensionEndpoint") + "{_id}"); // Use the updated URL here
         response.prettyPrint();
         return response;
+    }
+
+    public String getLocationID(String externalID) {
+        Response response = fetchEntitydetails(externalID);
+        location_Id = response.jsonPath().getString("result[0].registryDetails.locationId").replaceAll("[\\[\\]]", "");
+        Assert.assertTrue(response.asString().contains(externalID), "locationId not found");
+        logger.info("Location Id fetched successfully!! = " + location_Id);
+        return location_Id;
     }
 }

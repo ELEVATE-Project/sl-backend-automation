@@ -16,7 +16,6 @@ import static org.shikshalokam.backend.PropertyLoader.PROP_LIST;
 import static org.testng.Assert.*;
 
 public class TestCRUDUserRoleExtensionOperations extends ElevateProjectBaseTest {
-
     public static final Logger logger = LogManager.getLogger(TestCRUDUserRoleExtensionOperations.class);
     private String updatedRoleTitle = "Principal" + RandomStringUtils.randomAlphabetic(3).toLowerCase();
     private String userRoleId = RandomStringUtils.randomAlphabetic(10);
@@ -53,7 +52,7 @@ public class TestCRUDUserRoleExtensionOperations extends ElevateProjectBaseTest 
         Response response = updateUserRoleExtension(updatedRoleTitle, PROP_LIST.getProperty("elevate.qa.entityType"), PROP_LIST.getProperty("elevate.qa.entityTypeId"));
         logger.info("Response Code: {}, Response Body: {}", response.getStatusCode(), response.getBody().asString());
         assertEquals(response.getStatusCode(), 200, "User role extension update failed with " + response.getStatusCode());
-        assertEquals(response.jsonPath().getString("message"), "USER_ROLE_UPDATATED");
+        assertEquals(response.jsonPath().getString("message"), "USER_ROLE_UPDATED");
         Response responseFind = findUserRoleExtension();
         assertEquals(responseFind.getStatusCode(), 200, "User role extension update failed with " + response.getStatusCode());
         assertTrue(responseFind.getBody().asString().contains(updatedRoleTitle));

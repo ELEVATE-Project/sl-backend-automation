@@ -2,7 +2,9 @@
     <listeners>
         <listener class-name="org.shikshalokam.Listerners.SLCustomListener"/>
     </listeners>
+
     <test name="Test">
+        
         <classes>
             <class name="org.shikshalokam.backend.ep.TestElevateLogin">
                 <methods>
@@ -57,7 +59,8 @@
                     <include name="testInvalidRelatedEntitiesBasedOnEntity"/>
                     <include name="testValidEntityDetails"/>
                     <include name="testInvalidEntityDetails"/>
-                    <include name="testFetchEntitySubListUsingParentEntityID"/>
+                    <include name="testfetchEntityDetailByLocationId"/>
+                    <include name="testFetchSublistOfEntitiesByEntityId"/>
                 </methods>
             </class>
         </classes>

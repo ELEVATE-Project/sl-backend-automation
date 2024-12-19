@@ -75,7 +75,7 @@ public class ElevateProjectBaseTest extends MentorBase {
         return response;
     }
 
-    //Method to get entity type Id
+    //Method to get entity type ID
     public String getEntitytype_Id(String entityName) {
         Response response = fetchSingleEntityType(entityName);
         response.prettyPrint();

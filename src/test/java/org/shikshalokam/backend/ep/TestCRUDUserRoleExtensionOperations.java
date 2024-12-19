@@ -16,7 +16,6 @@ import static org.shikshalokam.backend.PropertyLoader.PROP_LIST;
 import static org.testng.Assert.*;
 
 public class TestCRUDUserRoleExtensionOperations extends ElevateProjectBaseTest {
-
     public static final Logger logger = LogManager.getLogger(TestCRUDUserRoleExtensionOperations.class);
     private String updatedRoleTitle = "Principal" + RandomStringUtils.randomAlphabetic(3).toLowerCase();
     private String userRoleId = RandomStringUtils.randomAlphabetic(10);

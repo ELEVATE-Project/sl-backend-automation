@@ -20,6 +20,7 @@ import java.util.*;
 import static io.restassured.RestAssured.given;
 
 public class TestElevateEntityCRUDOperations extends ElevateProjectBaseTest {
+
     private Logger logger = LogManager.getLogger(TestElevateEntityCRUDOperations.class);
     private String randomEntityName = RandomStringUtils.randomAlphabetic(11);
     private String randomExternalId = RandomStringUtils.randomAlphabetic(11);

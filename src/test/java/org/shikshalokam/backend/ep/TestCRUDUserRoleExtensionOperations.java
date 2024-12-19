@@ -53,7 +53,7 @@ public class TestCRUDUserRoleExtensionOperations extends ElevateProjectBaseTest 
         Response response = updateUserRoleExtension(updatedRoleTitle, PROP_LIST.getProperty("elevate.qa.entityType"), PROP_LIST.getProperty("elevate.qa.entityTypeId"));
         logger.info("Response Code: {}, Response Body: {}", response.getStatusCode(), response.getBody().asString());
         assertEquals(response.getStatusCode(), 200, "User role extension update failed with " + response.getStatusCode());
-        assertEquals(response.jsonPath().getString("message"), "USER_ROLE_UPDATATED");
+        assertEquals(response.jsonPath().getString("message"), "USER_ROLE_UPDATED");
         Response responseFind = findUserRoleExtension();
         assertEquals(responseFind.getStatusCode(), 200, "User role extension update failed with " + response.getStatusCode());
         assertTrue(responseFind.getBody().asString().contains(updatedRoleTitle));

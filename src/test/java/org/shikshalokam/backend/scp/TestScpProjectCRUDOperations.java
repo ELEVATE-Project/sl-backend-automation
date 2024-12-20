@@ -21,8 +21,9 @@ import static org.shikshalokam.backend.PropertyLoader.PROP_LIST;
 
 public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
     private static final Logger logger = LogManager.getLogger(TestScpProjectCRUDOperations.class);
-    private URI projectCreateEndpoint, projectUpdateEndpoint, getProjectDetailsEndpoint, projectDeletionEndpoint;
+    private URI projectCreateEndpoint, projectUpdateEndpoint, getProjectDetailsEndpoint, projectDeletionEndpoint, submitProjectToReviewerEndpoint;
     private Integer createdId;
+    private List<Integer> reviewerIds = List.of(239, 240, 241);
     private String contentCreatorToken;
 
     @BeforeMethod()
@@ -215,7 +216,7 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
     }
 
     @Test(dependsOnMethods = "testCreateProjectWithValidPayload", description = "Verifies the functionality of updating project with valid payload.")
-        public void testUpdateProjectWithValidPayload() throws Exception {
+    public void testUpdateProjectWithValidPayload() throws Exception {
         logger.info("Started calling the UpdateProject API with valid payload:");
 
         // Load JSON payload and ensure the file exists
@@ -251,7 +252,7 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
 
         // Modify values for updating
         requestBody.put("title", "Updated Project Title with Certificate");
-        requestBody.put("objective", "Updated objective for project with certificate.");
+        requestBody.put("objective", "Updated objective for project with certificate");
         requestBody.put("keywords", "Updated, Classroom Management");
 
         // Make the API call to update the project
@@ -263,7 +264,7 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
         Assert.assertEquals(statusCode, 202, "Status code should be 202");
 
         // Validate the updated content
-        validateUpdatedProjectContent(createdId, "Updated Project Title with Certificate", "Updated objective for project with certificate.", "Updated, Classroom Management");
+        validateUpdatedProjectContent(createdId, "Updated Project Title with Certificate", "Updated objective for project with certificate", "Updated, Classroom Management");
 
         logger.info("Ended calling the UpdateProject API with certificates.");
     }
@@ -277,7 +278,7 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
 
         // Modify values for updating
         requestBody.put("title", "Updated Project Title without Certificate");
-        requestBody.put("objective", "Updated objective for project without certificate.");
+        requestBody.put("objective", "Updated objective for project without certificate");
         requestBody.put("keywords", "Updated, Training");
 
         // Make the API call to update the project
@@ -289,7 +290,7 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
         Assert.assertEquals(statusCode, 202, "Status code should be 202");
 
         // Validate the updated content
-        validateUpdatedProjectContent(createdId, "Updated Project Title without Certificate", "Updated objective for project without certificate.", "Updated, Training");
+        validateUpdatedProjectContent(createdId, "Updated Project Title without Certificate", "Updated objective for project without certificate", "Updated, Training");
 
         logger.info("Ended calling the UpdateProject API without certificates.");
     }
@@ -303,7 +304,7 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
 
         // Modify values for updating
         requestBody.put("title", "Updated Project Title with No Subtasks");
-        requestBody.put("objective", "Updated objective for project with no subtasks.");
+        requestBody.put("objective", "Updated objective for project with no subtasks");
         requestBody.put("keywords", "Updated, Subtask-less");
 
         // Make the API call to update the project
@@ -315,7 +316,7 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
         Assert.assertEquals(statusCode, 202, "Status code should be 202");
 
         // Validate the updated content
-        validateUpdatedProjectContent(createdId, "Updated Project Title with No Subtasks", "Updated objective for project with no subtasks.", "Updated, Subtask-less");
+        validateUpdatedProjectContent(createdId, "Updated Project Title with No Subtasks", "Updated objective for project with no subtasks", "Updated, Subtask-less");
 
         logger.info("Ended calling the UpdateProject API with no subtasks.");
     }
@@ -329,7 +330,7 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
 
         // Modify values for updating
         requestBody.put("title", "Updated Project Title with Only Mandatory Fields");
-        requestBody.put("objective", "Updated objective for project with only mandatory fields.");
+        requestBody.put("objective", "Updated objective for project with only mandatory fields");
         requestBody.put("keywords", "Updated, Basic");
 
         // Make the API call to update the project
@@ -341,7 +342,7 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
         Assert.assertEquals(statusCode, 202, "Status code should be 202");
 
         // Validate the updated content
-        validateUpdatedProjectContent(createdId, "Updated Project Title with Only Mandatory Fields", "Updated objective for project with only mandatory fields.", "Updated, Basic");
+        validateUpdatedProjectContent(createdId, "Updated Project Title with Only Mandatory Fields", "Updated objective for project with only mandatory fields", "Updated, Basic");
 
         logger.info("Ended calling the UpdateProject API with only mandatory fields.");
     }
@@ -433,6 +434,50 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
         logger.info("Ended calling the delete project API with a non-existing project id.");
     }
 
+    @Test(description = "Verifies the functionality of submitting the created project to reviewer with valid payload")
+    public void testSubmitProjectForReviewValidPayload() {
+        logger.info("Started calling the submit project for review API with valid project id");
+
+        // Generate random reviewer id from the list
+        Integer reviewerId = reviewerIds.get(0);
+
+        // Build the request payload with dynamic reviewer IDs
+        JSONObject requestPayload = new JSONObject();
+        requestPayload.put("reviewer_ids", List.of(reviewerId));
+        requestPayload.put("notes", "Note to the reviewer");
+
+        // Make the API call to submit the project
+        Response response = submitProjectForReviewer(createdId, requestPayload);
+
+        // Log the status code and response body
+        response.prettyPrint();
+
+        // Validate response code
+        Assert.assertEquals(response.getStatusCode(), 200, "Status code should be 200 for valid payload");
+
+        logger.info("Ended calling the submit project for review API with valid project id");
+    }
+
+    @Test(description = "Verifies the functionality of submitting the created project to reviewer with invalid payload")
+    public void testSubmitProjectForReviewInvalidPayload() {
+        logger.info("Started calling the submit project for review API with invalid project id");
+
+        // Invalid payload - missing reviewer_ids or invalid format
+        JSONObject requestPayload = new JSONObject();
+        requestPayload.put("reviewer_ids", new Object());
+        requestPayload.put("notes", "Note to the reviewer");
+
+        // Make the API call to submit the project
+        Response response = submitProjectForReviewer(createdId, requestPayload);
+
+        // Log the status code and response body
+        response.prettyPrint();
+
+        // Validate response code
+        Assert.assertEquals(response.getStatusCode(), 400, "Status code should be 400 for invalid payload");
+        logger.info("Ended calling the submit project for review API with invalid payload");
+    }
+
     //Method to create project
     private JSONObject createProject(Map<String, Object> map) {
         JSONObject requestBody = new JSONObject();
@@ -497,7 +542,7 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
         return response;
     }
 
-    //Method to delete entityType
+    //Method to delete project
     private Response projectDeleteRequest(Integer id) {
         projectDeletionEndpoint = MentorBase.createURI(PROP_LIST.get("scp.delete.project.endpoint").toString());
         // Make the DELETE project request
@@ -512,6 +557,35 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
 
         return response;
     }
+
+    //Method to submit project for reviewer
+    private JSONObject submitProject(Map<String, Object> map) {
+        JSONObject requestBody = new JSONObject();
+        requestBody.putAll(map);
+        return requestBody;
+    }
+
+    // Method to submit the project for review
+    private Response submitProjectForReviewer(Integer id, JSONObject requestPayload) {
+        // Construct the URI for submitting the project for review
+        submitProjectToReviewerEndpoint = MentorBase.createURI(PROP_LIST.get("scp.submitForReview.endpoint").toString());
+
+        // Ensure the path parameter is correctly inserted in the URL
+        String endpoint = submitProjectToReviewerEndpoint + "{id}";
+
+        // Make the POST request to submit the project for review
+        Response response = given()
+                .header("X-auth-token", "bearer " + X_AUTH_TOKEN)
+                .contentType(ContentType.JSON)
+                .body(requestPayload.toString())
+                .pathParam("id", id) // Correctly passing the path parameter "id"
+                .when().post(endpoint); // Post the request with the correct endpoint and path parameter
+
+        // Pretty-print the response for debugging
+        response.prettyPrint();
+        return response;
+    }
+
 
     //Method to load Json payload
     private JSONObject loadJsonPayload(String key) throws Exception {
@@ -537,7 +611,7 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
         Assert.assertEquals(response.jsonPath().getString("result.title"), "Effective Classroom Management", "Project title mismatch");
 
         // Validate the project objective
-        Assert.assertEquals(response.jsonPath().getString("result.objective"), "Teachers will learn strategies to manage classrooms effectively.", "Project objective mismatch");
+        Assert.assertEquals(response.jsonPath().getString("result.objective"), "Teachers will learn strategies to manage classrooms effectively", "Project objective mismatch");
 
         // Validate the keywords
         Assert.assertEquals(response.jsonPath().getString("result.keywords"), "Classroom Management, Teacher Training", "Project keywords mismatch");
@@ -562,7 +636,7 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
             // Validate the certificate criteria
             Map<String, Object> criteria = (Map<String, Object>) certificate.get("criteria");
             Assert.assertNotNull(criteria, "Certificate criteria should not be null");
-            Assert.assertEquals(criteria.get("validationText"), "Complete the project tasks to receive the certificate.", "Certificate validation text mismatch");
+            Assert.assertEquals(criteria.get("validationText"), "Complete the project tasks to receive the certificate", "Certificate validation text mismatch");
 
             // Validate conditions C1 and C2
             Map<String, Object> conditions = (Map<String, Object>) criteria.get("conditions");

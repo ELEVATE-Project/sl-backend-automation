@@ -21,8 +21,9 @@ import static org.shikshalokam.backend.PropertyLoader.PROP_LIST;
 
 public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
     private static final Logger logger = LogManager.getLogger(TestScpProjectCRUDOperations.class);
-    private URI projectCreateEndpoint, projectUpdateEndpoint, getProjectDetailsEndpoint, projectDeletionEndpoint;
+    private URI projectCreateEndpoint, projectUpdateEndpoint, getProjectDetailsEndpoint, projectDeletionEndpoint, submitProjectToReviewerEndpoint;
     private Integer createdId;
+    private List<Integer> reviewerIds = List.of(239, 240, 241);
     private String contentCreatorToken;
 
     @BeforeMethod()
@@ -215,7 +216,7 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
     }
 
     @Test(dependsOnMethods = "testCreateProjectWithValidPayload", description = "Verifies the functionality of updating project with valid payload.")
-        public void testUpdateProjectWithValidPayload() throws Exception {
+    public void testUpdateProjectWithValidPayload() throws Exception {
         logger.info("Started calling the UpdateProject API with valid payload:");
 
         // Load JSON payload and ensure the file exists
@@ -433,6 +434,50 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
         logger.info("Ended calling the delete project API with a non-existing project id.");
     }
 
+    @Test(description = "Verifies the functionality of submitting the created project to reviewer with valid payload")
+    public void testSubmitProjectForReviewValidPayload() {
+        logger.info("Started calling the submit project for review API with valid project id");
+
+        // Generate random reviewer id from the list
+        Integer reviewerId = reviewerIds.get(0);
+
+        // Build the request payload with dynamic reviewer IDs
+        JSONObject requestPayload = new JSONObject();
+        requestPayload.put("reviewer_ids", List.of(reviewerId));
+        requestPayload.put("notes", "Note to the reviewer");
+
+        // Make the API call to submit the project
+        Response response = submitProjectForReviewer(createdId, requestPayload);
+
+        // Log the status code and response body
+        response.prettyPrint();
+
+        // Validate response code
+        Assert.assertEquals(response.getStatusCode(), 200, "Status code should be 200 for valid payload");
+
+        logger.info("Ended calling the submit project for review API with valid project id");
+    }
+
+    @Test(description = "Verifies the functionality of submitting the created project to reviewer with invalid payload")
+    public void testSubmitProjectForReviewInvalidPayload() {
+        logger.info("Started calling the submit project for review API with invalid project id");
+
+        // Invalid payload - missing reviewer_ids or invalid format
+        JSONObject requestPayload = new JSONObject();
+        requestPayload.put("reviewer_ids", new Object());
+        requestPayload.put("notes", "Note to the reviewer");
+
+        // Make the API call to submit the project
+        Response response = submitProjectForReviewer(createdId, requestPayload);
+
+        // Log the status code and response body
+        response.prettyPrint();
+
+        // Validate response code
+        Assert.assertEquals(response.getStatusCode(), 400, "Status code should be 400 for invalid payload");
+        logger.info("Ended calling the submit project for review API with invalid payload");
+    }
+
     //Method to create project
     private JSONObject createProject(Map<String, Object> map) {
         JSONObject requestBody = new JSONObject();
@@ -497,7 +542,7 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
         return response;
     }
 
-    //Method to delete entityType
+    //Method to delete project
     private Response projectDeleteRequest(Integer id) {
         projectDeletionEndpoint = MentorBase.createURI(PROP_LIST.get("scp.delete.project.endpoint").toString());
         // Make the DELETE project request
@@ -512,6 +557,35 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
 
         return response;
     }
+
+    //Method to submit project for reviewer
+    private JSONObject submitProject(Map<String, Object> map) {
+        JSONObject requestBody = new JSONObject();
+        requestBody.putAll(map);
+        return requestBody;
+    }
+
+    // Method to submit the project for review
+    private Response submitProjectForReviewer(Integer id, JSONObject requestPayload) {
+        // Construct the URI for submitting the project for review
+        submitProjectToReviewerEndpoint = MentorBase.createURI(PROP_LIST.get("scp.submitForReview.endpoint").toString());
+
+        // Ensure the path parameter is correctly inserted in the URL
+        String endpoint = submitProjectToReviewerEndpoint + "{id}";
+
+        // Make the POST request to submit the project for review
+        Response response = given()
+                .header("X-auth-token", "bearer " + X_AUTH_TOKEN)
+                .contentType(ContentType.JSON)
+                .body(requestPayload.toString())
+                .pathParam("id", id) // Correctly passing the path parameter "id"
+                .when().post(endpoint); // Post the request with the correct endpoint and path parameter
+
+        // Pretty-print the response for debugging
+        response.prettyPrint();
+        return response;
+    }
+
 
     //Method to load Json payload
     private JSONObject loadJsonPayload(String key) throws Exception {

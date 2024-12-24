@@ -311,7 +311,7 @@
     "objective": "Teachers will learn strategies to manage classrooms effectively",
     "recommended_duration": { "number": "3", "duration": "months" },
     "keywords": "Classroom Management, Teacher Training",
-    "recommended_for": ["teacher", "principal"],
+    "recommended_for": ["teachers", "principal"],
     "languages": ["en", "hi"],
     "learning_resources": [
       { "name": "Classroom Management Techniques", "url": "https://diksha.gov.in/play/content/123456" }
@@ -437,7 +437,7 @@
     "objective": "Teachers will learn strategies to manage classrooms effectively",
     "recommended_duration": { "number": "1", "duration": "month" },
     "keywords": "Classroom Management, Teacher Training",
-    "recommended_for": ["teacher", "trainer"],
+    "recommended_for": ["teachers"],
     "languages": ["en"],
     "learning_resources": [
       { "name": "Digital Literacy Basics", "url": "https://diksha.gov.in/play/content/223344" }
@@ -482,7 +482,7 @@
     "objective": "Teachers will learn strategies to manage classrooms effectively",
     "recommended_duration": { "number": "3", "duration": "months" },
     "keywords": "Classroom Management, Teacher Training",
-    "recommended_for": ["student"],
+    "recommended_for": ["teachers"],
     "languages": ["en"],
     "learning_resources": [],
     "licenses": "cc_by_nc",
@@ -520,7 +520,7 @@
     "objective": "Teachers will now learn advanced strategies to manage classrooms effectively",
     "recommended_duration": { "number": "1", "duration": "month" },
     "keywords": "Advanced Classroom Management, Teacher Training",
-    "recommended_for": ["teacher", "trainer"],
+    "recommended_for": ["teachers"],
     "languages": ["en"],
     "learning_resources": [
       { "name": "Digital Literacy Basics", "url": "https://diksha.gov.in/play/content/223344" }

@@ -68,7 +68,7 @@
                     <include name="testGetProjectDetailsWithInValidProjectId"/>
                     <include name="testDeleteProjectWithValidProjectId"/>
                     <include name="testDeletingNotTheExistingOne"/>
-                    <include name="testSubmitProjectForReviewValidPayload"/>
+                    <include name="testZSubmitProjectForReviewValidPayload"/>
                     <include name="testSubmitProjectForReviewInvalidPayload"/>
                 </methods>
             </class>

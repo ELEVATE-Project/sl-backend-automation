@@ -5,6 +5,7 @@ import io.restassured.response.Response;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.shikshalokam.backend.MentorBase;
@@ -434,8 +435,8 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
         logger.info("Ended calling the delete project API with a non-existing project id.");
     }
 
-    @Test(description = "Verifies the functionality of submitting the created project to reviewer with valid payload")
-    public void testSubmitProjectForReviewValidPayload() {
+    @Test(priority = 12, description = "Verifies the functionality of submitting the created project to reviewer with valid payload")
+    public void testZSubmitProjectForReviewValidPayload() {
         logger.info("Started calling the submit project for review API with valid project id");
 
         // Generate random reviewer id from the list
@@ -443,7 +444,9 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
 
         // Build the request payload with dynamic reviewer IDs
         JSONObject requestPayload = new JSONObject();
-        requestPayload.put("reviewer_ids", List.of(reviewerId));
+        JSONArray reviewerArray = new JSONArray();
+        reviewerArray.add(reviewerId);
+        requestPayload.put("reviewer_ids", reviewerArray);
         requestPayload.put("notes", "Note to the reviewer");
 
         // Make the API call to submit the project
@@ -576,6 +579,7 @@ public class TestScpProjectCRUDOperations extends SelfCreationPortalBaseTest {
         // Make the POST request to submit the project for review
         Response response = given()
                 .header("X-auth-token", "bearer " + X_AUTH_TOKEN)
+                .log().all()
                 .contentType(ContentType.JSON)
                 .body(requestPayload.toString())
                 .pathParam("id", id) // Correctly passing the path parameter "id"

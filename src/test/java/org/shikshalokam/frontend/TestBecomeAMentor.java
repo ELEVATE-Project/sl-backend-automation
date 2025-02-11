@@ -7,7 +7,6 @@ import org.shikshalokam.uiPageObjects.Robot;
 import org.testng.annotations.Test;
 
 import static org.shikshalokam.uiPageObjects.PWBasePage.fetchProperty;
-import static org.shikshalokam.uiPageObjects.PWBasePage.page;
 
 public class TestBecomeAMentor {
 

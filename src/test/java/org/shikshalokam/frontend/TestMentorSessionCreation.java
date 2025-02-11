@@ -5,7 +5,6 @@ import org.shikshalokam.uiPageObjects.PWBasePage;
 import org.shikshalokam.uiPageObjects.PWBrowser;
 import org.shikshalokam.uiPageObjects.Robot;
 import org.testng.annotations.Test;
-
 import static org.shikshalokam.uiPageObjects.AppAllPages.createSessionPage;
 import static org.shikshalokam.uiPageObjects.PWBasePage.fetchProperty;
 

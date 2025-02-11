@@ -39,6 +39,7 @@ public class AppWelcomePage extends PWBasePage {
         page.getByText("Workspace").click();
         return welcomePage;
     }
+
     public AppWelcomePage menu() {
         this.validPage();
         if (PWBasePage.PWBrowser == PWBrowser.chromePixel4a || PWBasePage.PWBrowser == PWBrowser.msedgePixel4a) {
@@ -50,7 +51,8 @@ public class AppWelcomePage extends PWBasePage {
 
     public AppWelcomePage verifiedUserAsaMentor() {
         this.validPage();
-        page.getByRole(AriaRole.NAVIGATION).getByText("Mentor", new Locator.GetByTextOptions()).isVisible();
+        page.getByRole(AriaRole.NAVIGATION).getByText("Profile").click();
+        page.locator("#main-content").getByText("Mentor", new Locator.GetByTextOptions().setExact(true)).isVisible();
         return welcomePage;
     }
 
@@ -135,8 +137,8 @@ public class AppWelcomePage extends PWBasePage {
 
     public AppWelcomePage selectSessionFromList(String session) {
         this.validPage();
-        page.getByRole(AriaRole.CELL, new Page.GetByRoleOptions().setName(session)).locator("div").click();
-        //page.getByText(session).click();
+        page.reload();
+        page.getByRole(AriaRole.CELL, new Page.GetByRoleOptions().setName(session)).locator("div").first().click();
         return welcomePage;
     }
 
@@ -167,14 +169,13 @@ public class AppWelcomePage extends PWBasePage {
         this.validPage();
         if (PWBasePage.PWBrowser == PWBrowser.chromePixel4a || PWBasePage.PWBrowser == PWBrowser.msedgePixel4a) {
             page.locator("ion-tab-button").filter(new Locator.FilterOptions().setHasText("Mentors")).click();
-        }
-        else {
+        } else {
             page.locator("ion-item").filter(new Locator.FilterOptions().setHasText("Mentors")).click();
         }
         return welcomePage;
     }
 
-    public AppWelcomePage verifyRoles( String... expectedRoles) {
+    public AppWelcomePage verifyRoles(String... expectedRoles) {
         this.validPage();
         page.getByText("Roles", new Page.GetByTextOptions().setExact(true)).isVisible();
         for (String expectedRole : expectedRoles) {
@@ -182,6 +183,6 @@ public class AppWelcomePage extends PWBasePage {
             logger.info("Role '" + expectedRole + "' is on the Role list.");
         }
         page.locator("//ion-label[text()='Close']").click();
-            return welcomePage;
+        return welcomePage;
     }
 }

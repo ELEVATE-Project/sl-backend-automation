@@ -6,6 +6,7 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -44,7 +45,7 @@ public class AppManageSessionPage extends PWBasePage {
     public AppManageSessionPage verifyCreatedSession(String session) {
         this.validPage();
         String createdsession = page.getByRole(AriaRole.CELL, new Page.GetByRoleOptions().setName(String.format(" %s ", session)))
-                .locator("div").first().textContent();
+                .locator("div").textContent();
         page.locator(createdsession).isVisible();
         logger.info(createdsession + " Session created Successfully");
         return manageSessionPage;
@@ -73,7 +74,7 @@ public class AppManageSessionPage extends PWBasePage {
         }
 
         // Set the file to upload on the input[type="file"]
-        page.setInputFiles("//input[@type='file' and contains(@accept, '.csv')]", filePath);
+        page.setInputFiles("//input[@type='file']", filePath);
         verifyToastMessage("Bulk Session Creation CSV Uploaded Successfully");
         page.reload();
         return manageSessionPage;
@@ -85,7 +86,7 @@ public class AppManageSessionPage extends PWBasePage {
         Path filePath = Paths.get(currentWorkingDirectory, "target", "bulksession_files", "session_edit.csv");
         logger.info("File Path: " + filePath.toString());
         // Set the file to upload on the input[type="file"]
-        page.setInputFiles("//input[@type='file' and contains(@accept, '.csv')]", filePath);
+        page.setInputFiles("//input[@type='file']", filePath);
         verifyToastMessage("Bulk Session Creation CSV Uploaded Successfully");
         page.reload();
         return manageSessionPage;

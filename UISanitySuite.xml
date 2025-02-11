@@ -76,6 +76,9 @@
                     <include name="sessionDeleteViaBulkUpload"/>
                 </methods>
             </class>
+
         </classes>
     </test> <!-- Test -->
 </suite> <!-- Suite -->
+
+

@@ -58,7 +58,7 @@ public class PWBasePage extends MentorEDBaseTest {
             case "chromium":
                 logger.info("Using Chromium browser for Test suite");
                 PWBasePage.PWBrowser = PWBasePage.PWBrowser.chromium;
-                BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions().setHeadless(headless).setSlowMo(1500);
+                BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions().setHeadless(headless).setSlowMo(2000);
 
                 // Set slowMo if recording is enabled
                 if (recordVideo) {

@@ -17,7 +17,7 @@ public class AppCreateSessionPage extends PWBasePage {
         this.createSessionPage = this;
     }
 
-    public String bbbSessionTitle = "bbbsession" + RandomStringUtils.randomAlphabetic(3);
+    public String bbbSessionTitle = "bbbsession" + RandomStringUtils.randomAlphabetic(10);
 
     public AppCreateSessionPage bbbSessionCreation() {
         this.validPage();

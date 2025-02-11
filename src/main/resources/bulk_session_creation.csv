@@ -1,3 +1,3 @@
 Action,id,title,description,type,Mentor(Email),Mentees(Email),Date(DD-MM-YYYY),Time Zone(IST/UTC),Time (24 hrs),Duration(Min),recommended_for,categories,medium,Meeting Platform,Meeting Link,Meeting Passcode (if needed)
-Create,,AutoPrivateBulkUploadSession,Session Private,Private,sinchana@guerrillamail.de,menteeauto@guerrillamail.de,31-12-2024,IST,17:30 Hrs,30,Headmasters,Infrastucture,English,BigBlueButton,,
-Create,,AutoPublicBulkUploadSession,Session Public,Public,sinchana@guerrillamail.de,,31-12-2024,IST,18:30 Hrs,60,Teachers,Pedagogy,Hindi,Google meet,https://meet.google.com/jgx-ydjs-ptv?authuser=0,
+Create,,AutoPrivateBulkUploadSession,Session Private,Private,sinchana@guerrillamail.de,menteeauto@guerrillamail.de,31-12-2025,IST,17:30 Hrs,30,Headmasters,Infrastucture,English,BigBlueButton,,
+Create,,AutoPublicBulkUploadSession,Session Public,Public,sinchana@guerrillamail.de,,31-12-2025,IST,18:30 Hrs,60,Teachers,Pedagogy,Hindi,Google meet,https://meet.google.com/jgx-ydjs-ptv?authuser=0,

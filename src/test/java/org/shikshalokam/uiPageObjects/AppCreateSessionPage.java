@@ -8,7 +8,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class AppCreateSessionPage extends PWBasePage {
-
     private AppCreateSessionPage createSessionPage;
     private static final Logger logger = LogManager.getLogger(AppCreateSessionPage.class);
 
@@ -17,7 +16,7 @@ public class AppCreateSessionPage extends PWBasePage {
         this.createSessionPage = this;
     }
 
-    public String bbbSessionTitle = "bbbsession" + RandomStringUtils.randomAlphabetic(3);
+    public String bbbSessionTitle = "bbbsession" + RandomStringUtils.randomAlphabetic(10);
 
     public AppCreateSessionPage bbbSessionCreation() {
         this.validPage();
@@ -59,7 +58,6 @@ public class AppCreateSessionPage extends PWBasePage {
         verifyToastMessage("Your session details have been updated.");
         return createSessionPage;
     }
-
 
     public String privateSessionTitle = "PrivateSession" + RandomStringUtils.randomAlphabetic(3);
 
@@ -134,7 +132,6 @@ public class AppCreateSessionPage extends PWBasePage {
         return createSessionPage;
     }
 
-
     public AppCreateSessionPage addMentee() {
         this.validPage();
         page.locator("ion-chip").filter(new Locator.FilterOptions().setHasText("Add Mentee")).click();
@@ -151,4 +148,3 @@ public class AppCreateSessionPage extends PWBasePage {
         return createSessionPage;
     }
 }
-

@@ -94,8 +94,7 @@ public class TestMentorSessionCreation {
         robot.sees(AppAllPages.sessionDeatilsPage).verifyMenteeCount("1");
         if (PWBasePage.PWBrowser == PWBrowser.chromePixel4a || PWBasePage.PWBrowser == PWBrowser.msedgePixel4a) {
             robot.sees(AppAllPages.welcomePage).backToWorkSpace();
-        }
-        else {
+        } else {
             robot.sees(AppAllPages.sessionDeatilsPage).verifyMenteeListEmail(fetchProperty("default.mentee.user"));
         }
         robot.sees(AppAllPages.welcomePage).logOutFromApp();
@@ -115,6 +114,5 @@ public class TestMentorSessionCreation {
         robot.sees(AppAllPages.sessionDeatilsPage).deleteSession();
         robot.sees(AppAllPages.welcomePage).logOutFromApp();
         robot.quitAppBrowser();
-
     }
 }

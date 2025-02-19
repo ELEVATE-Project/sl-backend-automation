@@ -17,7 +17,6 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
 
@@ -58,7 +57,7 @@ public class PWBasePage extends MentorEDBaseTest {
             case "chromium":
                 logger.info("Using Chromium browser for Test suite");
                 PWBasePage.PWBrowser = PWBasePage.PWBrowser.chromium;
-                BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions().setHeadless(headless).setSlowMo(1500);
+                BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions().setHeadless(headless).setSlowMo(2000);
 
                 // Set slowMo if recording is enabled
                 if (recordVideo) {
@@ -288,6 +287,4 @@ public class PWBasePage extends MentorEDBaseTest {
         SimpleDateFormat formatter = new SimpleDateFormat("MMMM d, yyyy hh:mm a");
         return formatter.format(futureDate);
     }
-
-
 }

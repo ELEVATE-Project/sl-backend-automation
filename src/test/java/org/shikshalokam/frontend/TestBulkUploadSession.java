@@ -7,6 +7,7 @@ import org.shikshalokam.backend.SMsampleCSVBulkPuload;
 import org.shikshalokam.uiPageObjects.AppAllPages;
 import org.shikshalokam.uiPageObjects.Robot;
 import org.testng.annotations.Test;
+
 import static org.shikshalokam.backend.PropertyLoader.PROP_LIST;
 import static org.shikshalokam.uiPageObjects.PWBasePage.*;
 
@@ -29,7 +30,7 @@ public class TestBulkUploadSession extends SMsampleCSVBulkPuload {
     }
 
     @Test(description = "Uploading the Csv file via bulk upload option to Create sessions",
-            dependsOnMethods ={"downloadSampleCSV"} )
+            dependsOnMethods = {"downloadSampleCSV"})
     public void sessionCreationViaBulkUpload() {
         Robot robot = new Robot();
         robot.openApp();
@@ -74,8 +75,7 @@ public class TestBulkUploadSession extends SMsampleCSVBulkPuload {
         robot.quitAppBrowser();
     }
 
-    @Test(description = "Uploading the Csv file via bulk upload option to Delete sessions",
-            dependsOnMethods ={"sessionEditViaBulkUpload"} )
+    @Test(description = "Uploading the Csv file via bulk upload option to Delete sessions", dependsOnMethods = {"sessionEditViaBulkUpload"})
     public void sessionDeleteViaBulkUpload() {
         Robot robot = new Robot();
         robot.openApp();
@@ -92,7 +92,3 @@ public class TestBulkUploadSession extends SMsampleCSVBulkPuload {
         robot.quitAppBrowser();
     }
 }
-
-
-
-

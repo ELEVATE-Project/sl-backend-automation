@@ -20,10 +20,13 @@ jobs:
           java-version: ${{ matrix.java-version }}
           distribution: 'zulu'
 
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
       - name: Install Playwright Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libwoff1 libvpx7 libevent-2.1-7 libopus0 \
+          sudo apt-get install -y libwoff2-1 libvpx7 libevent-2.1-7 libopus0 \
                                   libharfbuzz-icu0 libgstallocators-1.0-0 \
                                   libgstapp-1.0-0 libgstpbutils-1.0-0 \
                                   libgstaudio-1.0-0 libgsttag-1.0-0 \
@@ -36,7 +39,10 @@ jobs:
                                   libflite-cmulex1 libflite-cmu-time-awb1 \
                                   libflite-cmu-us-awb1 libflite-cmu-us-kal16-1 \
                                   libflite-cmu-us-kal1 libflite-cmu-us-rms1 \
-                                  libflite-cmu-us-slt1 libGLESv2-2 libx264-160
+                                  libflite-cmu-us-slt1 libGLESv2-2 libx264-160 \
+                                  libgstreamer1.0-0 gstreamer1.0-libav \
+                                  gstreamer1.0-plugins-bad gstreamer1.0-plugins-base \
+                                  gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly
 
       - name: Cache Maven dependencies
         uses: actions/cache@v3

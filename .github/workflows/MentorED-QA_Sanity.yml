@@ -1,4 +1,4 @@
-name: MentorED-QA Sanity Automation Run
+name: MentorED Sanity Automation Run
 on:
   workflow_dispatch:
 
@@ -18,7 +18,25 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: ${{ matrix.java-version }}
-          distribution: 'zulu'  # Or 'temurin', depending on your preferred JDK distribution
+          distribution: 'zulu'
+
+      - name: Install Playwright Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwoff1 libvpx7 libevent-2.1-7 libopus0 \
+                                  libharfbuzz-icu0 libgstallocators-1.0-0 \
+                                  libgstapp-1.0-0 libgstpbutils-1.0-0 \
+                                  libgstaudio-1.0-0 libgsttag-1.0-0 \
+                                  libgstvideo-1.0-0 libgstgl-1.0-0 \
+                                  libgstcodecparsers-1.0-0 libgstfft-1.0-0 \
+                                  libsecret-1-0 libhyphen0 libmanette-0.2-0 \
+                                  libflite1 libflite-usenglish1 \
+                                  libflite-cmu-grapheme-lang1 libflite-cmu-grapheme-lex1 \
+                                  libflite-cmu-indic-lang1 libflite-cmu-indic-lex1 \
+                                  libflite-cmulex1 libflite-cmu-time-awb1 \
+                                  libflite-cmu-us-awb1 libflite-cmu-us-kal16-1 \
+                                  libflite-cmu-us-kal1 libflite-cmu-us-rms1 \
+                                  libflite-cmu-us-slt1 libGLESv2-2 libx264-160
 
       - name: Cache Maven dependencies
         uses: actions/cache@v3
@@ -27,13 +45,6 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-
-      - name: Check Current Directory
-        run: |
-          echo "Current Directory:"
-          pwd  # Print the current working directory
-          echo "Files in Current Directory:"
-          ls -al  # List files and directories in the current directory  
 
       - name: Copy Configuration File
         run: cp ./src/main/resources/config/automation.MentorED_QA.properties ./src/main/resources/config/automation.properties
@@ -44,23 +55,23 @@ jobs:
       - name: Zip the Reports Folder (If Exists)
         run: |
           if [ -d "./target/screenshots" ]; then
-            zip -r ./target/Automation_Screenshots.zip ./target/screenshots
+            zip -r ./target/Automation_Failure_Screenshots.zip ./target/screenshots
           else
             echo "Screenshots folder does not exist. Skipping zipping step."
           fi
 
       - name: Send Email Notification
-        if: always()  # Run this step whether the tests succeed or fail
+        if: always()
         uses: dawidd6/action-send-mail@v3
         with:
-          server_address: smtp.gmail.com  # Replace with your SMTP server address
-          server_port: 587  # Typically 587 for TLS
-          username: ${{ secrets.SMTP_USERNAME }}  # Stored in GitHub Secrets
-          password: ${{ secrets.SMTP_PASSWORD }}  # Stored in GitHub Secrets
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
           subject: "Test Status - ${{ github.workflow }}"
           body: "The test run for the project has completed with status: ${{ job.status }}"
-          to: "sl-qa@shikshalokam.org"  # Replace with recipient's email address
-          from: "automation@shikshalokam.org"  # Replace with sender's email address
+          to: "sl-qa@shikshalokam.org"
+          from: "automation@shikshalokam.org"
           secure: false
           attachments: |
             ./target/Automation_Failure_Screenshots.zip

@@ -43,8 +43,10 @@ jobs:
             libharfbuzz-icu0 gstreamer1.0-plugins-base \
             gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly \
             libsecret-1-0 libhyphen0 libmanette-0.2-0 \
-            libflite1 libflite1-dev \
-            libgles2-mesa libx264-dev
+            libx264-dev || true
+          # Attempt to install optional packages, but don't fail if they're not found
+          sudo apt-get install -y libflite1 libflite1-dev || echo "libflite1 and libflite1-dev not found, skipping..."
+          sudo apt-get install -y libgles2-mesa || echo "libgles2-mesa not found, skipping..."
 
       - name: Cache Maven dependencies
         uses: actions/cache@v3

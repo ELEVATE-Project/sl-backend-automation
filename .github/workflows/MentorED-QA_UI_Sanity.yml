@@ -8,11 +8,11 @@ jobs:
 
     strategy:
       matrix:
-        java-version: [11]  
+        java-version: [11]
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3 
+        uses: actions/checkout@v3
 
       - name: Set up JDK ${{ matrix.java-version }}
         uses: actions/setup-java@v3
@@ -30,21 +30,21 @@ jobs:
           sudo apt-get update
           sudo apt-get upgrade -y
 
-      - name: Search for Required Packages
+      - name: Search for Available Packages
         run: |
-          apt-cache search libwoff2
-          apt-cache search libvpx
-          apt-cache search gstreamer1.0
+          apt-cache search woff2
+          apt-cache search flite
+          apt-cache search GLESv2
 
       - name: Install Playwright Dependencies
         run: |
           sudo apt-get install -y \
-            libwoff2-dev libvpx-dev libevent-2.1-7 libopus0 \
+            libwoff1 libvpx-dev libevent-2.1-7 libopus0 \
             libharfbuzz-icu0 gstreamer1.0-plugins-base \
             gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly \
             libsecret-1-0 libhyphen0 libmanette-0.2-0 \
-            libflite1 libflite-dev libflite1 libflite-usenglish1 \
-            libGLESv2-mesa libx264-dev
+            libflite1 libflite1-dev \
+            libgles2-mesa libx264-dev
 
       - name: Cache Maven dependencies
         uses: actions/cache@v3

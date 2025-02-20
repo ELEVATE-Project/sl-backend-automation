@@ -8,11 +8,11 @@ jobs:
 
     strategy:
       matrix:
-        java-version: [11]  # Specify the JDK version(s) here
+        java-version: [11]  
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3  # Checks out your repository
+        uses: actions/checkout@v3 
 
       - name: Set up JDK ${{ matrix.java-version }}
         uses: actions/setup-java@v3
@@ -23,26 +23,28 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
+      - name: Enable Additional Repositories & Update System
+        run: |
+          sudo add-apt-repository universe -y
+          sudo add-apt-repository multiverse -y
+          sudo apt-get update
+          sudo apt-get upgrade -y
+
+      - name: Search for Required Packages
+        run: |
+          apt-cache search libwoff2
+          apt-cache search libvpx
+          apt-cache search gstreamer1.0
+
       - name: Install Playwright Dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y libwoff2-1 libvpx7 libevent-2.1-7 libopus0 \
-                                  libharfbuzz-icu0 libgstallocators-1.0-0 \
-                                  libgstapp-1.0-0 libgstpbutils-1.0-0 \
-                                  libgstaudio-1.0-0 libgsttag-1.0-0 \
-                                  libgstvideo-1.0-0 libgstgl-1.0-0 \
-                                  libgstcodecparsers-1.0-0 libgstfft-1.0-0 \
-                                  libsecret-1-0 libhyphen0 libmanette-0.2-0 \
-                                  libflite1 libflite-usenglish1 \
-                                  libflite-cmu-grapheme-lang1 libflite-cmu-grapheme-lex1 \
-                                  libflite-cmu-indic-lang1 libflite-cmu-indic-lex1 \
-                                  libflite-cmulex1 libflite-cmu-time-awb1 \
-                                  libflite-cmu-us-awb1 libflite-cmu-us-kal16-1 \
-                                  libflite-cmu-us-kal1 libflite-cmu-us-rms1 \
-                                  libflite-cmu-us-slt1 libGLESv2-2 libx264-160 \
-                                  libgstreamer1.0-0 gstreamer1.0-libav \
-                                  gstreamer1.0-plugins-bad gstreamer1.0-plugins-base \
-                                  gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly
+          sudo apt-get install -y \
+            libwoff2-dev libvpx-dev libevent-2.1-7 libopus0 \
+            libharfbuzz-icu0 gstreamer1.0-plugins-base \
+            gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly \
+            libsecret-1-0 libhyphen0 libmanette-0.2-0 \
+            libflite1 libflite-dev libflite1 libflite-usenglish1 \
+            libGLESv2-mesa libx264-dev
 
       - name: Cache Maven dependencies
         uses: actions/cache@v3
@@ -75,7 +77,7 @@ jobs:
           username: ${{ secrets.SMTP_USERNAME }}
           password: ${{ secrets.SMTP_PASSWORD }}
           subject: "Test Status - ${{ github.workflow }}"
-          body: "The test run for the project has completed with status: ${{ job.status }}"
+          body: "The test run for the project has completed with status: ${{ job.status }}."
           to: "sl-qa@shikshalokam.org"
           from: "automation@shikshalokam.org"
           secure: false

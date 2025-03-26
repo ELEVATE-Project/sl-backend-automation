@@ -41,6 +41,14 @@ jobs:
 
       - name: Build with Maven and run tests
         run:  mvn clean test -DsuiteXmlFile="UISanitySuite.xml"
+        
+      - name: Zip the Reports Folder (If Exists)l̥
+        run: |
+          if [ -d "./target/screenshots" ]; then
+            zip -r ./target/Automation_Failure_Screenshots.zip ./target/screenshots
+          else
+            echo "Screenshots folder does not exist. Skipping zipping step."
+          fi
 
       - name: Send Email Notification
         if: always()

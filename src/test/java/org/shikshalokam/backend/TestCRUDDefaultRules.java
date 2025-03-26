@@ -33,14 +33,14 @@ public class TestCRUDDefaultRules extends MentorEDBaseTest {
 
     @Test(description = "Test case to update the default rules", priority = 3)
     public void testUpdateDefaultRules() {
-        Response response = updateDefaultRules("session", "categories", false, "designation", "overlap");
+        Response response = updateDefaultRules(ID, "session","categories" , false, "area_of_expertise","overlap");
         Assert.assertEquals(response.getStatusCode(), 202);
         Assert.assertEquals(response.jsonPath().getString("result.target_field"), "[categories]");
         logger.info("Validation related to updating the Default rules is completed");
     }
 
     @Test(description = "Test case to delete the default rules", priority = 4)
-    public void testDeleteDefaultRule() {
+    public void testDeleteDefaultRule(ID) {
         Response response = deleteDefaultRules();
         Assert.assertEquals(response.getStatusCode(), 202);
         Assert.assertEquals(response.jsonPath().getString("message"), "The default rule has been deleted successfully.");

@@ -1,4 +1,5 @@
 name: MentorED Sanity Automation Run
+
 on:
   workflow_dispatch:
 
@@ -20,34 +21,6 @@ jobs:
           java-version: ${{ matrix.java-version }}
           distribution: 'zulu'
 
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
-
-      - name: Enable Additional Repositories & Update System
-        run: |
-          sudo add-apt-repository universe -y
-          sudo add-apt-repository multiverse -y
-          sudo apt-get update
-          sudo apt-get upgrade -y
-
-      - name: Search for Available Packages
-        run: |
-          apt-cache search woff2
-          apt-cache search flite
-          apt-cache search GLESv2
-
-      - name: Install Playwright Dependencies
-        run: |
-          sudo apt-get install -y \
-            libwoff1 libvpx-dev libevent-2.1-7 libopus0 \
-            libharfbuzz-icu0 gstreamer1.0-plugins-base \
-            gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly \
-            libsecret-1-0 libhyphen0 libmanette-0.2-0 \
-            libx264-dev || true
-          # Attempt to install optional packages, but don't fail if they're not found
-          sudo apt-get install -y libflite1 libflite1-dev || echo "libflite1 and libflite1-dev not found, skipping..."
-          sudo apt-get install -y libgles2-mesa || echo "libgles2-mesa not found, skipping..."
-
       - name: Cache Maven dependencies
         uses: actions/cache@v3
         with:
@@ -56,19 +29,18 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
+      - name: Check Current Directory
+        run: |
+          echo "Current Directory:"
+          pwd
+          echo "Files in Current Directory:"
+          ls -al
+
       - name: Copy Configuration File
         run: cp ./src/main/resources/config/automation.MentorED_QA.properties ./src/main/resources/config/automation.properties
 
       - name: Build with Maven and run tests
-        run: mvn clean test -DsuiteXmlFile="UISanitySuite.xml"
-
-      - name: Zip the Reports Folder (If Exists)
-        run: |
-          if [ -d "./target/screenshots" ]; then
-            zip -r ./target/Automation_Failure_Screenshots.zip ./target/screenshots
-          else
-            echo "Screenshots folder does not exist. Skipping zipping step."
-          fi
+        run:  mvn clean test -DsuiteXmlFile="UISanitySuite.xml"
 
       - name: Send Email Notification
         if: always()
@@ -83,6 +55,4 @@ jobs:
           to: "sl-qa@shikshalokam.org"
           from: "automation@shikshalokam.org"
           secure: false
-          attachments: |
-            ./target/Automation_Failure_Screenshots.zip
-            ./target/ExtentReport.html
+          attachments: ./target/ExtentReport.html

@@ -4,6 +4,7 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.simple.JSONObject;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -23,6 +24,7 @@ public class MentorEDBaseTest extends MentorBase {
     private String deleteUseruserEndPoint = "user/v1/admin/deleteUser/";
 
     private String deleteUserMentorEndPoint = "/mentoring/v1/admin/userDelete?userId=";
+
     public static void loginToMentorED(String loginId, String password) {
 
         try {
@@ -101,7 +103,7 @@ public class MentorEDBaseTest extends MentorBase {
     public void deleteUser(String userEmail, String userPassword) {
         loginToMentorED(userEmail, userPassword);
         String deleteUserId = User_ID;
-        logger.info("user id :"+deleteUserId);
+        logger.info("user id :" + deleteUserId);
 
         // Check if deleteUserId is null or empty
         if (deleteUserId == null || deleteUserId.isEmpty()) {
@@ -123,7 +125,70 @@ public class MentorEDBaseTest extends MentorBase {
         }
     }
 
+    //Default rules APIs
+    public Response createDefaultRules(String type, String target_field, boolean is_target_from_sessions_mentor, String requester_field, String operator) {
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("type", type);
+        requestBody.put("target_field", target_field);
+        requestBody.put("is_target_from_sessions_mentor", is_target_from_sessions_mentor);
+        requestBody.put("requester_field", requester_field);
+        requestBody.put("operator", operator);
+        requestBody.put("requester_roles", new String[]{"session_manager"});
+        JSONObject requesterRolesConfig = new JSONObject();
+        requesterRolesConfig.put("exclude", true);
+        requestBody.put("requester_roles_config", requesterRolesConfig);
+
+        Response response = given()
+                .header("x-auth-token", "bearer " + X_AUTH_TOKEN)
+                .header("Content-Type", "application/json")
+                .body(requestBody)
+                .post("mentoring/v1/default-rule/create");
+        response.prettyPrint();
+        return response;
     }
+
+    public Response readDefaultRules() {
+        Response response = given()
+                .header("Content-Type", "application/json")
+                .header("x-auth-token", "bearer " + X_AUTH_TOKEN)
+                .get("mentoring/v1/default-rule/read");
+        response.prettyPrint();
+        return response;
+    }
+
+    public Response updateDefaultRules(String ProfileOrSessionID, String type, String target_field, boolean is_target_from_sessions_mentor, String requester_field, String operator) {
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("type", type);
+        requestBody.put("target_field", target_field);
+        requestBody.put("is_target_from_sessions_mentor", is_target_from_sessions_mentor);
+        requestBody.put("requester_field", requester_field);
+        requestBody.put("operator", operator);
+        requestBody.put("requester_roles", new String[]{"session_manager"});
+        JSONObject requesterRolesConfig = new JSONObject();
+        requesterRolesConfig.put("exclude", true);
+        requestBody.put("requester_roles_config", requesterRolesConfig);
+
+        Response response = given().log().all()
+                .header("x-auth-token", "bearer " + X_AUTH_TOKEN)
+                .header("Content-Type", "application/json")
+                .body(requestBody)
+                .pathParam("id", ProfileOrSessionID)
+                .patch("mentoring/v1/default-rule/update/{id}");
+        response.prettyPrint();
+        return response;
+    }
+
+    public Response deleteDefaultRules(String ProfileOrSessionID) {
+        Response response = given()
+                .header("Content-Type", "application/json")
+                .header("x-auth-token", "bearer " + X_AUTH_TOKEN)
+                .pathParam("id", ProfileOrSessionID)
+                .delete("mentoring/v1/default-rule/delete/{id}");
+        response.prettyPrint();
+        return response;
+    }
+
+}
 
 
 

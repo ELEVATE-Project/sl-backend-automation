@@ -1,5 +1,6 @@
 package org.shikshalokam.uiPageObjects;
 
+import com.microsoft.playwright.options.WaitForSelectorState;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -115,9 +116,32 @@ public class AppProfilePage extends PWBasePage {
         logger.info("Added Option is no more available");
         return profileDetailsPage;
     }
+
+    public AppProfilePage updateProfileForDefaultSearchRuleCreate(String targetValue, String profileName) {
+        this.validPage();
+        page.getByLabel("Your name *").click();
+        page.getByLabel("Your name *").fill(profileName);
+        page.getByRole(AriaRole.SWITCH, new Page.GetByRoleOptions().setName("Your role").setExact(true)).click();
+        page.getByRole(AriaRole.SWITCH, new Page.GetByRoleOptions().setName("Your role").setExact(true)).click();
+        page.locator("form ion-chip").filter(new Locator.FilterOptions().setHasText(targetValue)).click();
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Submit")).click();
+        verifyToastMessage("Profile Updated Successfully");
+        page.waitForTimeout(2000);
+        page.locator("form ion-chip").filter(new Locator.FilterOptions().setHasText(targetValue)).isVisible();
+        return profileDetailsPage;
+    }
+
+    public AppProfilePage updateProfileForDefaultSearchRuleUpdate(String targetValue, String profileName) {
+        this.validPage();
+        page.getByLabel("Your name *").click();
+        page.getByLabel("Your name *").fill(profileName);
+        page.getByRole(AriaRole.SWITCH, new Page.GetByRoleOptions().setName("Your expertise").setExact(true)).click();
+        page.getByRole(AriaRole.SWITCH, new Page.GetByRoleOptions().setName("Your expertise").setExact(true)).click();
+        page.locator("form ion-chip").filter(new Locator.FilterOptions().setHasText(targetValue)).click();
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Submit")).click();
+        verifyToastMessage("Profile Updated Successfully");
+        page.waitForTimeout(2000);
+        page.locator("form ion-chip").filter(new Locator.FilterOptions().setHasText(targetValue)).isVisible();
+        return profileDetailsPage;
+    }
 }
-
-
-
-
-

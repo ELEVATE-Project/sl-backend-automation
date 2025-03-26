@@ -76,8 +76,15 @@
                     <include name="sessionDeleteViaBulkUpload"/>
                 </methods>
             </class>
+
+            <class name="org.shikshalokam.frontend.TestDefaultRules">
+                <methods>
+                    <include name="testCreateDefaultRulesForProfile"/>
+                    <include name="testUpdateDefaultRulesForProfile"/>
+                    <include name="testCreateDefaultRulesForSession"/>
+                    <include name="testUpdateDefaultRulesForSession"/>
+                </methods>
+            </class>
         </classes>
     </test> <!-- Test -->
 </suite> <!-- Suite -->
-
-

@@ -53,10 +53,25 @@
                     <include name="testDeletePermissionMapping"/>
                     <include name="testDeletePermissionMapping_MissingRequiredFields"/>
                 </methods>
-
             </class>
+            <class name="org.shikshalokam.backend.TestCRUDDefaultRules">
+                <methods>
+                    <include name="testCreateDefaultRules"/>
+                    <include name="testReadDefaultRules"/>
+                    <include name="testUpdateDefaultRules"/>
+                    <include name="testDeleteDefaultRule"/>
+                </methods>
+            </class>
+
+            <class name="org.shikshalokam.backend.TestCRUDDefaultRules">
+                <methods>
+                    <include name="testCreateDefaultRules"/>
+                    <include name="testReadDefaultRules"/>
+                    <include name="testUpdateDefaultRules"/>
+                    <include name="testDeleteDefaultRule"/>
+                </methods>
+            </class>
+
         </classes>
     </test> <!-- Test -->
 </suite> <!-- Suite -->
-
-

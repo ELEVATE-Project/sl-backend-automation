@@ -26,8 +26,19 @@ public class AppMentorsPage extends PWBasePage {
         return mentorsPage;
     }
 
+    public AppMentorsPage searchMentorForDefaultRules(String mentor, String targetField) {
+        this.validPage();
+        page.getByPlaceholder("Search for mentors").first().click();
+        page.waitForTimeout(1000);
+        page.getByRole(AriaRole.SEARCHBOX, new Page.GetByRoleOptions().setName("search text")).fill(mentor);
+        page.getByRole(AriaRole.SEARCHBOX, new Page.GetByRoleOptions().setName("search text")).press("Enter");
+        page.waitForTimeout(1000);
+        page.getByRole(AriaRole.HEADING, new Page.GetByRoleOptions().setName(mentor)).click();
+        page.locator("app-mentor-details ion-chip").filter(new Locator.FilterOptions().setHasText(targetField)).isVisible();
+        return mentorsPage;
+    }
 
-    public AppMentorsPage viewRoles(){
+    public AppMentorsPage viewRoles() {
         this.validPage();
         page.locator("app-mentor-details").getByText("View roles").click();
         return mentorsPage;

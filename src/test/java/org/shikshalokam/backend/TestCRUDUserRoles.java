@@ -18,7 +18,7 @@ public class TestCRUDUserRoles extends MentorEDBaseTest {
 
     public static final Logger logger = LogManager.getLogger(TestCRUDUserRoles.class);
     private URI createUserRolesEndpoint, getUserRolesEndPoint, updateUserRolesEndpoint, deleteUserRolesEndpoint;
-    private String userRoleTitle, createdRoleID,updateUserRoleTitle;
+    private String userRoleTitle, createdRoleID,updateUserRoleTitle,label;
 
     @BeforeTest
     public void init() {
@@ -29,13 +29,14 @@ public class TestCRUDUserRoles extends MentorEDBaseTest {
         getUserRolesEndPoint = MentorBase.createURI("/user/v1/user-role/list");
 
         userRoleTitle = "userroletitle" + RandomStringUtils.randomAlphabetic(5).toLowerCase();
+        label = "R" + userRoleTitle;
         updateUserRoleTitle = "updusertitle" + RandomStringUtils.randomAlphabetic(3).toLowerCase();
     }
 
     @Test(description = "Creates user role with given title ")
     public void testCreateUserRoles() {
         logger.info("Started calling --------------- Create User Roles ----------- ");
-        Response response = createUserRole(userRoleTitle, "1", "ACTIVE", "PUBLIC");
+        Response response = createUserRole(userRoleTitle, label, "1", "ACTIVE", "PUBLIC");
 
         logger.info("Response Code: {}, Response Body: {}", response.getStatusCode(), response.getBody().asString());
         assertEquals(response.getStatusCode(), 201, "User role creation failed with " + response.getStatusCode());
@@ -49,7 +50,7 @@ public class TestCRUDUserRoles extends MentorEDBaseTest {
     @Test(description = "Validates the negative use case for create user role without providing title ")
     public void testCreateUserRoles_MissingRequiredFields() {
         logger.info("Started calling --------- Create User Roles - Negative Test Case Missing Required Fields");
-        Response response = createUserRole("", "1", "ACTIVE", "PUBLIC");
+        Response response = createUserRole("",label,"1", "ACTIVE", "PUBLIC");
 
         logger.info("Response Code: {}, Response Body: {}", response.getStatusCode(), response.getBody().asString());
         assertEquals(response.getStatusCode(), 422, "Expected Bad Request for missing required fields, but got " + response.getStatusCode());
@@ -112,9 +113,10 @@ public class TestCRUDUserRoles extends MentorEDBaseTest {
         logger.info("Ended calling ------------ DeleteUserRole with assertions completed.");
     }
 
-    private Response createUserRole(String title, String userType, String status, String visibility) {
+    private Response createUserRole(String title,String label, String userType, String status, String visibility) {
         JSONObject requestBody = new JSONObject();
         requestBody.put("title", title);
+        requestBody.put("label", label);
         requestBody.put("user_type", userType);
         requestBody.put("status", status);
         requestBody.put("visibility", visibility);

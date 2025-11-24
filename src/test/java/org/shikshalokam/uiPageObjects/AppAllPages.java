@@ -2,6 +2,7 @@ package org.shikshalokam.uiPageObjects;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.shikshalokam.uiPageObjects.ep.*;
 
 public class AppAllPages {
 
@@ -18,6 +19,18 @@ public class AppAllPages {
     public static AppSessionDetailsPage sessionDeatilsPage =new AppSessionDetailsPage("MentorED");
     public static AppMentorsPage mentorsPage =new AppMentorsPage("MentorED");
     public static AppManageSessionPage manageSessionPage =new AppManageSessionPage("MentorED");
+
+    public static AppHomePage homePage =new AppHomePage("Welcome to shikshagrahanew");
+    public static AppEPLoginPage eploginpage =new AppEPLoginPage("Welcome to shikshagrahanew");
+    public static AppProgramPage program =new AppProgramPage("Welcome to shikshagrahanew");
+    public static AppProjectPage project =new AppProjectPage("Elevate");
+    public static AppObservationWithRubricPage observationWithRubric =new AppObservationWithRubricPage("ObservationPortal");
+    public static AppObservationWithoutRubricPage observationWithoutRubric =new AppObservationWithoutRubricPage("ObservationPortal");
+    public static AppSurveyPage survey =new AppSurveyPage("ObservationPortal");
+    public static AppRegistrationPage registration = new AppRegistrationPage("Welcome to shikshagrahanew");
+
+
+
 
 }
 

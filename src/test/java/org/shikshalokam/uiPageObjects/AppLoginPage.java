@@ -27,8 +27,8 @@ public class AppLoginPage extends PWBasePage {
         } else {
             logger.info("Login Button not found, skipping click.");
         }
-        page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Email *")).click();
-        page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Email *")).fill(userName);
+        page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("//input[@id=\":rb:\"]")).click();
+        page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("//input[@id=\":rb:\"]")).fill(userName);
         page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Password *")).click();
         page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Password *")).fill(password);
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Login")).click();

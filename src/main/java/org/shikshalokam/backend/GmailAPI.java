@@ -157,8 +157,9 @@ public class GmailAPI {
         Properties properties = new Properties();
         properties.put("mail.store.protocol", "imaps");
         properties.put("mail.imap.host", "imap.gmail.com");
-        properties.put("mail.imap.port", "993");
-        properties.put("mail.imap.ssl.enable", "false");
+        properties.put("mail.imap.ssl.protocols", "TLSv1.2");
+        properties.put("mail.imaps.ssl.protocols", "TLSv1.2");
+
 
         Session session = Session.getDefaultInstance(properties);
 
@@ -192,8 +193,11 @@ public class GmailAPI {
         Properties properties = new Properties();
         properties.put("mail.store.protocol", "imaps");
         properties.put("mail.imap.host", "imap.gmail.com");
-        properties.put("mail.imap.port", "993");
-        properties.put("mail.imap.ssl.enable", "false");
+//        properties.put("mail.imap.port", "993");
+//        properties.put("mail.imap.ssl.enable", "false");
+
+        properties.put("mail.imap.ssl.protocols", "TLSv1.2");
+        properties.put("mail.imaps.ssl.protocols", "TLSv1.2");
 
         Session session = Session.getDefaultInstance(properties);
 

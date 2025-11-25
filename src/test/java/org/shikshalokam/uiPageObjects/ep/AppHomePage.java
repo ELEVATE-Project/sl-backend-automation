@@ -87,6 +87,7 @@ public class AppHomePage extends PWBasePage
     //Check the Profile page is working fine
     public  AppHomePage clickOnProfile()
     {
+        page.waitForTimeout(2000);
         logger.info("Verify click On action for Profile started");
         page.getByTestId("AccountCircleIcon").click();
         page.getByLabel("Account").click();

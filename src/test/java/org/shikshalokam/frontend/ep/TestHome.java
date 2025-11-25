@@ -13,9 +13,6 @@ public class TestHome
     public void testHomepage()
     {
         Robot robot = new Robot();
-        robot.openApp(fetchProperty("saas.portal.url"));
-        robot.sees(AppAllPages.eploginpage).logIntoPortal(fetchProperty("ep.username"), fetchProperty("ep.password"));
-
         robot.sees(AppAllPages.homePage).clickOnPrograms();
         robot.sees(AppAllPages.homePage).backBTNfromPrograms();
         robot.sees(AppAllPages.homePage).clickOnProject();

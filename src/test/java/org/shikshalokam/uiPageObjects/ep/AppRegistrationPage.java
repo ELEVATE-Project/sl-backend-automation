@@ -66,20 +66,20 @@ public class AppRegistrationPage  extends PWBasePage
 
 
             page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Send OTP")).click();
-            page.waitForTimeout(5000);
+            page.waitForTimeout(2000);
             String script = "navigator.clipboard.writeText('" + GmailAPI.getOTP() + "')";
             logger.info(script);
             page.getByLabel("OTP digit 1").click();
             page.evaluate(script);
-            page.waitForTimeout(5000);
+            page.waitForTimeout(2000);
             page.keyboard().down("Control");
             page.keyboard().press("KeyV");
             page.keyboard().up("Control");
             page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Verify")).click();
 
-            //   Delete mails after registration.
+            // Delete mails after registration.
             GmailAPI.deleteEmails();
-
+            page.waitForTimeout(2000);
             logger.info("OTP filling ended");
         }
 

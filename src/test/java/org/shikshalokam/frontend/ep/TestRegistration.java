@@ -10,12 +10,10 @@ public class TestRegistration
 {
 
     @Test(description = "Verify Registration page working properly.")
-    public void testRegistration() {
+    public void testRegistration()
+    {
         Robot robot = new Robot();
         robot.sees(AppAllPages.eploginpage).openURL();
-//        robot.sees(AppAllPages.eploginpage).logIntoPortal(fetchProperty("ep.username"), fetchProperty("ep.password"));
-
-//        robot.debugAPP();
         robot.sees(AppAllPages.registration).openRegistrationPage();
         robot.sees(AppAllPages.registration).getOTP();
 

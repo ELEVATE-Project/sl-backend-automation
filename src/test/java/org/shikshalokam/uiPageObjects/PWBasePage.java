@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.shikshalokam.backend.MentorEDBaseTest;
 import org.shikshalokam.backend.PropertyLoader;
+import org.shikshalokam.backend.elevateUtility.UserServiceUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -17,6 +18,7 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
 
@@ -34,6 +36,11 @@ public class PWBasePage extends MentorEDBaseTest {
 
     public static Boolean headless;
     public static Boolean recordVideo;
+
+    //    Access tokens
+    String UserToken = UserServiceUtils.UserToken;
+    String adminToken = UserServiceUtils.adminToken;
+
 
     static {
         // Set default values

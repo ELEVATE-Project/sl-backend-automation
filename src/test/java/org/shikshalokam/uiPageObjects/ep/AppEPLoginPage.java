@@ -8,31 +8,29 @@ import org.shikshalokam.uiPageObjects.AppLoginPage;
 import org.shikshalokam.uiPageObjects.PWBasePage;
 import org.shikshalokam.uiPageObjects.Robot;
 
-public class AppEPLoginPage extends PWBasePage
-{
+public class AppEPLoginPage extends PWBasePage {
     AppEPLoginPage login;
     private static final Logger logger = LogManager.getLogger(AppEPLoginPage.class);
-    public AppEPLoginPage(String givenTitleName)
-    {
+
+    public AppEPLoginPage(String givenTitleName) {
         super(givenTitleName);
         this.login = this;
     }
 
-    public void openURL()
-    {
+    public void openURL() {
         Robot robot = new Robot();
         robot.openApp(fetchProperty("ep.url"));
     }
 
 
-    public AppEPLoginPage logIntoPortal(String userName,String password)
-    {
+    public AppEPLoginPage logIntoPortal() {
         logger.info("login started");
-
+        String userName=fetchProperty("ep.mail");
+        String password=fetchProperty("ep.password");
         page.getByLabel("Email / Mobile / Username").click();
-        page.getByLabel("Email / Mobile / Username").fill(userName); //disauto1
+        page.getByLabel("Email / Mobile / Username").fill(userName);
         page.getByLabel("Password").click();
-        page.getByLabel("Password").fill(password);//PASSword###11"
+        page.getByLabel("Password").fill(password);
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Login")).click();
         logger.info("login ended");
 

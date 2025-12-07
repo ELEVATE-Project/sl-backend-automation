@@ -14,6 +14,7 @@ import org.testng.annotations.Test;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -119,7 +120,7 @@ public class ElevateProjectBaseTest extends MentorBase {
         requestBody.put("title", title);
         requestBody.put("userRoleId", userRoleId);
         requestBody.put("code", userRoleId);
-        requestBody.put("entityTypes", List.of(new HashMap<String, String>() {{
+        requestBody.put("entityTypes", Arrays.asList(new HashMap<String, String>() {{
             put("entityType", entityType);
             put("entityTypeId", entityTypeId);
         }}));

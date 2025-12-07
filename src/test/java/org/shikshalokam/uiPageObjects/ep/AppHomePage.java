@@ -11,22 +11,19 @@ import org.testng.Assert;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static org.shikshalokam.uiPageObjects.PWBasePage.page;
 
-public class AppHomePage extends PWBasePage
-{
+public class AppHomePage extends PWBasePage {
     private AppHomePage homePage;
 
     private static final Logger logger = LogManager.getLogger(AppHomePage.class);
 
-    public AppHomePage(String givenTitleName)
-    {
+    public AppHomePage(String givenTitleName) {
         super(givenTitleName);
         this.homePage = this;
 
     }
 
     //Verify that After log in Land on Home page
-    public  AppHomePage verifyHomePage()
-    {
+    public AppHomePage verifyHomePage() {
         logger.info("Login and Home page verification started");
         assertThat(page.getByText("Welcome, auto")).isVisible();
         logger.info("Login and Home page verification ended");
@@ -34,8 +31,7 @@ public class AppHomePage extends PWBasePage
     }
 
     //Check the Programs page is working fine
-    public AppHomePage clickOnPrograms()
-    {
+    public AppHomePage clickOnPrograms() {
         logger.info("Verify click On action for Programs started");
         page.getByText("Programs").click();
         Locator programsText = page.locator("h1").getByText("Programs", new Locator.GetByTextOptions().setExact(true));
@@ -45,7 +41,7 @@ public class AppHomePage extends PWBasePage
     }
 
     //Check the Projects page is working fine
-    public AppHomePage clickOnProject(){
+    public AppHomePage clickOnProject() {
         logger.info("Verify click On action for Project started");
         page.getByText("Projects").click();
         assertThat(page.getByText("Projects")).isVisible();
@@ -54,8 +50,7 @@ public class AppHomePage extends PWBasePage
     }
 
     //Check the Observation page is working fine
-    public AppHomePage clickOnObservation()
-    {
+    public AppHomePage clickOnObservation() {
         logger.info("Verify click On action for Observation started");
         page.getByText("Observations").click();
         assertThat(page.getByText("Observations")).isVisible();
@@ -64,8 +59,7 @@ public class AppHomePage extends PWBasePage
     }
 
     //Check the Survey page is working fine
-    public AppHomePage  clickOnSurvey()
-    {
+    public AppHomePage clickOnSurvey() {
         logger.info("Verify click On action for Survey started");
         page.getByText("Survey").click();
         Locator surveyText = page.getByText("Survey").nth(0);  // first match
@@ -75,8 +69,7 @@ public class AppHomePage extends PWBasePage
     }
 
     //Check the Reports page is working fine
-    public AppHomePage clickOnReports()
-    {
+    public AppHomePage clickOnReports() {
         logger.info("Verify click On action for Reports started");
         page.getByText("Reports").click();
         assertThat(page.getByText("Reports", new Page.GetByTextOptions().setExact(true))).isVisible();
@@ -85,8 +78,7 @@ public class AppHomePage extends PWBasePage
     }
 
     //Check the Profile page is working fine
-    public  AppHomePage clickOnProfile()
-    {
+    public AppHomePage clickOnProfile() {
         page.waitForTimeout(2000);
         logger.info("Verify click On action for Profile started");
         page.getByTestId("AccountCircleIcon").click();
@@ -98,11 +90,8 @@ public class AppHomePage extends PWBasePage
     }
 
 
-
-
     //Click back button Action from Program and land on Home page
-    public AppHomePage backBTNfromPrograms()
-    {
+    public AppHomePage backBTNfromPrograms() {
         logger.info("Back Button from Programs clicking started");
         page.getByRole(AriaRole.BANNER).locator("svg").click();
         logger.info("Back Button from Programs clicking ended");
@@ -110,8 +99,7 @@ public class AppHomePage extends PWBasePage
     }
 
     //Click back button Action from Projects and land on Home page
-    public AppHomePage backBTNfromProject()
-    {
+    public AppHomePage backBTNfromProject() {
         logger.info("Back Button from Project clicking started");
         page.getByRole(AriaRole.BANNER).locator("svg").click();
         logger.info("Back Button from Project clicking ended");
@@ -119,8 +107,7 @@ public class AppHomePage extends PWBasePage
     }
 
     //Click back button Action from Observation and land on Home page
-    public AppHomePage backBTNfromObservations()
-    {
+    public AppHomePage backBTNfromObservations() {
         logger.info("Back Button from Observation clicking started");
         page.getByRole(AriaRole.BUTTON).click();
         logger.info("Back Button from Observation clicking ended");
@@ -128,8 +115,7 @@ public class AppHomePage extends PWBasePage
     }
 
     //Click back button Action from Survey and land on Home page
-    public AppHomePage backBTNfromSurvey()
-    {
+    public AppHomePage backBTNfromSurvey() {
         logger.info("Back Button from Survey clicking started");
         page.locator("button").filter(new Locator.FilterOptions().setHasText("arrow_back")).click();
         logger.info("Back Button from Survey clicking ended");
@@ -137,8 +123,7 @@ public class AppHomePage extends PWBasePage
     }
 
     //Click back button Action from Reports and land on Home page
-    public AppHomePage backBTNfromReports()
-    {
+    public AppHomePage backBTNfromReports() {
         logger.info("Back Button from Reports clicking started");
         page.getByRole(AriaRole.BANNER).locator("path").click();
         logger.info("Back Button from Reports clicking ended");

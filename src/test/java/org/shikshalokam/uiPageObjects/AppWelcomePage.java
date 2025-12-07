@@ -5,10 +5,10 @@ import org.apache.logging.log4j.Logger;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
-import org.shikshalokam.uiPageObjects.PWBasePage;
 
 
-public class AppWelcomePage extends org.shikshalokam.uiPageObjects.PWBasePage {
+
+public class AppWelcomePage extends PWBasePage {
 
     private AppWelcomePage welcomePage;
     private static final Logger logger = LogManager.getLogger(AppWelcomePage.class);

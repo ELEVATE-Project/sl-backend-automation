@@ -27,10 +27,10 @@ public class AppEPLoginPage extends PWBasePage {
         logger.info("login started");
         String userName=fetchProperty("ep.mail");
         String password=fetchProperty("ep.password");
-        page.getByLabel("Email / Mobile / Username").click();
-        page.getByLabel("Email / Mobile / Username").fill(userName);
-        page.getByLabel("Password").click();
-        page.getByLabel("Password").fill(password);
+        page.locator("//input[@name='login-username']").click();
+        page.locator("//input[@name='login-username']").fill(userName);
+        page.locator("//input[@name='login-password']").click();
+        page.locator("//input[@name='login-password']").fill(password);
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Login")).click();
         logger.info("login ended");
 

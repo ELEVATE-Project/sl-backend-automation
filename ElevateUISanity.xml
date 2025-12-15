@@ -10,6 +10,14 @@
                 <methods>
 
                 </methods>
+
+            </class>
+
+            <class name="org.shikshalokam.frontend.ep.TestEPLogin">
+                <methods>
+
+                </methods>
+
             </class>
 
             <class name="org.shikshalokam.frontend.ep.TestHome">

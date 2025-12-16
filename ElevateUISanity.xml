@@ -1,35 +1,31 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="All Test Suite">
-    <!--  <listeners>
-          <listener class-name="org.example.MyTestListener"/>
-      </listeners>-->
-    <test verbose="2" preserve-order="false" name="MentorED API Validations">
-        <!--<parameter name="ENV" value="POD1"></parameter>
-        <parameter name="Browser" value="Chrome"></parameter>-->
+<suite name="Elevate UI Sanity Suite">
+    <listeners>
+        <listener class-name="org.shikshalokam.Listerners.SLCustomListener"/>
+    </listeners>
+    <test name="Test">
         <classes>
 
-            <class name="org.shikshalokam.backend.TestGetOrgPolicies">
+            <class name="org.shikshalokam.frontend.ep.TestRegistration">
                 <methods>
-                    <include name="testGetOrgPolicies"/>
+
                 </methods>
+
             </class>
-            <class name="org.shikshalokam.backend.TestMentoringQuestionsCreate">
+
+            <class name="org.shikshalokam.frontend.ep.TestEPLogin">
                 <methods>
-                    <include name="testCreatingQuestion"/>
+
                 </methods>
+
             </class>
-            <class name="org.shikshalokam.backend.TestMentoringQuestionSetCreate">
+
+            <class name="org.shikshalokam.frontend.ep.TestHome">
                 <methods>
-                    <include name="testMentoringQuestionSetCreate"/>
-                </methods>
-            </class>
-            <class name="org.shikshalokam.backend.TestMentoringQuestionsRead">
-                <methods>
-                    <include name="testMentoringQuestoinsRead"/>
+
                 </methods>
             </class>
         </classes>
-
     </test>
 </suite>
+

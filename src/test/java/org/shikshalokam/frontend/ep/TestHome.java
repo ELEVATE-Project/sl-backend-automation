@@ -7,15 +7,12 @@ import org.testng.annotations.Test;
 
 import static org.shikshalokam.uiPageObjects.PWBasePage.fetchProperty;
 
-public class TestHome
-{
+public class TestHome {
     @Test(description = "Verify Home page working properly.")
-    public void testHomepage()
-    {
+    public void testHomepage() {
         Robot robot = new Robot();
-        robot.openApp(fetchProperty("saas.portal.url"));
-        robot.sees(AppAllPages.eploginpage).logIntoPortal(fetchProperty("ep.username"), fetchProperty("ep.password"));
-
+        robot.sees(AppAllPages.eploginpage).openURL();
+        robot.sees(AppAllPages.eploginpage).logIntoPortal();
         robot.sees(AppAllPages.homePage).clickOnPrograms();
         robot.sees(AppAllPages.homePage).backBTNfromPrograms();
         robot.sees(AppAllPages.homePage).clickOnProject();

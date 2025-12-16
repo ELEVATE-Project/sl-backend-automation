@@ -22,15 +22,7 @@ public class AppAllPages {
 
     public static AppHomePage homePage =new AppHomePage("Welcome to shikshagrahanew");
     public static AppEPLoginPage eploginpage =new AppEPLoginPage("Welcome to shikshagrahanew");
-    public static AppProgramPage program =new AppProgramPage("Welcome to shikshagrahanew");
-    public static AppProjectPage project =new AppProjectPage("Elevate");
-    public static AppObservationWithRubricPage observationWithRubric =new AppObservationWithRubricPage("ObservationPortal");
-    public static AppObservationWithoutRubricPage observationWithoutRubric =new AppObservationWithoutRubricPage("ObservationPortal");
-    public static AppSurveyPage survey =new AppSurveyPage("ObservationPortal");
     public static AppRegistrationPage registration = new AppRegistrationPage("Welcome to shikshagrahanew");
-
-
-
 
 }
 

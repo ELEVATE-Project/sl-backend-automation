@@ -26,8 +26,8 @@ public class AppEPLoginPage extends PWBasePage {
 
     public AppEPLoginPage logIntoPortal() {
         logger.info("login started");
-        String userName=fetchProperty("ep.mail");
-        String password=fetchProperty("ep.password");
+        String userName = fetchProperty("ep.mail");
+        String password = fetchProperty("ep.password");
         page.locator("//input[@name='login-username']").click();
         page.locator("//input[@name='login-username']").fill(userName);
         page.locator("//input[@name='login-password']").click();

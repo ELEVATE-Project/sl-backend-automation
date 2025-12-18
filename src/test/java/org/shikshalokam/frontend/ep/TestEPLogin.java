@@ -13,6 +13,6 @@ public class TestEPLogin {
         robot.sees(AppAllPages.eploginpage).openURL();
         robot.sees(AppAllPages.eploginpage).logIntoPortal();
         robot.sees(AppAllPages.homePage).verifyHomePage();
-
+        robot.quitAppBrowser();
     }
 }

@@ -44,11 +44,9 @@ public class DeleteUserSAAS {
     public static void loginToUser(String loginId, String password) {
 
         RestAssured.baseURI = baseUrl;
-        String URL = fetchProperty("ep.url");
-        String searchString = "shikshagraha";
-        boolean isPresent = URL.contains(searchString);
 
-        if (isPresent == true) {
+        boolean isshikshagrahaPresent = DerivingSystem.SelectTenants();
+        if (isshikshagrahaPresent == true) {
             origin = fetchProperty("ep.sg.origin");
         } else {
             origin = fetchProperty("ep.sl.origin");
@@ -59,23 +57,15 @@ public class DeleteUserSAAS {
                 .formParam("password", password)
                 .header("Origin", origin)
                 .post(fetchProperty("ep.userEndPoint"));
-        try {
-            if (response.getStatusCode() != 200) {
-                logger.error("Login failed → Status Code: {}", response.getStatusCode());
-                logger.error("API Response: {}", response.getBody().asString());
-                throw new RuntimeException("Login failed");
-            }
-            logger.info("Login successful for user: {}", loginId);
 
-            //Extract userId from response (example path)
-            UserToken = response.jsonPath().getString("result.access_token");
-            User_ID = response.jsonPath().getString("result.user.id");
+        if (response.getStatusCode() != 200) {
+            logger.error("Login failed → Status Code: {}", response.getStatusCode());
+        } else logger.info("Login successful for user");
 
-        } catch (Exception e) {
-            logger.error("Exception during login: {}", e.getMessage(), e);
-        }
+        //Extract userId from response (example path)
+        UserToken = response.jsonPath().getString("result.access_token");
+        User_ID = response.jsonPath().getString("result.user.id");
     }
-
 
     //Log in to Admin
     public static void loginTOAdmin(String loginId, String password) {
@@ -88,15 +78,11 @@ public class DeleteUserSAAS {
                 .header("Origin", origin)
                 .post(fetchProperty("ep.admiLoginEndPoint"));
 
-        try {
-            if (response.getStatusCode() != 200) {
-                logger.error("Admin login failed → Status Code: {}", response.getStatusCode());
-                logger.error("API Response: {}", response.getBody().asString());
-                throw new RuntimeException("Admin login failed");
-            }
-        } catch (Exception e) {
-            logger.error("Exception during Admin login: {}", e.getMessage(), e);
+        if (response.getStatusCode() != 200) {
+            logger.error("Admin login failed → Status Code: {}", response.getStatusCode());
         }
+
+        logger.info("Exception during Admin login");
 
         // Extract Admin token from response
         adminToken = response.jsonPath().getString("result.access_token");
@@ -105,25 +91,17 @@ public class DeleteUserSAAS {
 
     //Log in as Admin use the token for Delete user API
     public static void deleteUserFromAdmin() {
-        //https://qa.elevate-apis.shikshalokam.org/user/v1/admin/deleteUser/3090
 
         Response response = given()
                 .header("X-auth-token", adminToken)
                 .delete(fetchProperty("ep.deleteUserEndPoint") + User_ID);
 
-        try {
-            if (response.getStatusCode() != 200) {
-                logger.error("Status Code: {}", response.getStatusCode());
-                throw new RuntimeException("Delete User failed → " + response.getStatusCode());
-            }
-        } catch (Exception e) {
-            logger.error("Exception during user deletion: {}", e.getMessage(), e);
-        }
-
+        if (response.getStatusCode() != 200) {
+            logger.error("Status Code: {}", response.getStatusCode());
+        } else logger.info("Exception during user deletion");
     }
 
     public static String fetchProperty(String key) {
         return PropertyLoader.PROP_LIST.getProperty(key);
     }
-
 }

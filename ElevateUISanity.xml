@@ -1,0 +1,31 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Elevate UI Sanity Suite">
+    <listeners>
+        <listener class-name="org.shikshalokam.Listerners.SLCustomListener"/>
+    </listeners>
+    <test name="Test">
+        <classes>
+
+            <class name="org.shikshalokam.frontend.ep.TestRegistration">
+                <methods>
+
+                </methods>
+
+            </class>
+
+            <class name="org.shikshalokam.frontend.ep.TestEPLogin">
+                <methods>
+
+                </methods>
+
+            </class>
+
+            <class name="org.shikshalokam.frontend.ep.TestHome">
+                <methods>
+
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>
+

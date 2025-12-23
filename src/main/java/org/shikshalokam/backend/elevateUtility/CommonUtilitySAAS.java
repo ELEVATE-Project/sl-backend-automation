@@ -9,7 +9,7 @@ import io.restassured.response.Response;
 import static io.restassured.RestAssured.*;
 
 
-public class DeleteUserSAAS {
+public class CommonUtilitySAAS {
 
     public static String User_ID = null;
     public static String UserToken = null;
@@ -17,7 +17,7 @@ public class DeleteUserSAAS {
     static String baseUrl = fetchProperty("ep.baseURL");
     static String origin;
 
-    private static final Logger logger = LogManager.getLogger(DeleteUserSAAS.class);
+    private static final Logger logger = LogManager.getLogger(CommonUtilitySAAS.class);
 
 
     // Call the User API and delete the user
@@ -45,7 +45,7 @@ public class DeleteUserSAAS {
 
         RestAssured.baseURI = baseUrl;
 
-        boolean isshikshagrahaPresent = DerivingSystem.SelectTenants();
+        boolean isshikshagrahaPresent = CommonUtilitySAAS.DerivingSystem();
         if (isshikshagrahaPresent == true) {
             origin = fetchProperty("ep.sg.origin");
         } else {
@@ -100,6 +100,13 @@ public class DeleteUserSAAS {
             logger.error("Status Code: {}", response.getStatusCode());
         } else logger.info("Exception during user deletion");
     }
+
+    public static boolean DerivingSystem(){
+        String URL = fetchProperty("ep.url");
+        String searchString = "shikshagraha";
+        return URL.contains(searchString);
+    }
+
 
     public static String fetchProperty(String key) {
         return PropertyLoader.PROP_LIST.getProperty(key);

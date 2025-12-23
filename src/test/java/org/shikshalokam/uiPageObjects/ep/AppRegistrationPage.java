@@ -5,7 +5,7 @@ import com.microsoft.playwright.options.AriaRole;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.shikshalokam.backend.GmailAPI;
-import org.shikshalokam.backend.elevateUtility.DerivingSystem;
+import org.shikshalokam.backend.elevateUtility.CommonUtilitySAAS;
 import org.shikshalokam.uiPageObjects.PWBasePage;
 
 public class AppRegistrationPage extends PWBasePage {
@@ -38,7 +38,7 @@ public class AppRegistrationPage extends PWBasePage {
 //    Based on org select and enter the registration code
         String URL = fetchProperty("ep.url");
 
-        boolean isshikshagrahaPresent = DerivingSystem.SelectTenants();
+        boolean isshikshagrahaPresent = CommonUtilitySAAS.DerivingSystem();
         if (isshikshagrahaPresent) {
             System.out.println("shikshagraha:" + URL);
         } else {

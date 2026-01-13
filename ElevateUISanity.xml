@@ -21,6 +21,13 @@
         </classes>
     </test>
 
+<!--Access Solutions from Program Tile-->
+    <test name="TestSubmitProjectFromProgram">
+        <classes>
+            <class name="org.shikshalokam.frontend.ep.TestSubmitProjectFromProgram"/>
+        </classes>
+    </test>
+
 
 </suite>
 

@@ -25,10 +25,8 @@ public class AppAllPages {
     public static AppHomePage homePage = new AppHomePage(fetchProperty("ep.AppHomePage.title"));
     public static AppEPLoginPage eploginpage = new AppEPLoginPage(fetchProperty("ep.AppEPLoginPage.title"));
     public static AppRegistrationPage registration = new AppRegistrationPage(fetchProperty("ep.AppRegistrationPage.title"));
+    public static AppProgramPage programPage =new AppProgramPage(fetchProperty("ep.AppProgramPage.title"));
 
-}
-
-
-
-
-
+    // New page objects for program actions
+    public static AppSubmitProjectFromProgram submitProjectFromProgram = new AppSubmitProjectFromProgram(fetchProperty("ep.AppProgramPage.title"));
+   }

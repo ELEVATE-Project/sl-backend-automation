@@ -1,6 +1,9 @@
 package org.shikshalokam.uiPageObjects;
 
 import com.microsoft.playwright.*;
+import com.microsoft.playwright.options.AriaRole;
+import com.microsoft.playwright.options.LoadState;
+import com.microsoft.playwright.options.WaitForSelectorState;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.shikshalokam.backend.MentorEDBaseTest;
@@ -17,7 +20,11 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
+import java.util.regex.Pattern;
+
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
+import static org.testng.Assert.assertTrue;
 
 
 public class PWBasePage extends MentorEDBaseTest {
@@ -286,5 +293,243 @@ public class PWBasePage extends MentorEDBaseTest {
         Date futureDate = calendar.getTime();
         SimpleDateFormat formatter = new SimpleDateFormat("MMMM d, yyyy hh:mm a");
         return formatter.format(futureDate);
+    }
+
+    public static void selectProgramName(String selectProgramName) {
+        logger.info("Selecting Program name started");
+        page.getByText("Programs", new Page.GetByTextOptions().setExact(true)).click();
+        page.getByPlaceholder("Search your program here").click();
+        page.getByPlaceholder("Search your program here").fill(selectProgramName);
+        page.getByText(selectProgramName).click();
+        logger.info("Selecting Program name ended");
+
+    }
+
+    public static void accessProject() {
+        logger.info("Accessing Project from Program started.");
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Start Improvement")).click();
+        Boolean certificate = page.locator("lib-details-page span").filter(new Locator.FilterOptions().setHasText(Pattern.compile("^Certificate$"))).isVisible();
+        page.getByText("Task details").click();
+        page.getByRole(AriaRole.HEADING, new Page.GetByRoleOptions().setName("1. Teachers should understand")).click();
+        page.locator("#mat-select-value-1").click();
+        page.getByRole(AriaRole.OPTION, new Page.GetByRoleOptions().setName("Completed")).click();
+        page.getByRole(AriaRole.BANNER).locator("path").click();
+        page.getByRole(AriaRole.HEADING, new Page.GetByRoleOptions().setName("2. Teachers should implement")).click();
+        addSubtasks();
+        if (certificate) {
+            attachEvidenceAtTaskLevel();
+        }
+        page.getByRole(AriaRole.BANNER).locator("path").click();
+        page.getByRole(AriaRole.HEADING, new Page.GetByRoleOptions().setName("3. Teachers should implement")).click();
+        page.getByText("Not Started").click();
+        page.getByText("Completed").click();
+        page.getByRole(AriaRole.BANNER).locator("path").click();
+        page.getByRole(AriaRole.HEADING, new Page.GetByRoleOptions().setName("4. Teachers should implement")).click();
+        page.getByText("Not Started").click();
+        page.getByText("Completed").click();
+        if (certificate) {
+            attachEvidenceAtTaskLevel();
+        }
+        page.getByRole(AriaRole.BANNER).locator("path").click();
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Load more")).click();
+        page.getByRole(AriaRole.HEADING, new Page.GetByRoleOptions().setName("5. Teachers should upload")).click();
+        page.getByText("Not Started").click();
+        page.getByText("Completed").click();
+        page.getByRole(AriaRole.BANNER).locator("path").click();
+        addNewTask();
+
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Submit Improvement")).click();
+        if (certificate) {
+            Path png = evidencePath("PNG_Evidence.png");
+            Path mp4 = evidencePath("MP4_Evidence.mp4");
+            Path pdf = evidencePath("PDF_Evidence.pdf");
+            uploadProjectLevelEvidence(png, "Images");
+            uploadProjectLevelEvidence(mp4, "Videos");
+            uploadProjectLevelEvidence(pdf, "Files");
+
+            page.locator("mat-card").filter(new Locator.FilterOptions().setHasText("Links")).click();
+            page.getByLabel("", new Page.GetByLabelOptions().setExact(true)).check();
+            page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Upload").setExact(true)).click();
+            page.getByPlaceholder("Add link here").click();
+            page.getByPlaceholder("Add link here").fill(fetchProperty("ep.url"));
+            page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Save")).click();
+        }
+        page.getByRole(AriaRole.BANNER).locator("svg").click();
+
+        downloadActivity();
+        syncActivity();
+        shareActivity();
+        if (certificate) {
+            filesActivity();
+            page.getByRole(AriaRole.BANNER).locator("path").click();
+        }
+
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Submit Improvement")).click();
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Submit Improvement")).click();
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Submit")).click();
+        assertThat(page.getByText("You have submitted your project successfully")).isVisible();
+
+        if (certificate) {
+            logger.info("Certificate is generated for the project");
+            checkCertificateGenerated();
+        }
+        logger.info("Accessing Project from Program ended.");
+    }
+
+    public static void addNewTask() {
+        logger.info("Adding New Task started.");
+        page.getByText("Add your own task.").click();
+        page.getByText("Task description").click();
+        page.getByLabel("Task description").fill("Task name 1");
+        page.getByText("Not Started").click();
+        page.getByRole(AriaRole.OPTION, new Page.GetByRoleOptions().setName("Completed")).locator("span").click();
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Add task")).click();
+        assertThat(page.getByText("New Task has been")).isVisible();
+        logger.info("Adding New Task ended.");
+    }
+
+    public static void addSubtasks() {
+        logger.info("Adding Subtasks started.");
+        page.getByPlaceholder("Add subtask name").click();
+        page.getByPlaceholder("Add subtask name").fill("Sub task 1");
+        page.getByPlaceholder("Add subtask name").press("ArrowLeft");
+        page.getByPlaceholder("Add subtask name").press("ArrowRight");
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Add subtask")).click();
+        page.locator(".sub-task-body > div:nth-child(2) > .mat-mdc-form-field > .mat-mdc-text-field-wrapper > .mat-mdc-form-field-flex > .mat-mdc-form-field-infix").click();
+        page.getByRole(AriaRole.OPTION, new Page.GetByRoleOptions().setName("Completed")).click();
+        logger.info("Adding Subtasks ended.");
+    }
+
+    public static void downloadActivity() {
+        page.locator("lib-icon-list mat-icon").first().click();
+        assertThat(page.getByText("You have downloaded the")).isVisible();
+    }
+
+    public static void shareActivity() {
+        logger.info("Share Activity Project Started.");
+        page.locator("lib-icon-list mat-icon").nth(1).click();
+        page.getByText("Copy Link").click();
+        assertThat(page.getByText("Link copied to clipboard! You")).isVisible();
+        logger.info("Share Activity Project ended.");
+    }
+
+    public static void filesActivity() {
+        logger.info("Check attached files are visible Started.");
+        page.locator("lib-icon-list mat-icon").nth(2).click();
+        verifyAttachedFiles(1);
+        verifyAttachedFiles(2);
+        verifyAttachedFiles(3);
+        page.getByText("Videos", new Page.GetByTextOptions().setExact(true)).click();
+        verifyAttachedFiles(1);
+        verifyAttachedFiles(2);
+        verifyAttachedFiles(3);
+        page.getByText("Files").click();
+        verifyAttachedLink(1, "Files");
+        verifyAttachedLink(2, "Files");
+        verifyAttachedLink(3, "Files");
+        page.getByText("Links").click();
+        verifyAttachedLink(1, "Links");
+        verifyAttachedLink(2, "Links");
+        verifyAttachedLink(3, "Links");
+        logger.info("Check attached files are visible ended.");
+    }
+
+    public static void verifyAttachedFiles(int expectedCount) {
+        page.locator("(//div[@class=\"primary-icon cursor-pointer break-words [word-break:break-word]\"])[" + expectedCount + "]").click();
+        assertThat(page.locator("//mat-icon[@data-mat-icon-name=\"cancel\" and @type=\"button\"]")).isVisible();
+        page.locator("//mat-icon[@data-mat-icon-name=\"cancel\" and @type=\"button\"]").click();
+    }
+
+    public static void verifyAttachedLink(int expectedCount, String typeOfFile) {
+        Page mainPage = page;
+        Page newTab = page.waitForPopup(() -> {
+            page.locator("(//div[@class='primary-icon cursor-pointer break-words [word-break:break-word]'])[" + expectedCount + "]"
+            ).click();
+        });
+        newTab.waitForLoadState(LoadState.DOMCONTENTLOADED);
+        if (Objects.equals(typeOfFile, "Links")) {
+            assertTrue(newTab.url().contains(fetchProperty("ep.url")));
+        }
+        newTab.close();
+    }
+
+    public static void syncActivity() {
+        logger.info("Sync Activity Project Started.");
+        page.locator("lib-icon-list mat-icon").nth(3).click();
+        Locator syncToast = page.getByText("Your project has been synced");
+
+        syncToast.waitFor(
+                new Locator.WaitForOptions()
+                        .setState(WaitForSelectorState.VISIBLE)
+                        .setTimeout(15000)
+        );
+
+        assertThat(syncToast).isVisible();
+        logger.info("Sync Activity Project ended.");
+    }
+
+    public static void attachEvidenceAtTaskLevel() {
+        logger.info("Attaching Evidence for Project Started.");
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Add files")).click();
+        page.getByLabel("", new Page.GetByLabelOptions().setExact(true)).check();
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Upload").setExact(true)).click();
+
+        Path png = evidencePath("PNG_Evidence.png");
+        Path pdf = evidencePath("PDF_Evidence.pdf");
+        Path mp4 = evidencePath("MP4_Evidence.mp4");
+
+        uploadTaskLevelEvidence(png, "Images");
+        uploadTaskLevelEvidence(mp4, "Videos");
+        uploadTaskLevelEvidence(pdf, "Files");
+        page.locator("mat-card").filter(new Locator.FilterOptions().setHasText("Links")).click();
+        page.getByPlaceholder("Add link here").click();
+        page.getByPlaceholder("Add link here").fill(fetchProperty("ep.url"));
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Save")).click();
+
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Attach files")).click();
+        assertThat(page.getByText("Files attached successfully")).isVisible();
+        logger.info("Attaching Evidence for Project ended.");
+
+    }
+
+    public static void uploadTaskLevelEvidence(Path filePath, String fileType) {
+        FileChooser fileChooser = page.waitForFileChooser(() -> {
+            page.locator("mat-card").filter(new Locator.FilterOptions().setHasText(fileType)).click();
+        });
+        fileChooser.setFiles(filePath);
+        assertThat(page.getByText("Attached Successfully")).isVisible();
+    }
+
+    public static void uploadProjectLevelEvidence(Path filePaths, String fileType) {
+        FileChooser fileChooser = page.waitForFileChooser(() -> {
+            page.locator("mat-card").filter(new Locator.FilterOptions().setHasText(fileType)).click();
+            page.getByLabel("", new Page.GetByLabelOptions().setExact(true)).check();
+            page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Upload").setExact(true)).click();
+        });
+        fileChooser.setFiles(filePaths);
+        assertThat(page.getByText("Attached Successfully")).isVisible();
+    }
+
+    public static Path evidencePath(String fileName) {
+        return Paths.get(
+                System.getProperty("user.dir"),
+                "src", "main", "resources", "AllEvidence", fileName
+        );
+    }
+
+    public static void checkCertificateGenerated() {
+        page.locator("lib-icon-list mat-icon").nth(2).click();
+        assertThat(page.locator("div").filter(new Locator.FilterOptions().setHasText("@font-face { font-family: '")).nth(2)).isVisible();
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Download")).click();
+        Download download = page.waitForDownload(() -> {
+            page.getByRole(AriaRole.MENUITEM, new Page.GetByRoleOptions().setName("PDF")).click();
+        });
+        page.getByText("Certificate is getting").click();
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Download")).click();
+        Download download1 = page.waitForDownload(() -> {
+            page.getByRole(AriaRole.MENUITEM, new Page.GetByRoleOptions().setName("PNG")).click();
+        });
+        page.getByText("Certificate is getting").click();
+        page.getByRole(AriaRole.BANNER).locator("svg").click();
     }
 }

@@ -14,7 +14,7 @@ public class MentorBase {
         PropertyLoader.loadProperties();
         Configurator.initialize(null, System.getProperty("user.dir")+File.separator+ Paths.get("src","main","resources","config").toString()+File.separator+"log4j2.properties");
         GmailAPI.deleteEmails();
-        CommonUtilitySAAS.deleteUser(fetchProperty("ep.mail"), fetchProperty("ep.password"),fetchProperty("ep.superadminmail"), fetchProperty("ep.superadminpassword"));
+//        CommonUtilitySAAS.deleteUser(fetchProperty("ep.mail"), fetchProperty("ep.password"),fetchProperty("ep.superadminmail"), fetchProperty("ep.superadminpassword"));
     }
 
     public static URI createURI(String endpoint) {

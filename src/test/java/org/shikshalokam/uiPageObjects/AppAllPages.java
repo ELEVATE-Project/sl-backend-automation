@@ -29,4 +29,4 @@ public class AppAllPages {
 
     // New page objects for program actions
     public static AppSubmitProjectFromProgram submitProjectFromProgram = new AppSubmitProjectFromProgram(fetchProperty("ep.AppProgramPage.title"));
-   }
+}

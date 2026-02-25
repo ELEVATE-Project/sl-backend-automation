@@ -15,6 +15,7 @@ public class TestSubmitProjectFromProgram {
         robot.sees(AppAllPages.homePage).clickOnPrograms();
         robot.sees(AppAllPages.submitProjectFromProgram).selectProgramName(fetchProperty("ep.programName"));
         robot.sees(AppAllPages.submitProjectFromProgram).submitProjectFromProgram(fetchProperty("ep.projectWithCertificateName"));
+        robot.quitAppBrowser();
     }
     @Test(priority = 2, description = "Submit project from program WithOut Certificate")
     public void testSubmitProjectWithOutCertificateFromProgram() {
@@ -24,6 +25,7 @@ public class TestSubmitProjectFromProgram {
         robot.sees(AppAllPages.homePage).clickOnPrograms();
         robot.sees(AppAllPages.submitProjectFromProgram).selectProgramName(fetchProperty("ep.programName"));
         robot.sees(AppAllPages.submitProjectFromProgram).submitProjectFromProgram(fetchProperty("ep.projectWithOutCertificateName"));
+        robot.quitAppBrowser();
     }
 }
 

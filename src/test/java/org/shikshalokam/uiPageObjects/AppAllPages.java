@@ -29,4 +29,13 @@ public class AppAllPages {
 
     // New page objects for program actions
     public static AppSubmitProjectFromProgram submitProjectFromProgram = new AppSubmitProjectFromProgram(fetchProperty("ep.AppProgramPage.title"));
+    public static AppSubmitObservationWithRubricFromProgram submitObservationWithRubricFromProgram = new AppSubmitObservationWithRubricFromProgram(fetchProperty("ep.AppProgramPage.title"));
+    public static AppSubmitObservationWithoutRubricFromProgram submitObservationWithoutRubricFromProgram = new AppSubmitObservationWithoutRubricFromProgram(fetchProperty("ep.AppProgramPage.title"));
+    public static AppSubmitSurveyFromProgram submitSurveyFromProgram = new AppSubmitSurveyFromProgram(fetchProperty("ep.AppProgramPage.title"));
+
+    // New page objects for tile actions
+    public static AppSubmitProjectFromTile submitProjectFromTile = new AppSubmitProjectFromTile(fetchProperty("ep.AppProgramPage.title"));
+    public static AppSubmitObservationWithRubricFromTile submitObservationWithRubricFromTile = new AppSubmitObservationWithRubricFromTile(fetchProperty("ep.AppProgramPage.title"));
+    public static AppSubmitObservationWithoutRubricFromTile submitObservationWithoutRubricFromTile = new AppSubmitObservationWithoutRubricFromTile(fetchProperty("ep.AppProgramPage.title"));
+    public static AppSubmitSurveyFromTile submitSurveyFromTile = new AppSubmitSurveyFromTile(fetchProperty("ep.AppProgramPage.title"));
 }

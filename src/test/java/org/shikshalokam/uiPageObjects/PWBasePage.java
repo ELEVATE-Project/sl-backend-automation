@@ -1,6 +1,10 @@
 package org.shikshalokam.uiPageObjects;
 
 import com.microsoft.playwright.*;
+import com.microsoft.playwright.assertions.LocatorAssertions;
+import com.microsoft.playwright.options.AriaRole;
+import com.microsoft.playwright.options.LoadState;
+import com.microsoft.playwright.options.WaitForSelectorState;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.shikshalokam.backend.MentorEDBaseTest;
@@ -17,7 +21,11 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
+import java.util.regex.Pattern;
+
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
+import static org.testng.Assert.assertTrue;
 
 
 public class PWBasePage extends MentorEDBaseTest {
@@ -287,4 +295,403 @@ public class PWBasePage extends MentorEDBaseTest {
         SimpleDateFormat formatter = new SimpleDateFormat("MMMM d, yyyy hh:mm a");
         return formatter.format(futureDate);
     }
+
+    public static void selectProgramName(String selectProgramName) {
+        logger.info("Selecting Program name started");
+        page.getByText("Programs", new Page.GetByTextOptions().setExact(true)).click();
+        page.getByPlaceholder("Search your program here").click();
+        page.getByPlaceholder("Search your program here").fill(selectProgramName);
+        page.getByText(selectProgramName, new Page.GetByTextOptions().setExact(true)).click();
+        logger.info("Selecting Program name ended");
+
+    }
+
+    public static void accessProject() {
+        logger.info("Accessing Project from Program started.");
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Start Improvement")).click();
+        Boolean certificate = page.locator("lib-details-page span").filter(new Locator.FilterOptions().setHasText(Pattern.compile("^Certificate$"))).isVisible();
+        page.getByText("Task details").click();
+        page.getByRole(AriaRole.HEADING, new Page.GetByRoleOptions().setName("1. Teachers should understand")).click();
+        page.locator("#mat-select-value-1").click();
+        page.getByRole(AriaRole.OPTION, new Page.GetByRoleOptions().setName("Completed")).click();
+        page.getByRole(AriaRole.BANNER).locator("path").click();
+        page.getByRole(AriaRole.HEADING, new Page.GetByRoleOptions().setName("2. Teachers should implement")).click();
+        addSubtasks();
+        if (certificate) {
+            attachEvidenceAtTaskLevel();
+        }
+        page.getByRole(AriaRole.BANNER).locator("path").click();
+        page.getByRole(AriaRole.HEADING, new Page.GetByRoleOptions().setName("3. Teachers should implement")).click();
+        page.getByText("Not Started").click();
+        page.getByText("Completed").click();
+        page.getByRole(AriaRole.BANNER).locator("path").click();
+        page.getByRole(AriaRole.HEADING, new Page.GetByRoleOptions().setName("4. Teachers should implement")).click();
+        page.getByText("Not Started").click();
+        page.getByText("Completed").click();
+        if (certificate) {
+            attachEvidenceAtTaskLevel();
+        }
+        page.getByRole(AriaRole.BANNER).locator("path").click();
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Load more")).click();
+        page.getByRole(AriaRole.HEADING, new Page.GetByRoleOptions().setName("5. Teachers should upload")).click();
+        page.getByText("Not Started").click();
+        page.getByText("Completed").click();
+        page.getByRole(AriaRole.BANNER).locator("path").click();
+        addNewTask();
+
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Submit Improvement")).click();
+        if (certificate) {
+            Path png = evidencePath("PNG_Evidence.png");
+            Path mp4 = evidencePath("MP4_Evidence.mp4");
+            Path pdf = evidencePath("PDF_Evidence.pdf");
+            uploadProjectLevelEvidence(png, "Images");
+            uploadProjectLevelEvidence(mp4, "Videos");
+            uploadProjectLevelEvidence(pdf, "Files");
+
+            page.locator("mat-card").filter(new Locator.FilterOptions().setHasText("Links")).click();
+            page.getByLabel("", new Page.GetByLabelOptions().setExact(true)).check();
+            page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Upload").setExact(true)).click();
+            page.getByPlaceholder("Add link here").click();
+            page.getByPlaceholder("Add link here").fill(fetchProperty("ep.url"));
+            page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Save")).click();
+        }
+        page.getByRole(AriaRole.BANNER).locator("svg").click();
+
+        downloadActivity();
+        syncActivity();
+        shareActivity();
+        if (certificate) {
+            filesActivity();
+            page.getByRole(AriaRole.BANNER).locator("path").click();
+        }
+
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Submit Improvement")).click();
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Submit Improvement")).click();
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Submit")).click();
+
+        Locator Syncinglocator = page.getByText("Syncing Project");
+            if(Syncinglocator.isVisible()) {
+                Syncinglocator.waitFor(
+                        new Locator.WaitForOptions()
+                                .setState(WaitForSelectorState.HIDDEN)
+                                .setTimeout(30000)
+                );            }
+        assertThat(page.getByText("You have submitted your project successfully")).isVisible();
+
+        if (certificate) {
+            logger.info("Certificate is generated for the project");
+            checkCertificateGenerated();
+        }
+        logger.info("Accessing Project from Program ended.");
+    }
+
+    public static void addNewTask() {
+        logger.info("Adding New Task started.");
+        page.getByText("Add your own task.").click();
+        page.getByText("Task description").click();
+        page.getByLabel("Task description").fill("Task name 1");
+        page.getByText("Not Started").click();
+        page.getByRole(AriaRole.OPTION, new Page.GetByRoleOptions().setName("Completed")).locator("span").click();
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Add task")).click();
+        assertThat(page.getByText("New Task has been")).isVisible();
+        logger.info("Adding New Task ended.");
+    }
+
+    public static void addSubtasks() {
+        logger.info("Adding Subtasks started.");
+        page.getByPlaceholder("Add subtask name").click();
+        page.getByPlaceholder("Add subtask name").fill("Sub task 1");
+        page.getByPlaceholder("Add subtask name").press("ArrowLeft");
+        page.getByPlaceholder("Add subtask name").press("ArrowRight");
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Add subtask")).click();
+        page.locator(".sub-task-body > div:nth-child(2) > .mat-mdc-form-field > .mat-mdc-text-field-wrapper > .mat-mdc-form-field-flex > .mat-mdc-form-field-infix").click();
+        page.getByRole(AriaRole.OPTION, new Page.GetByRoleOptions().setName("Completed")).click();
+        logger.info("Adding Subtasks ended.");
+    }
+
+    public static void downloadActivity() {
+        page.locator("lib-icon-list mat-icon").first().click();
+        assertThat(page.getByText("You have downloaded the")).isVisible();
+    }
+
+    public static void shareActivity() {
+        logger.info("Share Activity Project Started.");
+        page.locator("lib-icon-list mat-icon").nth(1).click();
+        page.getByText("Copy Link").click();
+        assertThat(page.getByText("Link copied to clipboard! You")).isVisible();
+        logger.info("Share Activity Project ended.");
+    }
+
+    public static void filesActivity() {
+        logger.info("Check attached files are visible Started.");
+        page.locator("lib-icon-list mat-icon").nth(2).click();
+        verifyAttachedFiles(1);
+        verifyAttachedFiles(2);
+        verifyAttachedFiles(3);
+        page.getByText("Videos", new Page.GetByTextOptions().setExact(true)).click();
+        verifyAttachedFiles(1);
+        verifyAttachedFiles(2);
+        verifyAttachedFiles(3);
+        page.getByText("Files").click();
+        verifyAttachedLink(1, "Files");
+        verifyAttachedLink(2, "Files");
+        verifyAttachedLink(3, "Files");
+        page.getByText("Links").click();
+        verifyAttachedLink(1, "Links");
+        verifyAttachedLink(2, "Links");
+        verifyAttachedLink(3, "Links");
+        logger.info("Check attached files are visible ended.");
+    }
+
+    public static void verifyAttachedFiles(int expectedCount) {
+        page.locator("(//div[@class=\"primary-icon cursor-pointer break-words [word-break:break-word]\"])[" + expectedCount + "]").click();
+        assertThat(page.locator("//mat-icon[@data-mat-icon-name=\"cancel\" and @type=\"button\"]")).isVisible();
+        page.locator("//mat-icon[@data-mat-icon-name=\"cancel\" and @type=\"button\"]").click();
+    }
+
+    public static void verifyAttachedLink(int expectedCount, String typeOfFile) {
+        Page mainPage = page;
+        Page newTab = page.waitForPopup(() -> {
+            page.locator("(//div[@class='primary-icon cursor-pointer break-words [word-break:break-word]'])[" + expectedCount + "]"
+            ).click();
+        });
+        newTab.waitForLoadState(LoadState.DOMCONTENTLOADED);
+        if (Objects.equals(typeOfFile, "Links")) {
+            assertTrue(newTab.url().contains(fetchProperty("ep.url")));
+        }
+        newTab.close();
+    }
+
+    public static void syncActivity() {
+        logger.info("Sync Activity Project Started.");
+        page.locator("lib-icon-list mat-icon").nth(3).click();
+        Locator syncingText = page.getByText("Syncing Project").nth(1);
+        assertThat(syncingText).isHidden(
+                new LocatorAssertions.IsHiddenOptions().setTimeout(30000)
+        );
+        Locator syncToast = page.getByText("Your project has been synced");
+
+        syncToast.waitFor(
+                new Locator.WaitForOptions()
+                        .setState(WaitForSelectorState.VISIBLE)
+                        .setTimeout(15000)
+        );
+
+        assertThat(syncToast).isVisible();
+        logger.info("Sync Activity Project ended.");
+    }
+
+    public static void attachEvidenceAtTaskLevel() {
+        logger.info("Attaching Evidence for Project Started.");
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Add files")).click();
+        page.getByLabel("", new Page.GetByLabelOptions().setExact(true)).check();
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Upload").setExact(true)).click();
+
+        Path png = evidencePath("PNG_Evidence.png");
+        Path pdf = evidencePath("PDF_Evidence.pdf");
+        Path mp4 = evidencePath("MP4_Evidence.mp4");
+
+        uploadTaskLevelEvidence(png, "Images");
+        uploadTaskLevelEvidence(mp4, "Videos");
+        uploadTaskLevelEvidence(pdf, "Files");
+        page.locator("mat-card").filter(new Locator.FilterOptions().setHasText("Links")).click();
+        page.getByPlaceholder("Add link here").click();
+        page.getByPlaceholder("Add link here").fill(fetchProperty("ep.url"));
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Save")).click();
+
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Attach files")).click();
+        assertThat(page.getByText("Files attached successfully")).isVisible();
+        logger.info("Attaching Evidence for Project ended.");
+
+    }
+
+    public static void uploadTaskLevelEvidence(Path filePath, String fileType) {
+        FileChooser fileChooser = page.waitForFileChooser(() -> {
+            page.locator("mat-card").filter(new Locator.FilterOptions().setHasText(fileType)).click();
+        });
+        fileChooser.setFiles(filePath);
+        assertThat(page.getByText("Attached Successfully")).isVisible();
+    }
+
+    public static void uploadProjectLevelEvidence(Path filePaths, String fileType) {
+        FileChooser fileChooser = page.waitForFileChooser(() -> {
+            page.locator("mat-card").filter(new Locator.FilterOptions().setHasText(fileType)).click();
+            page.getByLabel("", new Page.GetByLabelOptions().setExact(true)).check();
+            page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Upload").setExact(true)).click();
+        });
+        fileChooser.setFiles(filePaths);
+        assertThat(page.getByText("Attached Successfully")).isVisible();
+    }
+
+    public static Path evidencePath(String fileName) {
+        return Paths.get(
+                System.getProperty("user.dir"),
+                "src", "main", "resources", "AllEvidence", fileName
+        );
+    }
+
+    public static void checkCertificateGenerated() {
+        page.locator("lib-icon-list mat-icon").nth(2).click();
+        page.reload();
+        Locator certificateLocator = page.locator("#stateTitle");
+        assertThat(certificateLocator)
+                .isVisible(new LocatorAssertions.IsVisibleOptions().setTimeout(30000));
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Download")).click();
+        Download download = page.waitForDownload(() -> {
+            page.getByRole(AriaRole.MENUITEM, new Page.GetByRoleOptions().setName("PDF")).click();
+        });
+        page.getByText("Certificate is getting").click();
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Download")).click();
+        Download download1 = page.waitForDownload(() -> {
+            page.getByRole(AriaRole.MENUITEM, new Page.GetByRoleOptions().setName("PNG")).click();
+        });
+        page.getByText("Certificate is getting").click();
+        page.getByRole(AriaRole.BANNER).locator("svg").click();
+    }
+
+//    Project: code ends, Observation: code starts here.
+        public static void accessingObservationWithRubric() {
+            logger.info("Submitting an Observation With Rubric started.");
+            page.getByRole(AriaRole.HEADING, new Page.GetByRoleOptions().setName("Observation")).click();
+            page.locator("div").filter(new Locator.FilterOptions().setHasText(Pattern.compile("^0%$"))).nth(1).click();
+            page.getByText("Planning & Execution").click();
+            page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Start")).click();
+            page.getByPlaceholder("Enter your response").fill("Stud name");
+            page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Add remarks")).click();
+            page.getByPlaceholder("Add a remark").fill("Remarks");
+            attachEvidenceForSurveyService();
+            page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Submit")).click();
+            page.locator("(//button[@class=\"btn btnMargin ng-star-inserted\"])[1]").click();
+
+            page.locator("div").filter(new Locator.FilterOptions().setHasText(Pattern.compile("^0%$"))).nth(1).click();
+            page.getByText("Data based Governance").click();
+            page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Start")).click();
+            page.getByLabel("Male", new Page.GetByLabelOptions().setExact(true)).check();
+            page.getByLabel("IAF").check();
+            page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("2")).click();
+            page.getByPlaceholder("Enter your response").fill("Selector");
+            page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Add remarks")).click();
+            page.getByPlaceholder("Add a remark").fill("Remarks");
+            page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Submit")).click();
+            page.locator("(//button[@class=\"btn btnMargin ng-star-inserted\"])[1]").click();
+            page.locator("//button[contains(@class,'back-button mdc-icon-button mat-mdc-icon-button mat-unthemed mat-mdc-button-base')]").click();
+
+            Locator syncingText = page.getByText("Uploading").nth(1);
+            assertThat(syncingText).isHidden(
+                    new LocatorAssertions.IsHiddenOptions().setTimeout(30000)
+            );
+            assertThat(page.getByText("Your observation has been")).isVisible();
+            logger.info("Submitting an Observation With Rubric ended.");
+        }
+
+        public static void attachEvidenceForSurveyService() {
+            logger.info("Attaching Evidence for Observation Started.");
+            Path png = evidencePath("PNG_Evidence.png");
+            Path pdf = evidencePath("PDF_Evidence.pdf");
+            Path mp4 = evidencePath("MP4_Evidence.mp4");
+            fileChooserForSurveyService(png);
+            fileChooserForSurveyService(mp4);
+            fileChooserForSurveyService(pdf);
+            logger.info("Attaching Evidence for Observation ended.");
+        }
+
+        public static void fileChooserForSurveyService(Path filePath) {
+            if (page.locator("#undefined span").filter(new Locator.FilterOptions().setHasText("upload Add file")).isVisible())
+            {
+
+                FileChooser fileChooser = page.waitForFileChooser(() -> {
+                    page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Add file")).click();
+                    page.getByLabel("", new Page.GetByLabelOptions().setExact(true)).check();
+                    page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Upload").setExact(true)).click();
+                });
+                fileChooser.setFiles(filePath);
+                assertThat(page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Ok"))).isVisible();
+                page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Ok")).click();
+            }
+        }
+
+        public static void observeAgain(int observationCount, boolean withRubric) {
+            logger.info("Observe Again action started.");
+            for(int i=1; i<=observationCount; i++) {
+                page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Observe again")).click();
+                page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Yes")).click();
+
+                if (withRubric) {
+                    accessingObservationWithRubric();
+                } else {
+                    accessingObservationWithOUTRubric();
+                }
+            }
+            logger.info("Observe Again action ended.");
+        }
+
+        public static void addEntity(String EntityName, boolean withRubric) {
+            logger.info("Adding Entity started.");
+            page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Add school")).click();
+            page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Search school")).fill(EntityName);
+            page.getByRole(AriaRole.TEXTBOX, new Page.GetByRoleOptions().setName("Search school")).click();
+            page.getByRole(AriaRole.OPTION, new Page.GetByRoleOptions().setName(EntityName)).locator("div").first().click();
+            page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Add")).click();
+            page.getByText(EntityName).click();
+            if (withRubric) {
+                accessingObservationWithRubric();
+            } else {
+                accessingObservationWithOUTRubric();
+            }
+            logger.info("Adding Entity ended.");
+        }
+
+        public static void accessingObservationWithOUTRubric() {
+            logger.info("Submitting an Observation Without Rubric started.");
+            page.getByRole(AriaRole.HEADING, new Page.GetByRoleOptions().setName("Observation")).click();
+            page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Start")).click();
+            page.getByLabel("KARNATAKA PUBLIC SCHOOLS GHPS").check();
+            page.getByLabel("Open calendar").click();
+            page.getByLabel("Choose month and year").click();
+            page.getByLabel("2026").click();
+            page.getByLabel("Jan").click();
+            page.getByLabel("11 January").click();
+            page.locator("[id=\"\\30 \"] span").filter(new Locator.FilterOptions().setHasText("3 . Has the teacher received")).getByLabel("Yes").check();
+            page.getByText("Yes", new Page.GetByTextOptions().setExact(true)).nth(1).click();
+            page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("2")).click();
+            page.getByRole(AriaRole.RADIO, new Page.GetByRoleOptions().setName("Yes").setExact(true)).check();
+            page.getByLabel("Yes, a fully equipped science").check();
+            page.getByLabel("YouTube").check();
+            page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("3")).click();
+            page.getByPlaceholder("Enter your response").fill("2");
+            page.getByRole(AriaRole.RADIO, new Page.GetByRoleOptions().setName("Yes")).check();
+            page.getByPlaceholder("Enter your response").click();
+            page.getByRole(AriaRole.SLIDER).fill("5");
+            page.getByRole(AriaRole.RADIO, new Page.GetByRoleOptions().setName("Yes")).check();
+            page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Submit")).click();
+            page.locator("(//button[@class=\"btn btnMargin ng-star-inserted\"])[1]").click();
+            assertThat(page.getByText("Your observation has been")).isVisible();
+            logger.info("Submitting an Observation Without Rubric ended.");
+        }
+
+        public void accessingSurvey(String surveyName) {
+            logger.info("Submitting a Survey (from Program) started.");
+            page.getByText(surveyName, new Page.GetByTextOptions().setExact(true)).click();
+            page.getByLabel("Always").check();
+            attachEvidenceForSurveyService();
+            page.getByLabel("Internet videos").check();
+            page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Add remarks")).first().click();
+            page.getByPlaceholder("Add a remark").fill("Remarks");
+            page.getByLabel("Group discussions").check();
+            page.getByLabel("Very confident").check();
+            page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("2")).click();
+            page.getByLabel("Lack of materials").check();
+            page.getByLabel("Lack of training").check();
+            page.getByLabel("Participate with support").check();
+            page.getByLabel("Significant improvement").check();
+            page.getByRole(AriaRole.SLIDER).fill("6");
+            page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Submit")).click();
+            page.locator("(//button[@class=\"btn btnMargin ng-star-inserted\"])[1]").click();
+            Locator syncingText = page.getByText("Uploading").nth(1);
+            assertThat(syncingText).isHidden(
+                    new LocatorAssertions.IsHiddenOptions().setTimeout(30000)
+            );
+            assertThat(page.getByText("Your survey has been")).isVisible();
+            logger.info("Submitting a Survey (from Program) ended.");
+        }
 }

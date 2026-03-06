@@ -29,7 +29,7 @@ public class AppRegistrationPage extends PWBasePage {
         page.getByLabel("Password *", new Page.GetByLabelOptions().setExact(true)).fill(fetchProperty("ep.password"));
         page.getByLabel("Confirm Password*").click();
         page.getByLabel("Confirm Password*").fill(fetchProperty("ep.password"));
-        page.getByLabel("Student").first().click();
+        page.locator("(//div[@role=\"combobox\"])[1]").click();
         page.getByRole(AriaRole.OPTION, new Page.GetByRoleOptions().setName(fetchProperty("ep.role"))).first().click();
         page.getByLabel("Sub-Role *").click();
         page.getByRole(AriaRole.OPTION, new Page.GetByRoleOptions().setName(fetchProperty("ep.subrole1"))).getByRole(AriaRole.CHECKBOX).check();
@@ -66,7 +66,7 @@ public class AppRegistrationPage extends PWBasePage {
         logger.info(script);
         page.getByLabel("OTP digit 1").click();
         page.evaluate(script);
-        page.waitForTimeout(2000);
+        page.waitForTimeout(10000);
         page.keyboard().down("Control");
         page.keyboard().press("KeyV");
         page.keyboard().up("Control");

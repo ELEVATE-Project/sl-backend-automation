@@ -21,6 +21,56 @@
         </classes>
     </test>
 
+<!--Access Solutions from Program Tile-->
+    <test name="TestSubmitProjectFromProgram">
+        <classes>
+            <class name="org.shikshalokam.frontend.ep.TestSubmitProjectFromProgram"/>
+        </classes>
+    </test>
+
+    <test name="TestSubmitObservationWithRubricFromProgram">
+        <classes>
+            <class name="org.shikshalokam.frontend.ep.TestSubmitObservationWithRubricFromProgram"/>
+        </classes>
+    </test>
+
+    <test name="TestSubmitObservationWithoutRubricFromProgram">
+        <classes>
+            <class name="org.shikshalokam.frontend.ep.TestSubmitObservationWithoutRubricFromProgram"/>
+        </classes>
+    </test>
+
+    <test name="TestSubmitSurveyFromProgram">
+        <classes>
+            <class name="org.shikshalokam.frontend.ep.TestSubmitSurveyFromProgram"/>
+        </classes>
+    </test>
+
+    <!--Access Solutions from Specific Tiles-->
+
+    <test name="TestSubmitProjectFromTile">
+        <classes>
+            <class name="org.shikshalokam.frontend.ep.TestSubmitProjectFromTile"/>
+        </classes>
+    </test>
+
+    <test name="TestSubmitObservationWithRubricFromTile">
+        <classes>
+            <class name="org.shikshalokam.frontend.ep.TestSubmitObservationWithRubricFromTile"/>
+        </classes>
+    </test>
+
+    <test name="TestSubmitObservationWithoutRubricFromTile">
+        <classes>
+            <class name="org.shikshalokam.frontend.ep.TestSubmitObservationWithoutRubricFromTile"/>
+        </classes>
+    </test>
+
+    <test name="TestSubmitSurveyFromTile">
+        <classes>
+            <class name="org.shikshalokam.frontend.ep.TestSubmitSurveyFromTile"/>
+        </classes>
+    </test>
 
 </suite>
 

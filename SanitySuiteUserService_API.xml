@@ -1,0 +1,18 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="UserServiceApiTestSuite">
+    <listeners>
+        <listener class-name="org.shikshalokam.Listerners.SLCustomListener"/>
+    </listeners>
+    <test name="UserServiceSanityTests">
+        <classes>
+
+            <class name="org.shikshalokam.backend.userservice.TestUserServiceLogin">
+                <methods>
+                    <include name="successfulLoginScp"/>
+                    <include name="invalidLoginScp"/>
+                    <include name="checkEmptyFieldsForLoginCredentials"/>
+                </methods>
+            </class>
+        </classes>
+    </test> <!-- Test -->
+</suite> <!-- Suite -->

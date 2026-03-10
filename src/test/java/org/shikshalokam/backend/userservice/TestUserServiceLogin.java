@@ -159,9 +159,9 @@ public class TestUserServiceLogin extends UserServiceBaseTest {
             RestAssured.baseURI = UserServiceBaseTest.BASE_URL;
             String jsonBody = "{\"identifier\": \"" + identifier + "\", \"password\": \"" + password + "\"}";
             response = given().contentType("application/json")
-                .header("origin", PropertyLoader.PROP_LIST.getProperty("userservice.qa.tenantdomain.origin"))
-                .body(jsonBody)
-                .post(new URI(PropertyLoader.PROP_LIST.get("userservice.login.endpointasuser").toString()));
+                    .header("origin", PropertyLoader.PROP_LIST.getProperty("userservice.qa.tenantdomain.origin"))
+                    .body(jsonBody)
+                    .post(new URI(PropertyLoader.PROP_LIST.get("userservice.login.endpointasuser").toString()));
             if (response == null) {
                 logger.info("No response received login to the userservice is failed");
                 System.exit(-1);
@@ -184,9 +184,9 @@ public class TestUserServiceLogin extends UserServiceBaseTest {
             RestAssured.baseURI = UserServiceBaseTest.BASE_URL;
             String jsonBody = "{\"identifier\": \"" + identifier + "\", \"password\": \"" + password + "\", \"phone_code\": \"" + phoneCode + "\"}";
             response = given().contentType("application/json")
-                .header("origin", PropertyLoader.PROP_LIST.getProperty("userservice.qa.tenantdomain.origin"))
-                .body(jsonBody)
-                .post(new URI(PropertyLoader.PROP_LIST.get("userservice.login.endpointasuser").toString()));
+                    .header("origin", PropertyLoader.PROP_LIST.getProperty("userservice.qa.tenantdomain.origin"))
+                    .body(jsonBody)
+                    .post(new URI(PropertyLoader.PROP_LIST.get("userservice.login.endpointasuser").toString()));
             if (response == null) {
                 logger.info("No response received login to the userservice is failed");
                 System.exit(-1);

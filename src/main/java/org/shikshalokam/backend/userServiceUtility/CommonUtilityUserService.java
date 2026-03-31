@@ -103,7 +103,7 @@ public class CommonUtilityUserService {
 
     public static boolean DerivingSystem(){
         String URL = fetchProperty("userservice.url");
-        String searchString = "shikshagraha";
+        String searchString = "shikshalokam";
         return URL.contains(searchString);
     }
 

@@ -6,11 +6,17 @@
     <test name="UserServiceSanityTests">
         <classes>
 
-            <class name="org.shikshalokam.backend.userservice.TestUserServiceLogin">
+            <class name="org.shikshalokam.backend.userservice.TestUserServiceLoginPassing">
                 <methods>
-                    <include name="successfulLoginScp"/>
-                    <include name="invalidLoginScp"/>
-                    <include name="checkEmptyFieldsForLoginCredentials"/>
+                    <include name="successfulLoginWithPhoneNumber"/>
+                    <include name="invalidLoginWithPhoneNumber"/>
+                    <include name="emptyPasswordWithPhoneNumber"/>
+                    <include name="successfulLoginWithUsername"/>
+                    <include name="invalidLoginWithUsername"/>
+                    <include name="emptyPasswordWithUsername"/>
+                    <include name="successfulLoginWithEmail"/>
+                    <include name="invalidLoginWithEmail"/>
+                    <include name="emptyPasswordWithEmail"/>
                 </methods>
             </class>
         </classes>

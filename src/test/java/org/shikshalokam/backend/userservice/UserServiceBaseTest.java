@@ -17,7 +17,7 @@ public class UserServiceBaseTest extends MentorBase {
     public static Response response = null;
     public static String BASE_URL = PropertyLoader.PROP_LIST.getProperty("userservice.qa.api.base.url");
 
-    public static Response loginToUserService(String loginId, String password) {
+    public static Response loginToUserService(String loginId, String password, Object o) {
         try {
             RestAssured.baseURI = BASE_URL;
             response = given().contentType("application/x-www-form-urlencoded; charset=utf-8").header("origin", PropertyLoader.PROP_LIST.getProperty("userservice.qa.tenantdomain.origin")).formParam("email", loginId).formParam("password", password).post(new URI(PropertyLoader.PROP_LIST.get("userservice.login.endpointasuser").toString()));

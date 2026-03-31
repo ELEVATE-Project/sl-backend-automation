@@ -35,7 +35,7 @@ public class CommonUtilityUserService {
 
         } catch (Exception e) {
 
-            System.out.println("User Deletion Failed!, check API parameters");
+            logger.info("User Deletion Failed!, check API parameters");
         }
     }
 
@@ -80,7 +80,7 @@ public class CommonUtilityUserService {
 
         if (response.getStatusCode() != 200) {
             logger.error("Admin login failed → Status Code: {}", response.getStatusCode());
-        }
+        }else logger.info("Login successful for user");
 
         logger.info("Exception during Admin login");
 

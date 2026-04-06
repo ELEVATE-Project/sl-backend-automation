@@ -24,18 +24,24 @@ public class CommonUtilityUserService {
     public static void deleteUser(String userName, String userPassword, String superAdminUN, String superAdminPass) {
 
         try {
-            //Call User Login Admin API Method
+            // Step 1: Login as user
             loginToUser(userName, userPassword);
+            if (User_ID == null || UserToken == null) {
+                throw new RuntimeException("User login failed. Cannot proceed with deletion.");
+            }
 
-            //Call Login Admin API Method
+            // Step 2: Login as admin
             loginTOAdmin(superAdminUN, superAdminPass);
+            if (adminToken == null) {
+                throw new RuntimeException("Admin login failed. Cannot proceed with deletion.");
+            }
 
-            //Call Delete user API
+            // Step 3: Delete user
             deleteUserFromAdmin();
 
         } catch (Exception e) {
 
-            logger.info("User Deletion Failed!, check API parameters");
+            logger.info("User Deletion Failed!, check API parameters", e);
         }
     }
 
@@ -45,12 +51,9 @@ public class CommonUtilityUserService {
 
         RestAssured.baseURI = baseUrl;
 
-        boolean isshikshagrahaPresent = CommonUtilityUserService.DerivingSystem();
-        if (isshikshagrahaPresent == true) {
-            origin = fetchProperty("ep.sg.origin");
-        } else {
-            origin = fetchProperty("ep.sl.origin");
-        }
+        boolean isSG = DerivingSystem();
+        origin = isSG ? fetchProperty("ep.sg.origin") : fetchProperty("ep.sl.origin");
+
         Response response = given()
                 .contentType("application/x-www-form-urlencoded; charset=UTF-8")
                 .formParam("identifier", loginId)
@@ -82,8 +85,6 @@ public class CommonUtilityUserService {
             logger.error("Admin login failed → Status Code: {}", response.getStatusCode());
         }else logger.info("Login successful for user");
 
-        logger.info("Exception during Admin login");
-
         // Extract Admin token from response
         adminToken = response.jsonPath().getString("result.access_token");
 
@@ -92,21 +93,33 @@ public class CommonUtilityUserService {
     //Log in as Admin use the token for Delete user API
     public static void deleteUserFromAdmin() {
 
+        if (User_ID == null || adminToken == null) {
+            throw new RuntimeException("User_ID or adminToken is null. Cannot call delete API.");
+        }
+
         Response response = given()
                 .header("X-auth-token", adminToken)
                 .delete(fetchProperty("userservice.deleteUserEndPoint") + User_ID);
 
         if (response.getStatusCode() != 200) {
-            logger.error("Status Code: {}", response.getStatusCode());
-        } else logger.info("Exception during user deletion");
+            logger.error("User deletion failed → Status Code: {}", response.getStatusCode());
+        } else logger.info("User deleted successfully");
     }
 
     public static boolean DerivingSystem(){
         String URL = fetchProperty("userservice.url");
-        String searchString = "shikshalokam";
-        return URL.contains(searchString);
-    }
+        if (URL == null) {
+            throw new RuntimeException("userservice.url is not configured");
+        }
 
+        URL = URL.toLowerCase();
+
+        if (URL.contains("shikshagraha")) {
+            return true;   // SG
+        } else {
+            return false;  // SL
+        }
+    }
 
     public static String fetchProperty(String key) {
         return PropertyLoader.PROP_LIST.getProperty(key);

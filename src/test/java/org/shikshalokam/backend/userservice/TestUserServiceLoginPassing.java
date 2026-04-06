@@ -24,7 +24,8 @@ public class TestUserServiceLoginPassing extends UserServiceBaseTest {
                 PropertyLoader.PROP_LIST.getProperty("userservice.qa.phone.code")
         );
 
-        Assert.assertEquals(response.getStatusCode(), 422);
+        Assert.assertEquals(response.getStatusCode(), 200);
+        Assert.assertNotNull(response.jsonPath().getString("result.access_token"));
 
         logger.info("User logged in successfully with phone number");
     }
@@ -38,7 +39,7 @@ public class TestUserServiceLoginPassing extends UserServiceBaseTest {
                 PropertyLoader.PROP_LIST.getProperty("userservice.qa.phone.code")
         );
 
-        Assert.assertEquals(response.getStatusCode(), 422);
+        Assert.assertEquals(response.getStatusCode(), 400);
 
         logger.info("Invalid phone login verified");
     }
@@ -52,7 +53,7 @@ public class TestUserServiceLoginPassing extends UserServiceBaseTest {
                 PropertyLoader.PROP_LIST.getProperty("userservice.qa.phone.code")
         );
 
-        Assert.assertEquals(response.getStatusCode(), 422);
+        Assert.assertEquals(response.getStatusCode(), 400);
 
         logger.info("Empty password phone login verified");
     }
@@ -68,7 +69,8 @@ public class TestUserServiceLoginPassing extends UserServiceBaseTest {
                 null
         );
 
-        Assert.assertEquals(response.getStatusCode(), 422);
+        Assert.assertEquals(response.getStatusCode(), 200);
+        Assert.assertNotNull(response.jsonPath().getString("result.access_token"));
 
         logger.info("User logged in successfully with username");
     }
@@ -82,7 +84,7 @@ public class TestUserServiceLoginPassing extends UserServiceBaseTest {
                 null
         );
 
-        Assert.assertEquals(response.getStatusCode(), 422);
+        Assert.assertEquals(response.getStatusCode(), 400);
 
         logger.info("Invalid username login verified");
     }
@@ -96,7 +98,7 @@ public class TestUserServiceLoginPassing extends UserServiceBaseTest {
                 null
         );
 
-        Assert.assertEquals(response.getStatusCode(), 422);
+        Assert.assertEquals(response.getStatusCode(), 400);
 
         logger.info("Empty password username login verified");
     }
@@ -112,7 +114,8 @@ public class TestUserServiceLoginPassing extends UserServiceBaseTest {
                 null
         );
 
-        Assert.assertEquals(response.getStatusCode(), 422);
+        Assert.assertEquals(response.getStatusCode(), 200);
+        Assert.assertNotNull(response.jsonPath().getString("result.access_token"));
 
         logger.info("User logged in successfully with email");
     }
@@ -126,7 +129,7 @@ public class TestUserServiceLoginPassing extends UserServiceBaseTest {
                 null
         );
 
-        Assert.assertEquals(response.getStatusCode(), 422);
+        Assert.assertEquals(response.getStatusCode(), 400);
 
         logger.info("Invalid email login verified");
     }
@@ -140,7 +143,7 @@ public class TestUserServiceLoginPassing extends UserServiceBaseTest {
                 null
         );
 
-        Assert.assertEquals(response.getStatusCode(), 422);
+        Assert.assertEquals(response.getStatusCode(), 400);
 
         logger.info("Empty password email login verified");
     }

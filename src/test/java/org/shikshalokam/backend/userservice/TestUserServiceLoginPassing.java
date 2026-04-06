@@ -24,7 +24,7 @@ public class TestUserServiceLoginPassing extends UserServiceBaseTest {
                 PropertyLoader.PROP_LIST.getProperty("userservice.qa.phone.code")
         );
 
-        Assert.assertEquals(response.getStatusCode(), 422);
+        Assert.assertEquals(response.getStatusCode(), 200);
 
         logger.info("User logged in successfully with phone number");
     }
@@ -68,7 +68,7 @@ public class TestUserServiceLoginPassing extends UserServiceBaseTest {
                 null
         );
 
-        Assert.assertEquals(response.getStatusCode(), 422);
+        Assert.assertEquals(response.getStatusCode(), 200);
 
         logger.info("User logged in successfully with username");
     }
@@ -112,7 +112,7 @@ public class TestUserServiceLoginPassing extends UserServiceBaseTest {
                 null
         );
 
-        Assert.assertEquals(response.getStatusCode(), 422);
+        Assert.assertEquals(response.getStatusCode(), 200);
 
         logger.info("User logged in successfully with email");
     }

@@ -2,7 +2,6 @@ package org.shikshalokam.backend.userservice;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import io.restassured.response.Response;
 import org.shikshalokam.backend.PropertyLoader;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -10,8 +9,6 @@ import org.testng.annotations.Test;
 public class TestUserServiceLoginPassing extends UserServiceBaseTest {
 
     static final Logger logger = LogManager.getLogger(TestUserServiceLoginPassing.class);
-    public static String X_AUTH_TOKEN = null;
-    public static Response response = null;
 
     // ==================== PHONE NUMBER LOGIN TESTS ====================
 

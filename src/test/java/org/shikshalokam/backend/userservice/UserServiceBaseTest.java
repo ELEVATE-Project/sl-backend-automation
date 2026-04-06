@@ -7,8 +7,6 @@ import org.apache.logging.log4j.Logger;
 import org.shikshalokam.backend.MentorBase;
 import org.shikshalokam.backend.PropertyLoader;
 
-import java.net.URI;
-
 import static io.restassured.RestAssured.given;
 
 public class UserServiceBaseTest extends MentorBase {
@@ -17,13 +15,17 @@ public class UserServiceBaseTest extends MentorBase {
     public static Response response = null;
     public static String BASE_URL = PropertyLoader.PROP_LIST.getProperty("userservice.qa.api.base.url");
 
-    public static Response loginToUserService(String loginId, String password, Object o) {
+    public static Response loginToUserService(String loginId, String password) {
         try {
             RestAssured.baseURI = BASE_URL;
-            response = given().contentType("application/x-www-form-urlencoded; charset=utf-8").header("origin", PropertyLoader.PROP_LIST.getProperty("userservice.qa.tenantdomain.origin")).formParam("email", loginId).formParam("password", password).post(new URI(PropertyLoader.PROP_LIST.get("userservice.login.endpointasuser").toString()));
+            response = given()
+                    .contentType("application/x-www-form-urlencoded; charset=utf-8")
+                    .header("origin", PropertyLoader.PROP_LIST.getProperty("userservice.qa.tenantdomain.origin"))
+                    .formParam("identifier", loginId)
+                    .formParam("password", password)
+                    .post(PropertyLoader.PROP_LIST.getProperty("userservice.login.endpointasuser"));
             if (response == null) {
-                logger.info("No response received login to the userservice is failed");
-                System.exit(-1);
+                throw new RuntimeException("No response received, login to the userservice failed");
             }
             X_AUTH_TOKEN = response.body().jsonPath().get("result.access_token");
             logger.info(response.prettyPrint());

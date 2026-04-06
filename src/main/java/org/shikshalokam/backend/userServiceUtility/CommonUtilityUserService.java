@@ -46,7 +46,7 @@ public class CommonUtilityUserService {
         RestAssured.baseURI = baseUrl;
 
         boolean isshikshagrahaPresent = CommonUtilityUserService.DerivingSystem();
-        if (isshikshagrahaPresent == true) {
+        if (isshikshagrahaPresent) {
             origin = fetchProperty("ep.sg.origin");
         } else {
             origin = fetchProperty("ep.sl.origin");
@@ -80,9 +80,7 @@ public class CommonUtilityUserService {
 
         if (response.getStatusCode() != 200) {
             logger.error("Admin login failed → Status Code: {}", response.getStatusCode());
-        }else logger.info("Login successful for user");
-
-        logger.info("Exception during Admin login");
+        } else logger.info("Admin login successful");
 
         // Extract Admin token from response
         adminToken = response.jsonPath().getString("result.access_token");
@@ -97,8 +95,8 @@ public class CommonUtilityUserService {
                 .delete(fetchProperty("userservice.deleteUserEndPoint") + User_ID);
 
         if (response.getStatusCode() != 200) {
-            logger.error("Status Code: {}", response.getStatusCode());
-        } else logger.info("Exception during user deletion");
+            logger.error("User deletion failed → Status Code: {}", response.getStatusCode());
+        } else logger.info("User deleted successfully");
     }
 
     public static boolean DerivingSystem(){

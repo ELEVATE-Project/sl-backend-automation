@@ -20,11 +20,10 @@ public class TestUserServiceLoginPassing extends UserServiceBaseTest {
 
         response = UserServiceBaseTest.loginToUserService(
                 PropertyLoader.PROP_LIST.getProperty("userservice.qa.phone.login.identifier"),
-                PropertyLoader.PROP_LIST.getProperty("userservice.qa.phone.login.password"),
-                PropertyLoader.PROP_LIST.getProperty("userservice.qa.phone.code")
+                PropertyLoader.PROP_LIST.getProperty("userservice.qa.phone.login.password")
         );
 
-        Assert.assertEquals(response.getStatusCode(), 422);
+        Assert.assertEquals(response.getStatusCode(), 200);
 
         logger.info("User logged in successfully with phone number");
     }
@@ -34,8 +33,7 @@ public class TestUserServiceLoginPassing extends UserServiceBaseTest {
 
         response = UserServiceBaseTest.loginToUserService(
                 PropertyLoader.PROP_LIST.getProperty("userservice.qa.invalid.identifier"),
-                PropertyLoader.PROP_LIST.getProperty("userservice.qa.invalid.password"),
-                PropertyLoader.PROP_LIST.getProperty("userservice.qa.phone.code")
+                PropertyLoader.PROP_LIST.getProperty("userservice.qa.invalid.password")
         );
 
         Assert.assertEquals(response.getStatusCode(), 422);
@@ -48,8 +46,7 @@ public class TestUserServiceLoginPassing extends UserServiceBaseTest {
 
         response = UserServiceBaseTest.loginToUserService(
                 PropertyLoader.PROP_LIST.getProperty("userservice.qa.phone.login.identifier"),
-                "",
-                PropertyLoader.PROP_LIST.getProperty("userservice.qa.phone.code")
+                ""
         );
 
         Assert.assertEquals(response.getStatusCode(), 422);
@@ -64,11 +61,10 @@ public class TestUserServiceLoginPassing extends UserServiceBaseTest {
 
         response = UserServiceBaseTest.loginToUserService(
                 PropertyLoader.PROP_LIST.getProperty("userservice.qa.username.login.identifier"),
-                PropertyLoader.PROP_LIST.getProperty("userservice.qa.username.login.password"),
-                null
+                PropertyLoader.PROP_LIST.getProperty("userservice.qa.username.login.password")
         );
 
-        Assert.assertEquals(response.getStatusCode(), 422);
+        Assert.assertEquals(response.getStatusCode(), 200);
 
         logger.info("User logged in successfully with username");
     }
@@ -78,8 +74,7 @@ public class TestUserServiceLoginPassing extends UserServiceBaseTest {
 
         response = UserServiceBaseTest.loginToUserService(
                 PropertyLoader.PROP_LIST.getProperty("userservice.qa.username.login.identifier"),
-                PropertyLoader.PROP_LIST.getProperty("userservice.qa.invalid.password"),
-                null
+                PropertyLoader.PROP_LIST.getProperty("userservice.qa.invalid.password")
         );
 
         Assert.assertEquals(response.getStatusCode(), 422);
@@ -92,8 +87,7 @@ public class TestUserServiceLoginPassing extends UserServiceBaseTest {
 
         response = UserServiceBaseTest.loginToUserService(
                 PropertyLoader.PROP_LIST.getProperty("userservice.qa.username.login.identifier"),
-                "",
-                null
+                ""
         );
 
         Assert.assertEquals(response.getStatusCode(), 422);
@@ -108,11 +102,10 @@ public class TestUserServiceLoginPassing extends UserServiceBaseTest {
 
         response = UserServiceBaseTest.loginToUserService(
                 PropertyLoader.PROP_LIST.getProperty("userservice.qa.email.login.identifier"),
-                PropertyLoader.PROP_LIST.getProperty("userservice.qa.email.login.password"),
-                null
+                PropertyLoader.PROP_LIST.getProperty("userservice.qa.email.login.password")
         );
 
-        Assert.assertEquals(response.getStatusCode(), 422);
+        Assert.assertEquals(response.getStatusCode(), 200);
 
         logger.info("User logged in successfully with email");
     }
@@ -122,8 +115,7 @@ public class TestUserServiceLoginPassing extends UserServiceBaseTest {
 
         response = UserServiceBaseTest.loginToUserService(
                 PropertyLoader.PROP_LIST.getProperty("userservice.qa.email.login.identifier"),
-                PropertyLoader.PROP_LIST.getProperty("userservice.qa.invalid.password"),
-                null
+                PropertyLoader.PROP_LIST.getProperty("userservice.qa.invalid.password")
         );
 
         Assert.assertEquals(response.getStatusCode(), 422);
@@ -136,8 +128,7 @@ public class TestUserServiceLoginPassing extends UserServiceBaseTest {
 
         response = UserServiceBaseTest.loginToUserService(
                 PropertyLoader.PROP_LIST.getProperty("userservice.qa.email.login.identifier"),
-                "",
-                null
+                ""
         );
 
         Assert.assertEquals(response.getStatusCode(), 422);

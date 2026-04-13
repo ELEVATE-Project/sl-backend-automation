@@ -41,7 +41,7 @@ public class CommonUtilityUserService {
 
         } catch (Exception e) {
 
-            logger.info("User Deletion Failed!, check API parameters", e);
+            logger.info("User Deletion Failed! Reason: {}", e.getMessage());
         }
     }
 

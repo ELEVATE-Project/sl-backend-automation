@@ -550,9 +550,9 @@ public class PWBasePage extends MentorEDBaseTest {
     }
 
 //    Project: code ends, Observation: code starts here.
-        public static void accessingObservationWithRubric() {
+        public static void  accessingObservationWithRubric() {
             logger.info("Submitting an Observation With Rubric started.");
-            page.getByRole(AriaRole.HEADING, new Page.GetByRoleOptions().setName("Observation")).click();
+            page.locator("(//mat-card-content[@class=\"mat-mdc-card-content observation-content\"])[1]").click();
             page.locator("div").filter(new Locator.FilterOptions().setHasText(Pattern.compile("^0%$"))).nth(1).click();
             page.getByText("Planning & Execution").click();
             page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Start")).click();
@@ -574,7 +574,7 @@ public class PWBasePage extends MentorEDBaseTest {
             page.getByPlaceholder("Add a remark").fill("Remarks");
             page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Submit")).click();
             page.locator("(//button[@class=\"btn btnMargin ng-star-inserted\"])[1]").click();
-            page.locator("//button[contains(@class,'back-button mdc-icon-button mat-mdc-icon-button mat-unthemed mat-mdc-button-base')]").click();
+//            page.locator("//button[contains(@class,'back-button mdc-icon-button mat-mdc-icon-button mat-unthemed mat-mdc-button-base')]").click();
 
             Locator syncingText = page.getByText("Uploading").nth(1);
             assertThat(syncingText).isHidden(
@@ -643,7 +643,7 @@ public class PWBasePage extends MentorEDBaseTest {
 
         public static void accessingObservationWithOUTRubric() {
             logger.info("Submitting an Observation Without Rubric started.");
-            page.getByRole(AriaRole.HEADING, new Page.GetByRoleOptions().setName("Observation")).click();
+            page.locator("(//mat-card-content[@class=\"mat-mdc-card-content observation-content\"])[1]").click();
             page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Start")).click();
             page.getByLabel("KARNATAKA PUBLIC SCHOOLS GHPS").check();
             page.getByLabel("Open calendar").click();
@@ -656,6 +656,7 @@ public class PWBasePage extends MentorEDBaseTest {
             page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("2")).click();
             page.getByRole(AriaRole.RADIO, new Page.GetByRoleOptions().setName("Yes").setExact(true)).check();
             page.getByLabel("Yes, a fully equipped science").check();
+            attachEvidenceForSurveyService();
             page.getByLabel("YouTube").check();
             page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("3")).click();
             page.getByPlaceholder("Enter your response").fill("2");
@@ -665,7 +666,10 @@ public class PWBasePage extends MentorEDBaseTest {
             page.getByRole(AriaRole.RADIO, new Page.GetByRoleOptions().setName("Yes")).check();
             page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Submit")).click();
             page.locator("(//button[@class=\"btn btnMargin ng-star-inserted\"])[1]").click();
-            assertThat(page.getByText("Your observation has been")).isVisible();
+            // Wait up to 15 seconds for the success message to appear
+            Locator successMsg = page.locator("text=Your observation has been");
+            successMsg.waitFor(new Locator.WaitForOptions().setTimeout(15000).setState(WaitForSelectorState.VISIBLE));
+            assertThat(successMsg).isVisible();
             logger.info("Submitting an Observation Without Rubric ended.");
         }
 

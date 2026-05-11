@@ -24,9 +24,6 @@ public class AppSubmitObservationWithRubricFromTile extends PWBasePage {
         page.getByText(ObservationWithRubricName).click();
         page.locator("mat-card-content").first().click();
         accessingObservationWithRubric();
-        page.locator("//button[contains(@class,'back-button mdc-icon-button mat-mdc-icon-button mat-unthemed mat-mdc-button-base')]").click();
-        page.locator("//button[contains(@class,'back-button mdc-icon-button mat-mdc-icon-button mat-unthemed mat-mdc-button-base')]").click();
-        page.locator("button").filter(new Locator.FilterOptions().setHasText("arrow_back")).click();
         logger.info("Submitting an Observation With Rubric (from Tile) ended.");
         return this;
     }
@@ -37,8 +34,6 @@ public class AppSubmitObservationWithRubricFromTile extends PWBasePage {
         page.getByText(ObservationWithRubricName, new Page.GetByTextOptions().setExact(true)).click();
         page.locator("mat-card-content").first().click();
         observeAgain(observationCount,true);
-        page.locator("//button[contains(@class,'back-button mdc-icon-button mat-mdc-icon-button mat-unthemed mat-mdc-button-base')]").click();
-        page.locator("button").filter(new Locator.FilterOptions().setHasText("arrow_back")).click();
         logger.info("Submitting an Observation With Rubric (from Program) Again ended.");
         return this;
     }
@@ -48,8 +43,6 @@ public class AppSubmitObservationWithRubricFromTile extends PWBasePage {
         page.getByPlaceholder("Search your observation here").fill(ObservationWithRubricName);
         page.getByText(ObservationWithRubricName, new Page.GetByTextOptions().setExact(true)).click();
         addEntity(addEntityName, true);
-        page.locator("//button[contains(@class,'back-button mdc-icon-button mat-mdc-icon-button mat-unthemed mat-mdc-button-base')]").click();
-        page.locator("button").filter(new Locator.FilterOptions().setHasText("arrow_back")).click();
         logger.info("Submitting an Observation With Rubric (from Program) ended.");
         return this;
     }

@@ -22,9 +22,6 @@ public class AppSubmitObservationWithoutRubricFromTile extends PWBasePage {
         page.getByText(ObservationWithOutRubricName, new Page.GetByTextOptions().setExact(true)).click();
         page.locator("mat-card-content").first().click();
         accessingObservationWithOUTRubric();
-        page.locator("button").filter(new Locator.FilterOptions().setHasText("arrow_back")).click();
-        page.locator("button").filter(new Locator.FilterOptions().setHasText("arrow_back")).click();
-        page.getByRole(AriaRole.BUTTON).click();
         logger.info("Submitting an Observation Without Rubric (from Tile) ended.");
         return this;
     }
@@ -35,9 +32,6 @@ public class AppSubmitObservationWithoutRubricFromTile extends PWBasePage {
         page.getByText(ObservationWithOutRubricName, new Page.GetByTextOptions().setExact(true)).click();
         page.locator("mat-card-content").first().click();
         observeAgain(observationCount,false);
-        page.locator("button").filter(new Locator.FilterOptions().setHasText("arrow_back")).click();
-        page.locator("button").filter(new Locator.FilterOptions().setHasText("arrow_back")).click();
-        page.getByRole(AriaRole.BUTTON).click();
         logger.info("Submitting an Observation Without Rubric (from Tile) Observe again ended.");
         return this;
     }
@@ -47,9 +41,6 @@ public class AppSubmitObservationWithoutRubricFromTile extends PWBasePage {
         page.getByPlaceholder("Search your observation here").fill(ObservationWithOutRubricName);
         page.getByText(ObservationWithOutRubricName, new Page.GetByTextOptions().setExact(true)).click();
         addEntity(addEntityName,false);
-        page.locator("button").filter(new Locator.FilterOptions().setHasText("arrow_back")).click();
-        page.locator("button").filter(new Locator.FilterOptions().setHasText("arrow_back")).click();
-        page.getByRole(AriaRole.BUTTON).click();
         logger.info("Submitting an Observation Without Rubric (from Tile) Add Entity ended.");
         return this;
     }

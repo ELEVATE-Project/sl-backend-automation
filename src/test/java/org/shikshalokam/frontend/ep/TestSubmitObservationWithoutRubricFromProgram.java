@@ -24,6 +24,7 @@ public class TestSubmitObservationWithoutRubricFromProgram {
         robot.sees(AppAllPages.eploginpage).logIntoPortal();
         robot.sees(AppAllPages.homePage).clickOnPrograms();
         robot.sees(AppAllPages.submitProjectFromProgram).selectProgramName(fetchProperty("ep.programName"));
+
         robot.sees(AppAllPages.submitObservationWithoutRubricFromProgram).submitObservationWithoutRubricFromProgramAgain(fetchProperty("ep.observationWithoutRubricName"),1);
         robot.quitAppBrowser();
     }

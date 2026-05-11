@@ -14,6 +14,7 @@ public class TestSubmitObservationWithRubricFromProgram {
         robot.sees(AppAllPages.eploginpage).logIntoPortal();
         robot.sees(AppAllPages.homePage).clickOnPrograms();
         robot.sees(AppAllPages.submitProjectFromProgram).selectProgramName(fetchProperty("ep.programName"));
+//        robot.debugAPP();
         robot.sees(AppAllPages.submitObservationWithRubricFromProgram).submitObservationWithRubricFromProgram(fetchProperty("ep.observationWithRubricName"));
         robot.quitAppBrowser();
     }

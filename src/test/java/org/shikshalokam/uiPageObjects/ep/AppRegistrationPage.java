@@ -71,6 +71,7 @@ public class AppRegistrationPage extends PWBasePage {
         page.keyboard().press("KeyV");
         page.keyboard().up("Control");
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Verify")).click();
+        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Go to Home")).click();
         logger.info("OTP filling ended");
     }
 }

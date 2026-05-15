@@ -33,25 +33,13 @@ public class TestGetListOfUsersByID extends UserServiceBaseTest {
     }
 
     @Test
-    public void testGetListOfUsersById() {
+    public void testGetListOfUsersById()throws URISyntaxException {
 
         logger.info("Started calling Search User API");
 
-        URI endpoint;
-
-        try {
-
-            endpoint = new URI(
-                    PROP_LIST.get("userservice.search.user.endpoint").toString()
-            );
-
-        } catch (URISyntaxException e) {
-
-            throw new RuntimeException(
-                    "Error constructing URI for Search User API",
-                    e
-            );
-        }
+        URI endpoint = new URI(
+                PROP_LIST.get("userservice.search.user.endpoint").toString()
+        );
 
         String requestBody = "{\n" + "  \"user_ids\": [" + PROP_LIST.get("userservice.search.user.id").toString() + "]\n" + "}";
 

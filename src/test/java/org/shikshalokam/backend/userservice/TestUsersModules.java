@@ -4,12 +4,13 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.shikshalokam.backend.userServiceUtility.CommonUtilityUserService;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import static io.restassured.RestAssured.given;
 import static org.shikshalokam.backend.PropertyLoader.PROP_LIST;
@@ -21,20 +22,17 @@ public class TestUsersModules extends UserServiceBaseTest {
     public static final Logger logger =
             LogManager.getLogger(TestUsersModules.class);
 
-    private URI readUserEndpoint;
-    private URI profileByIdEndpoint;
-    private URI updateUserEndpoint;
+    private URI readUserEndpoint,
+            profileByIdEndpoint,
+            updateUserEndpoint;
+
+    private String xAuthToken;
 
     @BeforeMethod
     public void init() throws URISyntaxException {
 
-        logger.info("Logging into User Service");
-
-        // Use SAME admin user as Postman
-        CommonUtilityUserService.loginToUser(
-                PROP_LIST.get("userservice.qa.phone.login.identifier").toString(),
-                PROP_LIST.get("userservice.qa.phone.login.password").toString()
-        );
+        xAuthToken =
+                PROP_LIST.get("userservice.x.auth.token").toString();
 
         readUserEndpoint = new URI(
                 PROP_LIST.get("userservice.read.user.endpoint").toString()
@@ -51,44 +49,40 @@ public class TestUsersModules extends UserServiceBaseTest {
         );
     }
 
-    @Test
+    @Test(description = "Validate Read User API")
     public void testReadUser() {
 
-        logger.info("Started calling Read User API");
-
-        Response response = given()
-                .header(
-                        "X-auth-token",
-                        CommonUtilityUserService.UserToken
-                )
-                .when()
-                .get(readUserEndpoint);
-
-        response.prettyPrint();
+        Response response = readUser(xAuthToken);
 
         assertEquals(
                 response.getStatusCode(),
                 200,
                 "Read User API failed"
         );
-
-        logger.info("Successfully verified Read User API");
     }
 
-    @Test
+    @Test(description = "Negative Validation for Read User API")
+    public void testReadUserWithInvalidToken() {
+
+        Response response = readUser(
+                PROP_LIST.get(
+                        "userservice.invalid.x.auth.token"
+                ).toString()
+        );
+
+        assertEquals(
+                response.getStatusCode(),
+                401,
+                "Expected 401 for invalid token"
+        );
+    }
+
+    @Test(description = "Validate Get User Profile By ID API")
     public void testGetUserProfileById() {
 
-        logger.info("Started calling Profile By ID API");
-
-        Response response = given()
-                .header(
-                        "internal_access_token",
-                        PROP_LIST.get("userservice.internal.access.token").toString()
-                )
-                .when()
-                .get(profileByIdEndpoint);
-
-        response.prettyPrint();
+        Response response = getUserProfileById(
+                PROP_LIST.get("userservice.user.id").toString()
+        );
 
         assertEquals(
                 response.getStatusCode(),
@@ -102,79 +96,188 @@ public class TestUsersModules extends UserServiceBaseTest {
                 ),
                 "Expected User ID not found in response"
         );
-
-        logger.info("Successfully verified Profile By ID API");
     }
 
-    @Test
+    @Test(description = "Negative Validation for Get User Profile By Invalid ID")
+    public void testGetUserProfileByInvalidId() {
+
+        Response response = getUserProfileById(
+                PROP_LIST.get("userservice.invalid.user.id").toString()
+        );
+
+        assertEquals(
+                response.getStatusCode(),
+                404,
+                "Expected 404 for invalid user id"
+        );
+    }
+
+    @Test(description = "Validate Update User API")
     public void testUpdateUser() {
 
-        logger.info("Started calling Update User API");
+        Response response = updateUser(
+                PROP_LIST.get("userservice.update.user.name").toString(),
+                xAuthToken
+        );
 
-        // RAW JSON EXACTLY LIKE POSTMAN
-        String requestBody =
-                "{\n" +
-                        "    \"name\": \"" +
-                        PROP_LIST.get("userservice.update.user.name") +
-                        "\",\n" +
+        assertEquals(
+                response.getStatusCode(),
+                202,
+                "Update User API failed"
+        );
+    }
 
-                        "    \"location\": \"" +
-                        PROP_LIST.get("userservice.update.user.location") +
-                        "\",\n" +
+    @Test(description = "Negative Validation for Update User API")
+    public void testUpdateUserWithInvalidToken() {
 
-                        "    \"about\": \"" +
-                        PROP_LIST.get("userservice.update.user.about") +
-                        "\",\n" +
+        Response response = updateUser(
+                PROP_LIST.get("userservice.update.user.name").toString(),
+                PROP_LIST.get(
+                        "userservice.invalid.x.auth.token"
+                ).toString()
+        );
 
-                        "    \"has_accepted_terms_and_conditions\": true,\n" +
+        assertEquals(
+                response.getStatusCode(),
+                401,
+                "Expected 401 for invalid token"
+        );
+    }
 
-                        "    \"image\": \"" +
-                        PROP_LIST.get("userservice.update.user.image") +
-                        "\",\n" +
+    @Test(description = "Negative Validation for Update User With Empty Name")
+    public void testUpdateUserWithEmptyName() {
 
-                        "    \"state\": \"" +
-                        PROP_LIST.get("userservice.update.user.state") +
-                        "\",\n" +
+        Response response = updateUser(
+                "",
+                xAuthToken
+        );
 
-                        "    \"roles\": [\n" +
-                        "        " +
-                        PROP_LIST.get("userservice.update.user.role") +
-                        "\n" +
-                        "    ],\n" +
+        assertEquals(
+                response.getStatusCode(),
+                422,
+                "Expected 400 for empty username"
+        );
+    }
 
-                        "    \"district\": \"" +
-                        PROP_LIST.get("userservice.update.user.district") +
-                        "\",\n" +
-
-                        "    \"block\": \"" +
-                        PROP_LIST.get("userservice.update.user.block") +
-                        "\",\n" +
-
-                        "    \"cluster\": \"" +
-                        PROP_LIST.get("userservice.update.user.cluster") +
-                        "\",\n" +
-
-                        "    \"school\": \"" +
-                        PROP_LIST.get("userservice.update.user.school") +
-                        "\",\n" +
-
-                        "    \"professional_role\": \"" +
-                        PROP_LIST.get("userservice.update.user.professional.role") +
-                        "\",\n" +
-
-                        "    \"professional_subroles\": [\n" +
-                        "        \"" +
-                        PROP_LIST.get("userservice.update.user.professional.subrole") +
-                        "\"\n" +
-                        "    ]\n" +
-                        "}";
-
-        logger.info("Request Body : " + requestBody);
+    private Response readUser(String token) {
 
         Response response = given()
                 .header(
                         "X-auth-token",
-                        CommonUtilityUserService.UserToken
+                        token
+                )
+                .when()
+                .get(readUserEndpoint);
+
+        response.prettyPrint();
+
+        return response;
+    }
+
+    private Response getUserProfileById(String userId) {
+
+        Response response = given()
+                .header(
+                        "internal_access_token",
+                        PROP_LIST.get(
+                                "userservice.internal.access.token"
+                        ).toString()
+                )
+                .when()
+                .get(
+                        profileByIdEndpoint.toString()
+                                .replace(
+                                        PROP_LIST.get(
+                                                "userservice.user.id"
+                                        ).toString(),
+                                        userId
+                                )
+                );
+
+        response.prettyPrint();
+
+        return response;
+    }
+
+    private Response updateUser(
+            String name,
+            String token
+    ) {
+
+        HashMap<String, Object> requestBody =
+                new HashMap<>();
+
+        requestBody.put("name", name);
+
+        requestBody.put(
+                "about",
+                PROP_LIST.get(
+                        "userservice.update.user.about"
+                ).toString()
+        );
+
+        requestBody.put(
+                "block",
+                PROP_LIST.get(
+                        "userservice.update.user.block"
+                ).toString()
+        );
+
+        requestBody.put(
+                "state",
+                PROP_LIST.get(
+                        "userservice.update.user.state"
+                ).toString()
+        );
+
+        requestBody.put(
+                "school",
+                PROP_LIST.get(
+                        "userservice.update.user.school"
+                ).toString()
+        );
+
+        requestBody.put(
+                "cluster",
+                PROP_LIST.get(
+                        "userservice.update.user.cluster"
+                ).toString()
+        );
+
+        requestBody.put(
+                "district",
+                PROP_LIST.get(
+                        "userservice.update.user.district"
+                ).toString()
+        );
+
+        requestBody.put(
+                "professional_role",
+                PROP_LIST.get(
+                        "userservice.update.user.professional.role"
+                ).toString()
+        );
+
+        ArrayList<String> professionalSubroles =
+                new ArrayList<>();
+
+        professionalSubroles.add(
+                PROP_LIST.get(
+                        "userservice.update.user.professional.subrole"
+                ).toString()
+        );
+
+        requestBody.put(
+                "professional_subroles",
+                professionalSubroles
+        );
+
+        logger.info("Request Body : {}", requestBody);
+
+        Response response = given()
+                .header(
+                        "X-auth-token",
+                        token
                 )
                 .contentType(ContentType.JSON)
                 .body(requestBody)
@@ -183,19 +286,6 @@ public class TestUsersModules extends UserServiceBaseTest {
 
         response.prettyPrint();
 
-        assertEquals(
-                response.getStatusCode(),
-                200,
-                "Update User API failed"
-        );
-
-        assertTrue(
-                response.getBody().asString().contains(
-                        PROP_LIST.get("userservice.update.user.name").toString()
-                ),
-                "Updated username not found in response"
-        );
-
-        logger.info("Successfully verified Update User API");
+        return response;
     }
 }

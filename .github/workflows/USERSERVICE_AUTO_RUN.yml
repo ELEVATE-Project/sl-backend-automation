@@ -4,6 +4,9 @@ on:
 
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -36,17 +39,43 @@ jobs:
       - name: Build with Maven and run tests
         run: mvn clean test -DsuiteXmlFile="SanitySuiteUserService_API.xml"  # -B is for batch mode to reduce output noise
 
-      - name: Send Email Notification
-        if: always()  # Run this step whether the tests succeed or fail
+      - name: Check Extent Report Exists
+        if: always()
+        run: |
+          if [ -f "./target/ExtentReport.html" ]; then
+            echo "REPORT_EXISTS=true" >> $GITHUB_ENV
+          else
+            echo "REPORT_EXISTS=false" >> $GITHUB_ENV
+          fi
+
+      - name: Send Email Notification With Report
+        if: always() && env.REPORT_EXISTS == 'true'
         uses: dawidd6/action-send-mail@v3
         with:
-          server_address: smtp.gmail.com  # Replace with your SMTP server address
-          server_port: 587  # Typically 587 for TLS
-          username: ${{ secrets.SMTP_USERNAME }}  # Stored in GitHub Secrets
-          password: ${{ secrets.SMTP_PASSWORD }}  # Stored in GitHub Secrets
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
           subject: "Test Status - ${{ github.workflow }}"
           body: "The test run for the project has completed with status: ${{ job.status }}"
-          to: "sl-qa@shikshalokam.org"  # Replace with recipient's email address
-          from: "automation@shikshalokam.org"  # Replace with sender's email address
+          to: "sl-qa@shikshalokam.org"
+          from: "automation@shikshalokam.org"
           secure: false
           attachments: ./target/ExtentReport.html
+
+      - name: Send Email Notification Without Report
+        if: always() && env.REPORT_EXISTS == 'false'
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: "Test Status - ${{ github.workflow }}"
+          body: |
+            The test run completed with status: ${{ job.status }}
+
+            ExtentReport.html was not generated.
+          to: "sl-qa@shikshalokam.org"
+          from: "automation@shikshalokam.org"
+          secure: false

@@ -22,6 +22,7 @@
             <class name="org.shikshalokam.backend.userservice.TestGetListOfUsersByID">
                 <methods>
                     <include name="testGetListOfUsersById"/>
+                    <include name="testGetListOfUsersByInvalidId"/>
                 </methods>
             </class>
         </classes>

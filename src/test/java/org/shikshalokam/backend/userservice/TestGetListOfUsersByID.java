@@ -72,4 +72,43 @@ public class TestGetListOfUsersByID extends UserServiceBaseTest {
 
         logger.info("Verified user ID is present in response.");
     }
+
+    @Test
+    public void testGetListOfUsersByInvalidId() throws URISyntaxException {
+
+        logger.info("Started calling Search User API with invalid ID");
+
+        URI endpoint = new URI(
+                PROP_LIST.get("userservice.search.user.endpoint").toString()
+        );
+
+        String requestBody = "{\n" + "  \"user_ids\": [" + PROP_LIST.get("userservice.search.user.invalid.id").toString() + "]\n" + "}";
+
+        Response response = given()
+                .header(
+                        "X-auth-token",
+                        CommonUtilityUserService.UserToken
+                )
+                .contentType(ContentType.JSON)
+                .body(requestBody)
+                .when()
+                .post(endpoint);
+
+        assertEquals(
+                response.getStatusCode(),
+                200,
+                "Status code failed for invalid user ID request"
+        );
+
+        String responseBody = response.getBody().asString();
+
+        logger.info("Response: " + responseBody);
+
+        assertTrue(
+                responseBody.contains("result"),
+                "Result field not present in response."
+        );
+
+        logger.info("Verified response for invalid user ID.");
+    }
 }

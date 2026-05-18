@@ -8,7 +8,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -22,37 +21,34 @@ public class TestUsersModules extends UserServiceBaseTest {
     public static final Logger logger =
             LogManager.getLogger(TestUsersModules.class);
 
-    private URI readUserEndpoint,
-            profileByIdEndpoint,
-            updateUserEndpoint;
-
-    private String xAuthToken;
+    private String normalUserToken;
+    private String adminToken;
 
     @BeforeMethod
-    public void init() throws URISyntaxException {
+    public void init() {
 
-        xAuthToken =
-                PROP_LIST.get("userservice.x.auth.token").toString();
+        logger.info("Generating Normal User Token");
+        normalUserToken = generateNormalUserToken();
 
-        readUserEndpoint = new URI(
-                PROP_LIST.get("userservice.read.user.endpoint").toString()
-        );
+        logger.info("Generating Admin Token");
+        adminToken = generateAdminToken();
 
-        profileByIdEndpoint = new URI(
-                PROP_LIST.get("userservice.profilebyid.endpoint").toString()
-                        + PROP_LIST.get("userservice.user.id").toString()
-                        + "?tenant_code=default"
-        );
+        if (adminToken == null || adminToken.isEmpty()) {
 
-        updateUserEndpoint = new URI(
-                PROP_LIST.get("userservice.update.user.endpoint").toString()
-        );
+            throw new RuntimeException(
+                    "Admin Token is null"
+            );
+        }
+
+        logger.info("Admin Token Generated Successfully");
     }
 
     @Test(description = "Validate Read User API")
     public void testReadUser() {
 
-        Response response = readUser(xAuthToken);
+        Response response = readUser(normalUserToken);
+
+        response.prettyPrint();
 
         assertEquals(
                 response.getStatusCode(),
@@ -61,7 +57,7 @@ public class TestUsersModules extends UserServiceBaseTest {
         );
     }
 
-    @Test(description = "Negative Validation for Read User API")
+    @Test(description = "Negative Validation For Read User API")
     public void testReadUserWithInvalidToken() {
 
         Response response = readUser(
@@ -69,6 +65,8 @@ public class TestUsersModules extends UserServiceBaseTest {
                         "userservice.invalid.x.auth.token"
                 ).toString()
         );
+
+        response.prettyPrint();
 
         assertEquals(
                 response.getStatusCode(),
@@ -81,8 +79,12 @@ public class TestUsersModules extends UserServiceBaseTest {
     public void testGetUserProfileById() {
 
         Response response = getUserProfileById(
-                PROP_LIST.get("userservice.user.id").toString()
+                PROP_LIST.get(
+                        "userservice.user.id"
+                ).toString()
         );
+
+        response.prettyPrint();
 
         assertEquals(
                 response.getStatusCode(),
@@ -92,18 +94,24 @@ public class TestUsersModules extends UserServiceBaseTest {
 
         assertTrue(
                 response.getBody().asString().contains(
-                        PROP_LIST.get("userservice.user.id").toString()
+                        PROP_LIST.get(
+                                "userservice.user.id"
+                        ).toString()
                 ),
-                "Expected User ID not found in response"
+                "Expected user id not found in response"
         );
     }
 
-    @Test(description = "Negative Validation for Get User Profile By Invalid ID")
+    @Test(description = "Negative Validation For Invalid User ID")
     public void testGetUserProfileByInvalidId() {
 
         Response response = getUserProfileById(
-                PROP_LIST.get("userservice.invalid.user.id").toString()
+                PROP_LIST.get(
+                        "userservice.invalid.user.id"
+                ).toString()
         );
+
+        response.prettyPrint();
 
         assertEquals(
                 response.getStatusCode(),
@@ -116,9 +124,13 @@ public class TestUsersModules extends UserServiceBaseTest {
     public void testUpdateUser() {
 
         Response response = updateUser(
-                PROP_LIST.get("userservice.update.user.name").toString(),
-                xAuthToken
+                PROP_LIST.get(
+                        "userservice.update.user.name"
+                ).toString(),
+                adminToken
         );
+
+        response.prettyPrint();
 
         assertEquals(
                 response.getStatusCode(),
@@ -127,15 +139,19 @@ public class TestUsersModules extends UserServiceBaseTest {
         );
     }
 
-    @Test(description = "Negative Validation for Update User API")
+    @Test(description = "Negative Validation For Invalid Token")
     public void testUpdateUserWithInvalidToken() {
 
         Response response = updateUser(
-                PROP_LIST.get("userservice.update.user.name").toString(),
+                PROP_LIST.get(
+                        "userservice.update.user.name"
+                ).toString(),
                 PROP_LIST.get(
                         "userservice.invalid.x.auth.token"
                 ).toString()
         );
+
+        response.prettyPrint();
 
         assertEquals(
                 response.getStatusCode(),
@@ -144,13 +160,15 @@ public class TestUsersModules extends UserServiceBaseTest {
         );
     }
 
-    @Test(description = "Negative Validation for Update User With Empty Name")
+    @Test(description = "Negative Validation For Empty Username")
     public void testUpdateUserWithEmptyName() {
 
         Response response = updateUser(
                 "",
-                xAuthToken
+                adminToken
         );
+
+        response.prettyPrint();
 
         assertEquals(
                 response.getStatusCode(),
@@ -159,24 +177,144 @@ public class TestUsersModules extends UserServiceBaseTest {
         );
     }
 
-    private Response readUser(String token) {
+    private String generateNormalUserToken() {
 
         Response response = given()
+                .contentType(
+                        "application/x-www-form-urlencoded; charset=UTF-8"
+                )
+                .formParam(
+                        "identifier",
+                        PROP_LIST.get(
+                                "userservice.qa.phone.login.identifier"
+                        ).toString()
+                )
+                .formParam(
+                        "password",
+                        PROP_LIST.get(
+                                "userservice.qa.phone.login.password"
+                        ).toString()
+                )
+                .header(
+                        "Origin",
+                        PROP_LIST.get(
+                                "ep.sl.origin"
+                        ).toString()
+                )
+                .when()
+                .post(
+                        PROP_LIST.get(
+                                "userservice.qa.api.base.url"
+                        ).toString()
+                                +
+                                PROP_LIST.get(
+                                        "userservice.login.endpointasuser"
+                                ).toString()
+                );
+
+        response.prettyPrint();
+
+        assertEquals(
+                response.getStatusCode(),
+                200,
+                "Normal User Login Failed"
+        );
+
+        String token =
+                response.then()
+                        .extract()
+                        .path("result.access_token");
+
+        if (token == null || token.isEmpty()) {
+
+            throw new RuntimeException(
+                    "Normal user token generation failed"
+            );
+        }
+
+        return token;
+    }
+
+    private String generateAdminToken() {
+
+        Response response = given()
+                .contentType(
+                        "application/x-www-form-urlencoded; charset=UTF-8"
+                )
+                .formParam(
+                        "identifier",
+                        PROP_LIST.get(
+                                "userservice.qa.admin.login.user"
+                        ).toString()
+                )
+                .formParam(
+                        "password",
+                        PROP_LIST.get(
+                                "userservice.qa.admin.login.password"
+                        ).toString()
+                )
+                .header(
+                        "Origin",
+                        PROP_LIST.get(
+                                "ep.sl.origin"
+                        ).toString()
+                )
+                .when()
+                .post(
+                        PROP_LIST.get(
+                                "userservice.qa.api.base.url"
+                        ).toString()
+                                +
+                                PROP_LIST.get(
+                                        "userservice.admin.login.endpoint"
+                                ).toString()
+                );
+
+        response.prettyPrint();
+
+        assertEquals(
+                response.getStatusCode(),
+                200,
+                "Admin Login API failed"
+        );
+
+        String token =
+                response.then()
+                        .extract()
+                        .path("result.access_token");
+
+        if (token == null || token.isEmpty()) {
+
+            throw new RuntimeException(
+                    "Admin token generation failed"
+            );
+        }
+
+        logger.info("Generated Admin Token : {}", token);
+
+        return token;
+    }
+
+    private Response readUser(String token) {
+
+        return given()
                 .header(
                         "X-auth-token",
                         token
                 )
                 .when()
-                .get(readUserEndpoint);
-
-        response.prettyPrint();
-
-        return response;
+                .get(
+                        URI.create(
+                                PROP_LIST.get(
+                                        "userservice.read.user.endpoint"
+                                ).toString()
+                        )
+                );
     }
 
     private Response getUserProfileById(String userId) {
 
-        Response response = given()
+        return given()
                 .header(
                         "internal_access_token",
                         PROP_LIST.get(
@@ -185,18 +323,12 @@ public class TestUsersModules extends UserServiceBaseTest {
                 )
                 .when()
                 .get(
-                        profileByIdEndpoint.toString()
-                                .replace(
-                                        PROP_LIST.get(
-                                                "userservice.user.id"
-                                        ).toString(),
-                                        userId
-                                )
+                        PROP_LIST.get(
+                                "userservice.profilebyid.endpoint"
+                        ).toString()
+                                + userId
+                                + "?tenant_code=default"
                 );
-
-        response.prettyPrint();
-
-        return response;
     }
 
     private Response updateUser(
@@ -207,7 +339,10 @@ public class TestUsersModules extends UserServiceBaseTest {
         HashMap<String, Object> requestBody =
                 new HashMap<>();
 
-        requestBody.put("name", name);
+        requestBody.put(
+                "name",
+                name
+        );
 
         requestBody.put(
                 "about",
@@ -272,9 +407,12 @@ public class TestUsersModules extends UserServiceBaseTest {
                 professionalSubroles
         );
 
-        logger.info("Request Body : {}", requestBody);
+        logger.info(
+                "Request Body : {}",
+                requestBody
+        );
 
-        Response response = given()
+        return given()
                 .header(
                         "X-auth-token",
                         token
@@ -282,10 +420,12 @@ public class TestUsersModules extends UserServiceBaseTest {
                 .contentType(ContentType.JSON)
                 .body(requestBody)
                 .when()
-                .patch(updateUserEndpoint);
-
-        response.prettyPrint();
-
-        return response;
+                .patch(
+                        URI.create(
+                                PROP_LIST.get(
+                                        "userservice.update.user.endpoint"
+                                ).toString()
+                        )
+                );
     }
 }

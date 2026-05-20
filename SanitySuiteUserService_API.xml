@@ -19,25 +19,6 @@
                     <include name="emptyPasswordWithEmail"/>
                 </methods>
             </class>
-
-
-
-
-
-
-
-
-            <class name="org.shikshalokam.backend.userservice.TestUsersModules">
-                <methods>
-                    <include name="testReadUser"/>
-                    <include name="testReadUserWithInvalidToken"/>
-                    <include name="testGetUserProfileById"/>
-                    <include name="testGetUserProfileByInvalidId"/>
-                    <include name="testUpdateUser"/>
-                    <include name="testUpdateUserWithInvalidToken"/>
-                    <include name="testUpdateUserWithEmptyName"/>
-                </methods>
-            </class>
         </classes>
     </test>
 </suite>

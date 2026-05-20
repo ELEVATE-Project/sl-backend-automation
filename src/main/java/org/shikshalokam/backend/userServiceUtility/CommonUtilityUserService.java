@@ -1,127 +1,171 @@
 package org.shikshalokam.backend.userServiceUtility;
 
+import io.restassured.RestAssured;
+import io.restassured.response.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.shikshalokam.backend.PropertyLoader;
-import io.restassured.RestAssured;
-import io.restassured.response.Response;
 
-import static io.restassured.RestAssured.*;
-
+import static io.restassured.RestAssured.given;
 
 public class CommonUtilityUserService {
 
     public static String User_ID = null;
     public static String UserToken = null;
     public static String adminToken = null;
+
     static String baseUrl = fetchProperty("userservice.qa.api.base.url");
+
     static String origin;
 
     private static final Logger logger = LogManager.getLogger(CommonUtilityUserService.class);
 
+    // Generate Normal User Token
+    public static String generateNormalUserToken() {
 
-    // Call the User API and delete the user
-    public static void deleteUser(String userName, String userPassword, String superAdminUN, String superAdminPass) {
+        RestAssured.baseURI = baseUrl;
 
-        try {
-            // Step 1: Login as user
-            loginToUser(userName, userPassword);
-            if (User_ID == null || UserToken == null) {
-                throw new RuntimeException("User login failed. Cannot proceed with deletion.");
-            }
+        boolean isSG = DerivingSystem();
 
-            // Step 2: Login as admin
-            loginTOAdmin(superAdminUN, superAdminPass);
-            if (adminToken == null) {
-                throw new RuntimeException("Admin login failed. Cannot proceed with deletion.");
-            }
+        origin = isSG ? fetchProperty("ep.sg.origin") : fetchProperty("ep.sl.origin");
 
-            // Step 3: Delete user
-            deleteUserFromAdmin();
+        Response response = given().contentType("application/x-www-form-urlencoded; charset=UTF-8").formParam("identifier", fetchProperty("userservice.qa.phone.login.identifier")).formParam("password", fetchProperty("userservice.qa.phone.login.password")).header("Origin", origin).when().post(fetchProperty("userservice.login.endpointasuser"));
 
-        } catch (Exception e) {
+        response.prettyPrint();
 
-            logger.info("User Deletion Failed! Reason: {}", e.getMessage());
+        if (response.getStatusCode() != 200) {
+
+            throw new RuntimeException("Normal User Login Failed");
         }
+
+        String token = response.jsonPath().getString("result.access_token");
+
+        if (token == null || token.isEmpty()) {
+
+            throw new RuntimeException("Normal user token generation failed");
+        }
+
+        logger.info("Normal User Token Generated Successfully");
+
+        return token;
     }
 
+    // Generate Admin Token
+    public static String generateAdminToken() {
 
-    // Call the User API get user id
+        RestAssured.baseURI = baseUrl;
+
+        boolean isSG = DerivingSystem();
+
+        origin = isSG ? fetchProperty("ep.sg.origin") : fetchProperty("ep.sl.origin");
+
+        Response response = given().contentType("application/x-www-form-urlencoded; charset=UTF-8").formParam("identifier", fetchProperty("userservice.qa.admin.login.user")).formParam("password", fetchProperty("userservice.qa.admin.login.password")).header("Origin", origin).when().post(fetchProperty("userservice.admin.login.endpoint"));
+
+        response.prettyPrint();
+
+        if (response.getStatusCode() != 200) {
+
+            throw new RuntimeException("Admin Login Failed");
+        }
+
+        String token = response.jsonPath().getString("result.access_token");
+
+        if (token == null || token.isEmpty()) {
+
+            throw new RuntimeException("Admin token generation failed");
+        }
+
+        logger.info("Admin Token Generated Successfully");
+
+        return token;
+    }
+
+    // Existing Login Method
     public static void loginToUser(String loginId, String password) {
 
         RestAssured.baseURI = baseUrl;
 
         boolean isSG = DerivingSystem();
+
         origin = isSG ? fetchProperty("ep.sg.origin") : fetchProperty("ep.sl.origin");
 
-        Response response = given()
-                .contentType("application/x-www-form-urlencoded; charset=UTF-8")
-                .formParam("identifier", loginId)
-                .formParam("password", password)
-                .header("Origin", origin)
-                .post(fetchProperty("userservice.login.endpointasuser"));
+        Response response = given().contentType("application/x-www-form-urlencoded; charset=UTF-8").formParam("identifier", loginId).formParam("password", password).header("Origin", origin).when().post(fetchProperty("userservice.login.endpointasuser"));
 
         if (response.getStatusCode() != 200) {
-            logger.error("Login failed → Status Code: {}", response.getStatusCode());
-        } else logger.info("Login successful for user");
 
-        //Extract userId from response (example path)
+            logger.error("Login failed → Status Code: {}", response.getStatusCode());
+
+        } else {
+
+            logger.info("Login successful for user");
+        }
+
         UserToken = response.jsonPath().getString("result.access_token");
+
         User_ID = response.jsonPath().getString("result.user.id");
     }
 
-    //Log in to Admin
+    // Login To Admin
     public static void loginTOAdmin(String loginId, String password) {
 
-        Response response = given()
+        RestAssured.baseURI = baseUrl;
 
-                .contentType("application/x-www-form-urlencoded; charset=UTF-8")
-                .formParam("identifier", loginId)
-                .formParam("password", password)
-                .header("Origin", origin)
-                .post(fetchProperty("userservice.admiLoginEndPoint"));
+        boolean isSG = DerivingSystem();
+
+        origin = isSG ? fetchProperty("ep.sg.origin") : fetchProperty("ep.sl.origin");
+
+        Response response = given().contentType("application/x-www-form-urlencoded; charset=UTF-8").formParam("identifier", loginId).formParam("password", password).header("Origin", origin).when().post(fetchProperty("userservice.admin.login.endpoint"));
+
+        response.prettyPrint();
 
         if (response.getStatusCode() != 200) {
+
             logger.error("Admin login failed → Status Code: {}", response.getStatusCode());
-        }else logger.info("Login successful for user");
 
-        // Extract Admin token from response
+        } else {
+
+            logger.info("Admin login successful");
+        }
+
         adminToken = response.jsonPath().getString("result.access_token");
-
     }
 
-    //Log in as Admin use the token for Delete user API
+    // Delete User API
     public static void deleteUserFromAdmin() {
 
         if (User_ID == null || adminToken == null) {
-            throw new RuntimeException("User_ID or adminToken is null. Cannot call delete API.");
+
+            throw new RuntimeException("User_ID or adminToken is null.");
         }
 
-        Response response = given()
-                .header("X-auth-token", adminToken)
-                .delete(fetchProperty("userservice.deleteUserEndPoint") + User_ID);
+        Response response = given().header("X-auth-token", adminToken).when().delete(fetchProperty("userservice.deleteUserEndPoint") + User_ID);
 
         if (response.getStatusCode() != 200) {
+
             logger.error("User deletion failed → Status Code: {}", response.getStatusCode());
-        } else logger.info("User deleted successfully");
+
+        } else {
+
+            logger.info("User deleted successfully");
+        }
     }
 
-    public static boolean DerivingSystem(){
+    public static boolean DerivingSystem() {
+
         String URL = fetchProperty("userservice.url");
+
         if (URL == null) {
+
             throw new RuntimeException("userservice.url is not configured");
         }
 
         URL = URL.toLowerCase();
 
-        if (URL.contains("shikshagraha")) {
-            return true;   // SG
-        } else {
-            return false;  // SL
-        }
+        return URL.contains("shikshagraha");
     }
 
     public static String fetchProperty(String key) {
+
         return PropertyLoader.PROP_LIST.getProperty(key);
     }
 }

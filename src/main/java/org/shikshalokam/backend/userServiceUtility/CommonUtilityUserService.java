@@ -31,8 +31,6 @@ public class CommonUtilityUserService {
 
         Response response = given().contentType("application/x-www-form-urlencoded; charset=UTF-8").formParam("identifier", fetchProperty("userservice.qa.phone.login.identifier")).formParam("password", fetchProperty("userservice.qa.phone.login.password")).header("Origin", origin).when().post(fetchProperty("userservice.login.endpointasuser"));
 
-        response.prettyPrint();
-
         if (response.getStatusCode() != 200) {
 
             throw new RuntimeException("Normal User Login Failed");
@@ -60,8 +58,6 @@ public class CommonUtilityUserService {
         origin = isSG ? fetchProperty("ep.sg.origin") : fetchProperty("ep.sl.origin");
 
         Response response = given().contentType("application/x-www-form-urlencoded; charset=UTF-8").formParam("identifier", fetchProperty("userservice.qa.admin.login.user")).formParam("password", fetchProperty("userservice.qa.admin.login.password")).header("Origin", origin).when().post(fetchProperty("userservice.admin.login.endpoint"));
-
-        response.prettyPrint();
 
         if (response.getStatusCode() != 200) {
 
@@ -115,8 +111,6 @@ public class CommonUtilityUserService {
         origin = isSG ? fetchProperty("ep.sg.origin") : fetchProperty("ep.sl.origin");
 
         Response response = given().contentType("application/x-www-form-urlencoded; charset=UTF-8").formParam("identifier", loginId).formParam("password", password).header("Origin", origin).when().post(fetchProperty("userservice.admin.login.endpoint"));
-
-        response.prettyPrint();
 
         if (response.getStatusCode() != 200) {
 

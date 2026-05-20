@@ -23,6 +23,18 @@
                 <methods>
                     <include name="testGetListOfUsersById"/>
                     <include name="testGetListOfUsersByInvalidId"/>
+                    <include name="emptyPasswordWithPhoneNumber"/>
+                </methods>
+            </class>
+            <class name="org.shikshalokam.backend.userservice.TestUsersModules">
+                <methods>
+                    <include name="testReadUser"/>
+                    <include name="testReadUserWithInvalidToken"/>
+                    <include name="testGetUserProfileById"/>
+                    <include name="testGetUserProfileByInvalidId"/>
+                    <include name="testUpdateUser"/>
+                    <include name="testUpdateUserWithInvalidToken"/>
+                    <include name="testUpdateUserWithEmptyName"/>
                 </methods>
             </class>
         </classes>

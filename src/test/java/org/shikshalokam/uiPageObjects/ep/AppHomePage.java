@@ -93,7 +93,7 @@ public class AppHomePage extends PWBasePage {
     //Click back button Action from Program and land on Home page
     public AppHomePage backBTNfromPrograms() {
         logger.info("Back Button from Programs clicking started");
-        page.locator("//ion-buttons[@class=\"buttons-first-slot sc-ion-buttons-md-h sc-ion-buttons-md-s md hydrated\"]").click();
+        page.getByRole(AriaRole.BANNER).locator("path").click();
         logger.info("Back Button from Programs clicking ended");
         return homePage;
     }
@@ -101,7 +101,7 @@ public class AppHomePage extends PWBasePage {
     //Click back button Action from Projects and land on Home page
     public AppHomePage backBTNfromProject() {
         logger.info("Back Button from Project clicking started");
-        page.locator("//ion-buttons[@class=\"buttons-first-slot sc-ion-buttons-md-h sc-ion-buttons-md-s md hydrated\"]").click();
+        page.getByRole(AriaRole.BANNER).locator("path").click();
         logger.info("Back Button from Project clicking ended");
         return homePage;
     }
@@ -109,7 +109,7 @@ public class AppHomePage extends PWBasePage {
     //Click back button Action from Observation and land on Home page
     public AppHomePage backBTNfromObservations() {
         logger.info("Back Button from Observation clicking started");
-        page.locator("//button[@class=\"back-button mdc-icon-button mat-mdc-icon-button mat-unthemed mat-mdc-button-base\"]").click();
+        page.getByRole(AriaRole.BUTTON).click();
         logger.info("Back Button from Observation clicking ended");
         return homePage;
     }
@@ -117,7 +117,7 @@ public class AppHomePage extends PWBasePage {
     //Click back button Action from Survey and land on Home page
     public AppHomePage backBTNfromSurvey() {
         logger.info("Back Button from Survey clicking started");
-        page.locator("//button[@class=\"back-button mdc-icon-button mat-mdc-icon-button mat-unthemed mat-mdc-button-base\"]").click();
+        page.locator("button").filter(new Locator.FilterOptions().setHasText("arrow_back")).click();
         logger.info("Back Button from Survey clicking ended");
         return homePage;
     }
@@ -125,7 +125,7 @@ public class AppHomePage extends PWBasePage {
     //Click back button Action from Reports and land on Home page
     public AppHomePage backBTNfromReports() {
         logger.info("Back Button from Reports clicking started");
-        page.locator("//ion-buttons[@class=\"buttons-first-slot sc-ion-buttons-md-h sc-ion-buttons-md-s md hydrated\"]").click();
+        page.getByRole(AriaRole.BANNER).locator("path").click();
         logger.info("Back Button from Reports clicking ended");
         return homePage;
     }

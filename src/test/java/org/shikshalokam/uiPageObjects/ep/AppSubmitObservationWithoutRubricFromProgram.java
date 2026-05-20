@@ -3,6 +3,7 @@ package org.shikshalokam.uiPageObjects.ep;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
+import com.microsoft.playwright.options.WaitForSelectorState;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.shikshalokam.uiPageObjects.AppAllPages;
@@ -21,10 +22,16 @@ public class AppSubmitObservationWithoutRubricFromProgram extends PWBasePage {
         page.getByText(ObservationWithOutRubricName, new Page.GetByTextOptions().setExact(true)).click();
         page.locator("mat-card-content").first().click();
         accessingObservationWithOUTRubric();
-        page.locator("button").filter(new Locator.FilterOptions().setHasText("arrow_back")).click();
-        page.locator("button").filter(new Locator.FilterOptions().setHasText("arrow_back")).click();
-        page.getByRole(AriaRole.BANNER).locator("path").click();
-        page.getByRole(AriaRole.BANNER).locator("svg").click();
+//        page.locator("//button[.//mat-icon[text()='arrow_back']]").click();
+        Locator btn = page.locator("button.back-button");
+        btn.waitFor(new Locator.WaitForOptions()
+                .setState(WaitForSelectorState.VISIBLE));
+        btn.click();
+
+        Locator btn2 = page.locator("//mat-icon[contains(text(),'arrow_back')]").first();
+        btn2.waitFor(new Locator.WaitForOptions()
+                .setState(WaitForSelectorState.VISIBLE));
+        btn2.click();
         logger.info("Submitting an Observation Without Rubric (from Program) ended.");
         return this;
     }
@@ -34,9 +41,16 @@ public class AppSubmitObservationWithoutRubricFromProgram extends PWBasePage {
         page.getByText(ObservationWithRubricName, new Page.GetByTextOptions().setExact(true)).click();
         page.locator("mat-card-content").first().click();
         observeAgain(observationCount,false);
-        page.locator("//button[contains(@class,'back-button mdc-icon-button mat-mdc-icon-button mat-unthemed mat-mdc-button-base')]").click();
-        page.locator("button").filter(new Locator.FilterOptions().setHasText("arrow_back")).click();
-        page.getByRole(AriaRole.BANNER).locator("svg").click();
+//        page.locator("//button[.//mat-icon[text()='arrow_back']]").click();
+        Locator btn = page.locator("button.back-button");
+        btn.waitFor(new Locator.WaitForOptions()
+                .setState(WaitForSelectorState.VISIBLE));
+        btn.click();
+
+        Locator btn2 = page.locator("//mat-icon[contains(text(),'arrow_back')]").first();
+        btn2.waitFor(new Locator.WaitForOptions()
+                .setState(WaitForSelectorState.VISIBLE));
+        btn2.click();
         logger.info("Submitting an Observation With Rubric (from Program) Again ended.");
         return this;
     }
@@ -45,11 +59,17 @@ public class AppSubmitObservationWithoutRubricFromProgram extends PWBasePage {
         page.locator("ion-title").filter(new Locator.FilterOptions().setHasText("observations")).locator("div").click();
         page.getByText(ObservationWithRubricName, new Page.GetByTextOptions().setExact(true)).click();
         addEntity(addEntityName,false);
-        page.locator("//button[contains(@class,'back-button mdc-icon-button mat-mdc-icon-button mat-unthemed mat-mdc-button-base')]").click();
-        page.locator("button").filter(new Locator.FilterOptions().setHasText("arrow_back")).click();
-        page.getByRole(AriaRole.BANNER).locator("svg").click();
+//        page.locator("//button[.//mat-icon[text()='arrow_back']]").first().click();
+        Locator btn = page.locator("button.back-button");
+        btn.waitFor(new Locator.WaitForOptions()
+                .setState(WaitForSelectorState.VISIBLE));
+        btn.click();
+
+        Locator btn2 = page.locator("//mat-icon[contains(text(),'arrow_back')]").first();
+        btn2.waitFor(new Locator.WaitForOptions()
+                .setState(WaitForSelectorState.VISIBLE));
+        btn2.click();
         logger.info("Submitting an Observation With Rubric (from Program) Add Entity ended.");
         return this;
     }
 }
-

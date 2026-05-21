@@ -308,7 +308,15 @@ public class PWBasePage extends MentorEDBaseTest {
 
     public static void accessProject() {
         logger.info("Accessing Project from Program started.");
-        page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Start Improvement")).click();
+        try {
+            Locator startImprovementBtn = page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Start Improvement"));
+            assertThat(startImprovementBtn).isVisible();
+            startImprovementBtn.click();
+        } catch (Exception e) {
+            logger.error("Could not find 'Start Improvement' button. Available buttons:");
+            page.locator("button").allInnerTexts().forEach(text -> logger.error("Button: " + text));
+            throw e;
+        }
         Boolean certificate = page.locator("lib-details-page span").filter(new Locator.FilterOptions().setHasText(Pattern.compile("^Certificate$"))).isVisible();
         page.getByText("Task details").click();
         page.getByRole(AriaRole.HEADING, new Page.GetByRoleOptions().setName("1. Teachers should understand")).click();
@@ -589,18 +597,17 @@ public class PWBasePage extends MentorEDBaseTest {
             Path png = evidencePath("PNG_Evidence.png");
             Path pdf = evidencePath("PDF_Evidence.pdf");
             Path mp4 = evidencePath("MP4_Evidence.mp4");
-            fileChooserForSurveyService(png);
-            fileChooserForSurveyService(mp4);
-            fileChooserForSurveyService(pdf);
+            fileChooserForSurveyService(png, 0); // First 'Add file' button
+            fileChooserForSurveyService(mp4, 1); // Second 'Add file' button
+            fileChooserForSurveyService(pdf, 2); // Third 'Add file' button
             logger.info("Attaching Evidence for Observation ended.");
         }
 
-        public static void fileChooserForSurveyService(Path filePath) {
-            if (page.locator("#undefined span").filter(new Locator.FilterOptions().setHasText("upload Add file")).isVisible())
-            {
-
+        public static void fileChooserForSurveyService(Path filePath, int buttonIndex) {
+            Locator addFileButton = page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Add file")).nth(buttonIndex);
+            if (addFileButton.isVisible()) {
                 FileChooser fileChooser = page.waitForFileChooser(() -> {
-                    page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Add file")).click();
+                    addFileButton.click();
                     page.getByLabel("", new Page.GetByLabelOptions().setExact(true)).check();
                     page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Upload").setExact(true)).click();
                 });
@@ -651,7 +658,7 @@ public class PWBasePage extends MentorEDBaseTest {
             page.getByLabel("2026").click();
             page.getByLabel("Jan").click();
             page.getByLabel("11 January").click();
-            page.locator("[id=\"\\30 \"] span").filter(new Locator.FilterOptions().setHasText("3 . Has the teacher received")).getByLabel("Yes").check();
+            page.getByText("Yes", new Page.GetByTextOptions().setExact(true)).first().click();
             page.getByText("Yes", new Page.GetByTextOptions().setExact(true)).nth(1).click();
             page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("2")).click();
             page.getByRole(AriaRole.RADIO, new Page.GetByRoleOptions().setName("Yes").setExact(true)).check();
@@ -673,9 +680,8 @@ public class PWBasePage extends MentorEDBaseTest {
             logger.info("Submitting an Observation Without Rubric ended.");
         }
 
-        public void accessingSurvey(String surveyName) {
+        public void accessingSurvey() {
             logger.info("Submitting a Survey (from Program) started.");
-            page.getByText(surveyName, new Page.GetByTextOptions().setExact(true)).click();
             page.getByLabel("Always").check();
             attachEvidenceForSurveyService();
             page.getByLabel("Internet videos").check();

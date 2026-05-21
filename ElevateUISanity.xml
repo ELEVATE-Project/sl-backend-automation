@@ -72,5 +72,31 @@
         </classes>
     </test>
 
+    <!--Access Solutions Using deeplink-->
+
+    <test name="TestProjectDeeplink">
+        <classes>
+            <class name="org.shikshalokam.frontend.ep.TestProjectDeeplink"/>
+        </classes>
+    </test>
+
+    <test name="TestObservationWithRubricDeeplink">
+        <classes>
+            <class name="org.shikshalokam.frontend.ep.TestObservationWithRubricDeeplink"/>
+        </classes>
+    </test>
+
+    <test name="TestObservationWithOutRubricDeeplink">
+        <classes>
+            <class name="org.shikshalokam.frontend.ep.TestObservationWithOutRubricDeeplink"/>
+        </classes>
+    </test>
+
+    <test name="TestSubmitSurveyDeeplink">
+        <classes>
+            <class name="org.shikshalokam.frontend.ep.TestSubmitSurveyDeeplink"/>
+        </classes>
+    </test>
+
 </suite>
 

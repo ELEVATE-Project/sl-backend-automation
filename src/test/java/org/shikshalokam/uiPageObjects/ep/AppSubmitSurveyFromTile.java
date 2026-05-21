@@ -1,6 +1,7 @@
 package org.shikshalokam.uiPageObjects.ep;
 
 import com.microsoft.playwright.Locator;
+import com.microsoft.playwright.Page;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.shikshalokam.uiPageObjects.PWBasePage;
@@ -16,7 +17,8 @@ public class AppSubmitSurveyFromTile extends PWBasePage {
         logger.info("Submitting a Survey (from Tile) started.");
         page.getByPlaceholder("Search your survey here").click();
         page.getByPlaceholder("Search your survey here").fill(surveyName);
-        accessingSurvey(surveyName);
+        page.getByText(surveyName, new Page.GetByTextOptions().setExact(true)).click();
+        accessingSurvey();
         // Wait up to 30 seconds for the success message to appear (regex for robustness)
         Locator successMsg = page.getByText("Your survey has been submitted successfully.");
         successMsg.waitFor(new Locator.WaitForOptions().setTimeout(30000).setState(com.microsoft.playwright.options.WaitForSelectorState.VISIBLE));

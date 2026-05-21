@@ -37,6 +37,11 @@
                     <include name="testUpdateUserWithEmptyName"/>
                 </methods>
             </class>
+            <class name="org.shikshalokam.backend.userservice.TestUsersBulkUpload">
+                <methods>
+                    <include name="testBulkUserUpload"/>
+                </methods>
+            </class>
         </classes>
     </test>
 </suite>

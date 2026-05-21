@@ -1,0 +1,6 @@
+name,email,phone_code,phone,username,password,roles,state,district,block,cluster,school,professional_role,professional_subroles
+Content creator,rahulsher@yopmail.com,PASSword##11,"mentee,content_creator",16,southTripura,160207,1602070012,16020700204,functionaries-officials,"chief-education-officer,district-education-officer,block-education-officer"
+Program designer,karim@yopmail.com,PASSword##11,"mentee,program_designer",16,southTripura,160207,1602070012,16020700204,functionaries-officials,"chief-education-officer,district-education-officer,block-education-officer"
+Reviewer,afghan@yopmail.com,PASSword##11,"mentee,reviewer",16,southTripura,160207,1602070012,16020700204,functionaries-officials,"chief-education-officer,district-education-officer,block-education-officer"
+Rm and reviewer,nezee@yopmail.com,PASSword##11,"mentee,rollout_manager",16,southTripura,160207,1602070012,16020700204,functionaries-officials,"chief-education-officer,district-education-officer,block-education-officer"
+All rights,allinone@yopmail.com,PASSword##11,"mentee,rollout_manager,content_creator,program_designer,reviewer",16,southTripura,160207,1602070012,16020700204,functionaries-officials,"chief-education-officer,district-education-officer,block-education-officer"

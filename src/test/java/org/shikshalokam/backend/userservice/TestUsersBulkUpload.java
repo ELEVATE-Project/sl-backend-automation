@@ -24,23 +24,18 @@ import static io.restassured.RestAssured.given;
 
 public class TestUsersBulkUpload extends UserServiceBaseTest {
 
-    private static final Logger logger =
-            LogManager.getLogger(TestUsersBulkUpload.class);
+    private static final Logger logger = LogManager.getLogger(TestUsersBulkUpload.class);
 
     private String adminToken;
 
     @BeforeMethod
     public void setup() {
 
-        RestAssured.baseURI =
-                PropertyLoader.PROP_LIST.getProperty(
-                        "userservice.qa.api.base.url"
-                );
+        RestAssured.baseURI = PropertyLoader.PROP_LIST.getProperty("userservice.qa.api.base.url");
 
         logger.info("Generating Admin Token");
 
-        adminToken =
-                CommonUtilityUserService.generateAdminToken();
+        adminToken = CommonUtilityUserService.generateAdminToken();
 
         logger.info("Admin Token Generated Successfully");
     }
@@ -48,162 +43,94 @@ public class TestUsersBulkUpload extends UserServiceBaseTest {
     @Test(description = "Bulk Upload Users")
     public void testBulkUserUpload() throws Exception {
 
-        // STEP 1 : Generate Signed URL
-        Response signedUrlResponse =
-                given()
-                        .header(
-                                "X-auth-token",
-                                adminToken
-                        )
-                        .queryParam(
-                                "fileName",
-                                PropertyLoader.PROP_LIST.getProperty(
-                                        "userservice.bulkupload.csv.filename"
-                                )
-                        )
-                        .contentType("text/plain")
-                        .body("")
-                        .when()
-                        .get(
-                                PropertyLoader.PROP_LIST.getProperty(
-                                        "userservice.bulkupload.getsignedurl.endpoint"
-                                )
-                        );
+        Response signedUrlResponse = given().header("X-auth-token", adminToken).queryParam("fileName", PropertyLoader.PROP_LIST.getProperty("userservice.bulkupload.csv.filename")).contentType("text/plain").body("").when().get(PropertyLoader.PROP_LIST.getProperty("userservice.bulkupload.getsignedurl.endpoint"));
 
         signedUrlResponse.prettyPrint();
 
-        Assert.assertEquals(
-                signedUrlResponse.getStatusCode(),
-                200,
-                "Failed To Generate Signed URL"
-        );
+        Assert.assertEquals(signedUrlResponse.getStatusCode(), 200, "Failed To Generate Signed URL");
 
-        String signedUrl =
-                signedUrlResponse.jsonPath()
-                        .getString("result.signedUrl");
+        String signedUrl = signedUrlResponse.jsonPath().getString("result.signedUrl");
 
-        String filePath =
-                signedUrlResponse.jsonPath()
-                        .getString("result.filePath");
+        String filePath = signedUrlResponse.jsonPath().getString("result.filePath");
 
-        logger.info(
-                "Signed URL : {}",
-                signedUrl
-        );
+        logger.info("Signed URL : {}", signedUrl);
 
-        logger.info(
-                "File Path : {}",
-                filePath
-        );
+        logger.info("File Path : {}", filePath);
 
-        // STEP 2 : Upload CSV To GCP Using Multipart Binary Upload
-        File csvFile =
-                new File(
-                        PropertyLoader.PROP_LIST.getProperty(
-                                "userservice.bulkupload.csv.path"
-                        )
-                );
+        File csvFile = new File(PropertyLoader.PROP_LIST.getProperty("userservice.bulkupload.csv.path"));
 
-        HttpPut httpPut =
-                new HttpPut(signedUrl);
+        HttpPut httpPut = new HttpPut(signedUrl);
 
-        HttpEntity entity =
-                MultipartEntityBuilder.create()
-                        .addBinaryBody(
-                                "file",
-                                csvFile,
-                                ContentType.MULTIPART_FORM_DATA,
-                                csvFile.getName()
-                        )
-                        .build();
+        HttpEntity entity = MultipartEntityBuilder.create().addBinaryBody("file", csvFile, ContentType.MULTIPART_FORM_DATA, csvFile.getName()).build();
 
         httpPut.setEntity(entity);
 
-        httpPut.setHeader(
-                "Content-Type",
-                "multipart/form-data"
-        );
+        httpPut.setHeader("Content-Type", "multipart/form-data");
 
-        CloseableHttpClient httpClient =
-                HttpClients.createDefault();
+        CloseableHttpClient httpClient = HttpClients.createDefault();
 
-        CloseableHttpResponse uploadResponse =
-                httpClient.execute(httpPut);
+        CloseableHttpResponse uploadResponse = httpClient.execute(httpPut);
 
-        int uploadStatusCode =
-                uploadResponse.getStatusLine().getStatusCode();
+        int uploadStatusCode = uploadResponse.getStatusLine().getStatusCode();
 
-        logger.info(
-                "Upload Status Code : {}",
-                uploadStatusCode
-        );
+        logger.info("Upload Status Code : {}", uploadStatusCode);
 
-        Assert.assertTrue(
-                uploadStatusCode == 200
-                        || uploadStatusCode == 201,
-                "CSV Upload Failed"
-        );
+        Assert.assertTrue(uploadStatusCode == 200 || uploadStatusCode == 201, "CSV Upload Failed");
 
         uploadResponse.close();
 
         httpClient.close();
 
-        // STEP 3 : Trigger Bulk User Upload API
-        HashMap<String, Object> requestBody =
-                new HashMap<>();
+        HashMap<String, Object> requestBody = new HashMap<>();
 
-        requestBody.put(
-                "file_path",
-                filePath
-        );
+        requestBody.put("file_path", filePath);
 
-        requestBody.put(
-                "upload_type",
-                "upload"
-        );
+        requestBody.put("upload_type", "upload");
 
-        logger.info(
-                "Bulk Upload Request Body : {}",
-                requestBody
-        );
+        logger.info("Bulk Upload Request Body : {}", requestBody);
 
-        Response bulkUploadResponse =
-                given()
-                        .header(
-                                "X-auth-token",
-                                adminToken
-                        )
-                        .header(
-                                "x-tenant-code",
-                                PropertyLoader.PROP_LIST.getProperty(
-                                        "userservice.bulkupload.tenant.code"
-                                )
-                        )
-                        .header(
-                                "x-org-code",
-                                PropertyLoader.PROP_LIST.getProperty(
-                                        "userservice.bulkupload.org.code"
-                                )
-                        )
-                        .contentType("application/json")
-                        .body(requestBody)
-                        .when()
-                        .post(
-                                PropertyLoader.PROP_LIST.getProperty(
-                                        "userservice.bulkupload.create.endpoint"
-                                )
-                        );
+        Response bulkUploadResponse = given().header("X-auth-token", adminToken).header("x-tenant-code", PropertyLoader.PROP_LIST.getProperty("userservice.bulkupload.tenant.code")).header("x-org-code", PropertyLoader.PROP_LIST.getProperty("userservice.bulkupload.org.code")).contentType("application/json").body(requestBody).when().post(PropertyLoader.PROP_LIST.getProperty("userservice.bulkupload.create.endpoint"));
 
         bulkUploadResponse.prettyPrint();
 
-        Assert.assertEquals(
-                bulkUploadResponse.getStatusCode(),
-                200,
-                "Bulk User Upload Failed"
-        );
+        Assert.assertEquals(bulkUploadResponse.getStatusCode(), 200, "Bulk User Upload Failed");
 
-        logger.info(
-                "Bulk User Upload Completed Successfully"
-        );
+        logger.info("Bulk User Upload Completed Successfully");
+    }
+
+    @Test(description = "Negative Test - Generate Signed URL Without Token")
+    public void testGenerateSignedUrlWithoutToken() {
+
+        Response response = given().queryParam("fileName", "bulk_users_creation.csv").contentType("text/plain").body("").when().get(PropertyLoader.PROP_LIST.getProperty("userservice.bulkupload.getsignedurl.endpoint"));
+
+        response.prettyPrint();
+
+        Assert.assertEquals(response.getStatusCode(), 401, "Expected Unauthorized Error");
+    }
+
+    @Test(description = "Negative Test case - Generate Signed URL Without File Name")
+    public void testGenerateSignedUrlWithoutFileName() {
+
+        Response response = given().header("X-auth-token", adminToken).contentType("text/plain").body("").when().get(PropertyLoader.PROP_LIST.getProperty("userservice.bulkupload.getsignedurl.endpoint"));
+
+        response.prettyPrint();
+
+        Assert.assertTrue(response.getStatusCode() == 400 || response.getStatusCode() == 422, "Expected Validation Error");
+    }
+
+    @Test(description = "Negative Test case - Trigger Bulk Upload invalid users")
+    public void testBulkUploadInvalidUsers() {
+
+        HashMap<String, Object> requestBody = new HashMap<>();
+
+        requestBody.put("file_path", "users/bulk_invalid_users_creation.csv");
+
+        requestBody.put("upload_type", "upload");
+
+        Response response = given().header("x-tenant-code", PropertyLoader.PROP_LIST.getProperty("userservice.bulkupload.tenant.code")).header("x-org-code", PropertyLoader.PROP_LIST.getProperty("userservice.bulkupload.org.default.code")).contentType("application/json").body(requestBody).when().post(PropertyLoader.PROP_LIST.getProperty("userservice.bulkupload.create.endpoint"));
+
+        response.prettyPrint();
+
+        Assert.assertEquals(response.getStatusCode(), 401, "Expected Unauthorized Error");
     }
 }

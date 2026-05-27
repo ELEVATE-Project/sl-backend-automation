@@ -177,5 +177,46 @@ public class CommonUtilityUserService {
 
         return given().header("Content-Type", "multipart/form-data").body(csvFile).when().put(signedUrl);
     }
-    
+
+    public static Response loginCreatedBulkUser(String identifier, String password) {
+
+        HashMap<String, Object> requestBody = new HashMap<>();
+
+        requestBody.put("identifier", identifier);
+
+        requestBody.put("password", password);
+
+        return given().header("Origin", PropertyLoader.PROP_LIST.getProperty("ep.sl.origin")).contentType("application/json").body(requestBody).when().post(PropertyLoader.PROP_LIST.getProperty("userservice.login.endpointasuser"));
+    }
+
+    public static void validateCreatedUserLogin(String identifier, String password) throws Exception {
+
+        Response loginResponse = null;
+
+        int maxRetries = 10;
+
+        for (int retry = 1; retry <= maxRetries; retry++) {
+
+            logger.info("Attempting Login For Created User - Retry : {}", retry);
+
+            loginResponse = loginCreatedBulkUser(identifier, password);
+
+            loginResponse.prettyPrint();
+
+            if (loginResponse.getStatusCode() == 200) {
+
+                String accessToken = loginResponse.jsonPath().getString("result.access_token");
+
+                if (accessToken != null && !accessToken.isEmpty()) {
+
+                    logger.info("Created User Login Successful");
+
+                    return;
+                }
+            }
+
+            Thread.sleep(15000);
+        }
+    }
+
 }

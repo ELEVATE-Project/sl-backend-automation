@@ -33,7 +33,7 @@ public class TestUsersBulkUpload extends UserServiceBaseTest {
     }
 
     @Test(description = "Bulk Upload Users")
-    public void testBulkUserUpload() {
+    public void testBulkUserUpload() throws Exception {
 
         // Step 1 : Generate Signed URL
         Response signedUrlResponse = CommonUtilityUserService.getSignedUrlForBulkUpload(adminToken);
@@ -69,13 +69,11 @@ public class TestUsersBulkUpload extends UserServiceBaseTest {
         logger.info("Bulk Upload Request Body : {}", requestBody);
 
         Response bulkUploadResponse = given().header("X-auth-token", adminToken)
-                .header("x-tenant-code",
-                        PropertyLoader.PROP_LIST.getProperty(
+                .header("x-tenant-code", PropertyLoader.PROP_LIST.getProperty(
                         "userservice.bulkupload.tenant.code")
                 )
-                .header("x-org-code",
-                        PropertyLoader.PROP_LIST.getProperty(
-                                "userservice.bulkupload.org.code")
+                .header("x-org-code", PropertyLoader.PROP_LIST.getProperty(
+                        "userservice.bulkupload.org.code")
                 )
                 .contentType("application/json")
                 .body(requestBody)
@@ -89,5 +87,16 @@ public class TestUsersBulkUpload extends UserServiceBaseTest {
         Assert.assertEquals(bulkUploadResponse.getStatusCode(), 200, "Bulk User Upload Failed");
 
         logger.info("Bulk User Upload Completed Successfully");
+
+        // Step 4 : Validate Created User Login
+
+        CommonUtilityUserService.validateCreatedUserLogin(
+                "rahulsher@yopmail.com",
+                "PASSword##11"
+        );
+
+        logger.info(
+                "Created User Login Validation Completed Successfully"
+        );
     }
 }

@@ -168,7 +168,11 @@ public class CommonUtilityUserService {
 
     public static Response getSignedUrlForBulkUpload(String adminToken) {
 
-        return given().header("X-auth-token", adminToken).queryParam("fileName", PropertyLoader.PROP_LIST.getProperty("userservice.bulkupload.csv.filename")).contentType("text/plain").body("").when().get(PropertyLoader.PROP_LIST.getProperty("userservice.bulkupload.getsignedurl.endpoint"));
+        return given().header("X-auth-token", adminToken)
+                      .queryParam("fileName", PropertyLoader.PROP_LIST.getProperty("userservice.bulkupload.csv.filename"))
+                      .contentType("text/plain").body("")
+                      .when()
+                      .get(PropertyLoader.PROP_LIST.getProperty("userservice.bulkupload.getsignedurl.endpoint"));
     }
 
     public static Response uploadBulkCsvFile(String signedUrl) {
@@ -186,7 +190,11 @@ public class CommonUtilityUserService {
 
         requestBody.put("password", password);
 
-        return given().header("Origin", PropertyLoader.PROP_LIST.getProperty("ep.sl.origin")).contentType("application/json").body(requestBody).when().post(PropertyLoader.PROP_LIST.getProperty("userservice.login.endpointasuser"));
+        return given().header("Origin", PropertyLoader.PROP_LIST.getProperty("ep.sl.origin"))
+                      .contentType("application/json")
+                      .body(requestBody)
+                      .when()
+                      .post(PropertyLoader.PROP_LIST.getProperty("userservice.login.endpointasuser"));
     }
 
     public static void validateCreatedUserLogin(String identifier, String password) throws Exception {

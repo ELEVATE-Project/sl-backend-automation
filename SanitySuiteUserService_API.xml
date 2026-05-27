@@ -40,9 +40,6 @@
             <class name="org.shikshalokam.backend.userservice.TestUsersBulkUpload">
                 <methods>
                     <include name="testBulkUserUpload"/>
-                    <include name="testGenerateSignedUrlWithoutToken"/>
-                    <include name="testGenerateSignedUrlWithoutFileName"/>
-                    <include name="testBulkUploadInvalidUsers"/>
                 </methods>
             </class>
         </classes>

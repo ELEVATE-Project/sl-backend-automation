@@ -6,6 +6,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.shikshalokam.backend.PropertyLoader;
 
+import java.io.File;
+import java.util.HashMap;
+
 import static io.restassured.RestAssured.given;
 
 public class CommonUtilityUserService {
@@ -162,4 +165,17 @@ public class CommonUtilityUserService {
 
         return PropertyLoader.PROP_LIST.getProperty(key);
     }
+
+    public static Response getSignedUrlForBulkUpload(String adminToken) {
+
+        return given().header("X-auth-token", adminToken).queryParam("fileName", PropertyLoader.PROP_LIST.getProperty("userservice.bulkupload.csv.filename")).contentType("text/plain").body("").when().get(PropertyLoader.PROP_LIST.getProperty("userservice.bulkupload.getsignedurl.endpoint"));
+    }
+
+    public static Response uploadBulkCsvFile(String signedUrl) {
+
+        File csvFile = new File(PropertyLoader.PROP_LIST.getProperty("userservice.bulkupload.csv.path"));
+
+        return given().header("Content-Type", "multipart/form-data").body(csvFile).when().put(signedUrl);
+    }
+    
 }

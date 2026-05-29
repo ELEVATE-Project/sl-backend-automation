@@ -19,13 +19,6 @@ public class AppSubmitSurveyFromTile extends PWBasePage {
         page.getByPlaceholder("Search your survey here").fill(surveyName);
         page.getByText(surveyName, new Page.GetByTextOptions().setExact(true)).click();
         accessingSurvey();
-        // Wait up to 30 seconds for the success message to appear (regex for robustness)
-        Locator successMsg = page.getByText("Your survey has been submitted successfully.");
-        successMsg.waitFor(new Locator.WaitForOptions().setTimeout(30000).setState(com.microsoft.playwright.options.WaitForSelectorState.VISIBLE));
-        if (!successMsg.isVisible(new Locator.IsVisibleOptions().setTimeout(5000))) {
-            logger.error("Success message not visible after waiting.");
-            throw new AssertionError("Survey submission success message not visible");
-        }
         page.locator("(//button[@mat-ripple-loader-class-name=\"mat-mdc-button-ripple\"])[1]").click();
         logger.info("Submitting a Survey (from Tile) ended.");
         return this;

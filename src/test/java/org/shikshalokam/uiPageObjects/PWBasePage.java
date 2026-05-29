@@ -312,6 +312,11 @@ public class PWBasePage extends MentorEDBaseTest {
             Locator startImprovementBtn = page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Start Improvement"));
             assertThat(startImprovementBtn).isVisible();
             startImprovementBtn.click();
+            boolean YesBtn = page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Yes")).isVisible();
+            if (YesBtn) {
+                page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Yes")).click();
+            }
+
         } catch (Exception e) {
             logger.error("Could not find 'Start Improvement' button. Available buttons:");
             page.locator("button").allInnerTexts().forEach(text -> logger.error("Button: " + text));
@@ -597,14 +602,14 @@ public class PWBasePage extends MentorEDBaseTest {
             Path png = evidencePath("PNG_Evidence.png");
             Path pdf = evidencePath("PDF_Evidence.pdf");
             Path mp4 = evidencePath("MP4_Evidence.mp4");
-            fileChooserForSurveyService(png, 0); // First 'Add file' button
-            fileChooserForSurveyService(mp4, 1); // Second 'Add file' button
-            fileChooserForSurveyService(pdf, 2); // Third 'Add file' button
+            fileChooserForSurveyService(png); // First 'Add file' button
+            fileChooserForSurveyService(mp4); // Second 'Add file' button
+            fileChooserForSurveyService(pdf); // Third 'Add file' button
             logger.info("Attaching Evidence for Observation ended.");
         }
 
-        public static void fileChooserForSurveyService(Path filePath, int buttonIndex) {
-            Locator addFileButton = page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Add file")).nth(buttonIndex);
+        public static void fileChooserForSurveyService(Path filePath) {
+            Locator addFileButton = page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Add file")).nth(0);
             if (addFileButton.isVisible()) {
                 FileChooser fileChooser = page.waitForFileChooser(() -> {
                     addFileButton.click();
@@ -701,6 +706,13 @@ public class PWBasePage extends MentorEDBaseTest {
             assertThat(syncingText).isHidden(
                     new LocatorAssertions.IsHiddenOptions().setTimeout(30000)
             );
+            // Wait up to 30 seconds for the success message to appear (regex for robustness)
+            Locator successMsg = page.getByText("Your survey has been submitted successfully.");
+            successMsg.waitFor(new Locator.WaitForOptions().setTimeout(20000).setState(com.microsoft.playwright.options.WaitForSelectorState.VISIBLE));
+            if (!successMsg.isVisible(new Locator.IsVisibleOptions().setTimeout(1000))) {
+                logger.error("Success message not visible after waiting.");
+                throw new AssertionError("Survey submission success message not visible");
+            }
             assertThat(page.getByText("Your survey has been")).isVisible();
             logger.info("Submitting a Survey (from Program) ended.");
         }

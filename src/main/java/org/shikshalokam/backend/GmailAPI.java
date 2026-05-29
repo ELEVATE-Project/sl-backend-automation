@@ -29,6 +29,8 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static org.shikshalokam.backend.elevateUtility.CommonUtilitySAAS.fetchProperty;
+
 public class GmailAPI {
 
     private static final String APPLICATION_NAME = "RAJU";
@@ -164,19 +166,36 @@ public class GmailAPI {
         Session session = Session.getDefaultInstance(properties);
 
         try {
-            // Connect to Gmail's IMAP server
+            // Connect to Gmail IMAP server
             Store store = session.getStore("imaps");
             store.connect("imap.gmail.com", username, appPassword);
 
-            // Open INBOX folder
+            // Open inbox
             Folder inbox = store.getFolder("INBOX");
             inbox.open(Folder.READ_ONLY);
-            String body = (String) inbox.getMessage(inbox.getMessageCount()).getContent();
-            String[] split = body.split("<strong>");
 
-            inbox.close(false);
-            store.close();
-            return extractNumbers(split[1]).get(0);
+            // Wait for OTP mail
+            java.lang.Thread.sleep(Long.parseLong(fetchProperty("ep.waitingTimeForFetchOTP")));
+
+            // Get latest mail
+            javax.mail.Message message = inbox.getMessage(inbox.getMessageCount());
+
+            // Read mail body
+            String body = message.getContent().toString();
+
+            System.out.println("EMAIL BODY : " + body);
+
+            // Extract OTP
+            List<String> numbers = extractNumbers(body);
+
+            for (String number : numbers) {
+                // assuming OTP is 6 digits
+                if (number.matches("\\d{6}")) {
+                    return number;
+                }
+            }
+            throw new RuntimeException("OTP not found");
+
         } catch (Exception e) {
             e.printStackTrace();
             return null;

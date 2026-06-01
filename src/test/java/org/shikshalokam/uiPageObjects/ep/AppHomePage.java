@@ -109,7 +109,7 @@ public class AppHomePage extends PWBasePage {
     //Click back button Action from Observation and land on Home page
     public AppHomePage backBTNfromObservations() {
         logger.info("Back Button from Observation clicking started");
-        page.getByRole(AriaRole.BUTTON).click();
+        page.locator("button").filter(new Locator.FilterOptions().setHasText("arrow_back")).click();
         logger.info("Back Button from Observation clicking ended");
         return homePage;
     }

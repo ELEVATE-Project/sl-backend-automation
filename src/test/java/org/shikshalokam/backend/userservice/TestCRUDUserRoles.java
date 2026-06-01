@@ -1,29 +1,48 @@
-package org.shikshalokam.backend;
+package org.shikshalokam.backend.userservice;
 
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.*;
 import org.json.simple.JSONObject;
+import org.shikshalokam.backend.MentorBase;
+import org.shikshalokam.backend.userServiceUtility.CommonUtilityUserService;
+import org.shikshalokam.backend.userServiceUtility.CommonUtilityUserService.*;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import java.net.URI;
 import java.net.URISyntaxException;
 import static io.restassured.RestAssured.*;
 import static org.shikshalokam.backend.PropertyLoader.PROP_LIST;
+import static org.shikshalokam.backend.userServiceUtility.CommonUtilityUserService.*;
 import static org.testng.Assert.*;
 
-public class TestCRUDUserRoles extends MentorEDBaseTest {
+public class TestCRUDUserRoles extends UserServiceBaseTest {
 
     public static final Logger logger = LogManager.getLogger(TestCRUDUserRoles.class);
     private URI createUserRolesEndpoint, getUserRolesEndPoint, updateUserRolesEndpoint, deleteUserRolesEndpoint;
-    private String userRoleTitle, createdRoleID,updateUserRoleTitle,label;
+    private String token,userRoleTitle, createdRoleID,updateUserRoleTitle,label;
 
     @BeforeTest
-    public void init() {
-        logger.info("Logging into the application :");
-        loginToMentorED(PROP_LIST.get("mentor.qa.admin.login.user").toString(), PROP_LIST.get("mentor.qa.admin.login.password").toString());
+    @org.testng.annotations.Parameters({"role"})
+    public void init(String role) {
+        logger.info("Running tests for role: " + role);
+
+        if (role.equalsIgnoreCase("admin")) {
+            loginAsAdmin();
+            token = CommonUtilityUserService.adminToken;
+
+        } else if (role.equalsIgnoreCase("tenantAdmin")) {
+            loginAsTenantAdmin();
+            token = CommonUtilityUserService.tenantAdminToken;
+
+        } else {
+            throw new RuntimeException("Invalid role passed: " + role);
+        }
+
+        if (token == null || token.isEmpty()) {
+            throw new RuntimeException("Token is null for role: " + role);
+        }
 
         createUserRolesEndpoint = MentorBase.createURI("/user/v1/user-role/create");
         getUserRolesEndPoint = MentorBase.createURI("/user/v1/user-role/list");
@@ -38,7 +57,27 @@ public class TestCRUDUserRoles extends MentorEDBaseTest {
         logger.info("Started calling --------------- Create User Roles ----------- ");
         Response response = createUserRole(userRoleTitle, label, "1", "ACTIVE", "PUBLIC");
 
-        logger.info("Response Code: {}, Response Body: {}", response.getStatusCode(), response.getBody().asString());
+        //logger.info("Response Code: {}, Response Body: {}", response.getStatusCode(), response.getBody().asString());
+        logger.info(
+                "\nResponse Code : {}" +
+                        "\nMessage       : {}" +
+                        "\nRole ID       : {}" +
+                        "\nTitle         : {}" +
+                        "\nUser Type     : {}" +
+                        "\nStatus        : {}" +
+                        "\nVisibility    : {}" +
+                        "\nOrganization  : {}" +
+                        "\nTenant Code   : {}",
+                response.getStatusCode(),
+                response.jsonPath().getString("message"),
+                response.jsonPath().getString("result.id"),
+                response.jsonPath().getString("result.title"),
+                response.jsonPath().getString("result.user_type"),
+                response.jsonPath().getString("result.status"),
+                response.jsonPath().getString("result.visibility"),
+                response.jsonPath().getString("result.organization_id"),
+                response.jsonPath().getString("result.tenant_code")
+        );
         assertEquals(response.getStatusCode(), 201, "User role creation failed with " + response.getStatusCode());
 
         getUserRolesID(true,userRoleTitle );
@@ -56,7 +95,7 @@ public class TestCRUDUserRoles extends MentorEDBaseTest {
         assertEquals(response.getStatusCode(), 422, "Expected Bad Request for missing required fields, but got " + response.getStatusCode());
 
         String responseBody = response.getBody().asString();
-        assertTrue(responseBody.contains("title field is empty") || responseBody.contains("title is invalid, must not contain spaces"),
+        assertTrue(responseBody.contains("title field is required") || responseBody.contains("title must contain only lowercase letters (a–z) and underscores"),
                 "Expected error messages for missing title or invalid title not found in response: " + responseBody);
 
         logger.info("Ended calling --------------- CreateUserRoles: Negative test case completed with assertions on missing fields.");
@@ -67,7 +106,23 @@ public class TestCRUDUserRoles extends MentorEDBaseTest {
         logger.info("Started calling ---------------- Update User Roles ---------------");
         Response response = updateUserRole(createdRoleID, updateUserRoleTitle, "1", "ACTIVE", "PUBLIC");
 
-        logger.info("Response Code: {}, Response Body: {}", response.getStatusCode(), response.getBody().asString());
+        //logger.info("Response Code: {}, Response Body: {}", response.getStatusCode(), response.getBody().asString());
+        logger.info(
+                "\nResponse Code : {}" +
+                        "\nMessage       : {}" +
+                        "\nTitle         : {}" +
+                        "\nUser Type     : {}" +
+                        "\nStatus        : {}" +
+                        "\nVisibility    : {}" +
+                        "\nOrganization  : {}",
+                response.getStatusCode(),
+                response.jsonPath().getString("message"),
+                response.jsonPath().getString("result.title"),
+                response.jsonPath().getString("result.user_type"),
+                response.jsonPath().getString("result.status"),
+                response.jsonPath().getString("result.visibility"),
+                response.jsonPath().getString("result.organization_id")
+        );
         assertEquals(response.getStatusCode(), 201, "User role updation failed with " + response.getStatusCode());
 
         Response responsebody = getUserRolesID(false, updateUserRoleTitle);
@@ -89,7 +144,7 @@ public class TestCRUDUserRoles extends MentorEDBaseTest {
         assertEquals(response.getStatusCode(), 422, "Expected Bad Request for missing required fields, but got " + response.getStatusCode());
 
         String responseBody = response.getBody().asString();
-        assertTrue(responseBody.contains("title field is empty") || responseBody.contains("title is invalid, must not contain spaces"),
+        assertTrue(responseBody.contains("title field is required") || responseBody.contains("title must contain only lowercase letters (a–z) and underscores"),
                 "Expected error messages for missing title or invalid title not found in response: " + responseBody);
 
         logger.info("Ended calling --------------- UpdateUserRoles: Negative test completed with assertions on missing fields.");
@@ -117,12 +172,12 @@ public class TestCRUDUserRoles extends MentorEDBaseTest {
         JSONObject requestBody = new JSONObject();
         requestBody.put("title", title);
         requestBody.put("label", label);
-        requestBody.put("user_type", userType);
+        requestBody.put("user_type", Integer.valueOf(userType));
         requestBody.put("status", status);
         requestBody.put("visibility", visibility);
 
         Response response = given()
-                .header("X-auth-token", "bearer " + X_AUTH_TOKEN)
+                .header("X-auth-token", token)
                 .contentType(ContentType.JSON)
                 .body(requestBody.toString())
                 .when().post(createUserRolesEndpoint);
@@ -133,7 +188,7 @@ public class TestCRUDUserRoles extends MentorEDBaseTest {
         logger.info("Started calling ---------- GET User Roles -------------");
 
         Response response = given()
-                .header("X-auth-token", "bearer " + X_AUTH_TOKEN)
+                .header("X-auth-token", token)
                 .queryParam("search", title)
                 .when().get(getUserRolesEndPoint);
 
@@ -146,11 +201,11 @@ public class TestCRUDUserRoles extends MentorEDBaseTest {
     }
 
     private Response updateUserRole(String roleID, String title, String userType, String status, String visibility) {
+
         try {
-            updateUserRolesEndpoint = new URI("/user/v1/user-role/update/" + roleID);
+            updateUserRolesEndpoint =  new URI("/user/v1/user-role/update/" + roleID);
         } catch (URISyntaxException e) {
-            logger.error("Invalid URI syntax for the endpoint", e);
-            throw new RuntimeException("Invalid URI Syntax", e);
+            throw new RuntimeException(e);
         }
 
         JSONObject requestBodyJson = new JSONObject();
@@ -161,10 +216,11 @@ public class TestCRUDUserRoles extends MentorEDBaseTest {
 
         logger.info(requestBodyJson.toJSONString());
         Response response = given()
-                .header("X-auth-token", "bearer " + X_AUTH_TOKEN)
+                .header("X-auth-token", token)
                 .contentType(ContentType.JSON)
                 .body(requestBodyJson.toString())
-                .when().post(updateUserRolesEndpoint);
+                .when()
+                .post(updateUserRolesEndpoint);
         return response;
     }
 
@@ -177,7 +233,7 @@ public class TestCRUDUserRoles extends MentorEDBaseTest {
         }
 
         Response response = given()
-                .header("X-auth-token", "bearer " + X_AUTH_TOKEN)
+                .header("X-auth-token", token)
                 .contentType(ContentType.JSON)
                 .when().delete(deleteUserRolesEndpoint);
         return response;

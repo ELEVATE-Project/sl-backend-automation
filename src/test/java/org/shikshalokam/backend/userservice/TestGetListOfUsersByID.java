@@ -18,25 +18,24 @@ import static org.testng.Assert.assertTrue;
 
 public class TestGetListOfUsersByID extends UserServiceBaseTest {
 
-    private static final Logger logger =
-            LogManager.getLogger(TestGetListOfUsersByID.class);
+    private static final Logger logger = LogManager.getLogger(TestGetListOfUsersByID.class);
 
     @BeforeMethod
     public void init() {
 
         logger.info("Logging into User Service");
 
-        CommonUtilityUserService.loginToUser(
-                PROP_LIST.get("userservice.qa.phone.login.identifier").toString(),
-                PROP_LIST.get("userservice.qa.phone.login.password").toString()
-        );
+        CommonUtilityUserService.loginToUser();
+
+         if (CommonUtilityUserService.userToken == null || CommonUtilityUserService.userToken.isEmpty()) {
+             throw new RuntimeException("User Token is null or empty");
+         }
     }
 
     @Test
     public void testGetListOfUsersById()throws URISyntaxException {
 
         logger.info("Started calling Search User API");
-
         URI endpoint = new URI(
                 PROP_LIST.get("userservice.search.user.endpoint").toString()
         );
@@ -44,10 +43,7 @@ public class TestGetListOfUsersByID extends UserServiceBaseTest {
         String requestBody = "{\n" + "  \"user_ids\": [" + PROP_LIST.get("userservice.search.user.id").toString() + "]\n" + "}";
 
         Response response = given()
-                .header(
-                        "X-auth-token",
-                        CommonUtilityUserService.UserToken
-                )
+                .header("X-auth-token", CommonUtilityUserService.userToken)
                 .contentType(ContentType.JSON)
                 .body(requestBody)
                 .when()
@@ -60,9 +56,7 @@ public class TestGetListOfUsersByID extends UserServiceBaseTest {
         );
 
         String responseBody = response.getBody().asString();
-
         logger.info("Response: " + responseBody);
-
         assertTrue(
                 responseBody.contains(
                         PROP_LIST.get("userservice.search.user.id").toString()
@@ -87,7 +81,7 @@ public class TestGetListOfUsersByID extends UserServiceBaseTest {
         Response response = given()
                 .header(
                         "X-auth-token",
-                        CommonUtilityUserService.UserToken
+                        CommonUtilityUserService.userToken
                 )
                 .contentType(ContentType.JSON)
                 .body(requestBody)
@@ -101,9 +95,7 @@ public class TestGetListOfUsersByID extends UserServiceBaseTest {
         );
 
         String responseBody = response.getBody().asString();
-
         logger.info("Response: " + responseBody);
-
         assertTrue(
                 responseBody.contains("result"),
                 "Result field not present in response."

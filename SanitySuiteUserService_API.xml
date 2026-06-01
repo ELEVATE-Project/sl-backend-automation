@@ -26,7 +26,7 @@
                     <include name="emptyPasswordWithPhoneNumber"/>
                 </methods>
             </class>
-            <class name="org.shikshalokam.backend.userservice.TestUsersModules">
+            <class name="org.shikshalokam.backend.userservice.TestUsersOperations">
                 <methods>
                     <include name="testReadUser"/>
                     <include name="testReadUserWithInvalidToken"/>

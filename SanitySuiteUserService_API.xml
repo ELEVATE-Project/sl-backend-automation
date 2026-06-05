@@ -37,6 +37,16 @@
                     <include name="testUpdateUserWithEmptyName"/>
                 </methods>
             </class>
+            <class name="org.shikshalokam.backend.userservice.TestUsersTenantCRUDOperations">
+                <methods>
+                    <include name="testCreateTenant"/>
+                    <include name="testUpdateTenant"/>
+                    <include name="testAddDomainToTenant"/>
+                    <include name="testRemoveDomainFromTenant"/>
+                    <include name="testReadTenant"/>
+                    <include name="testListTenants"/>
+                </methods>
+            </class>
         </classes>
     </test>
 </suite>

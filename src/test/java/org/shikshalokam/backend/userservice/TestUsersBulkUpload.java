@@ -91,11 +91,11 @@ public class TestUsersBulkUpload extends UserServiceBaseTest {
         // Step 4 : Validate Created User Login
 
         CommonUtilityUserService.validateCreatedUserLogin(
-                "rahulsher@yopmail.com",
+                "rahulsherr@yopmail.com",
                 "PASSword##11"
         );
 
-        logger.info(
+
                 "Created User Login Validation Completed Successfully"
         );
     }

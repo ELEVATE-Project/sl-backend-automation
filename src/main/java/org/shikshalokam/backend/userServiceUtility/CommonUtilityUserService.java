@@ -10,6 +10,7 @@ import java.io.File;
 import java.util.HashMap;
 
 import static io.restassured.RestAssured.given;
+import static org.testng.Assert.fail;
 
 public class CommonUtilityUserService {
 
@@ -179,7 +180,7 @@ public class CommonUtilityUserService {
 
         File csvFile = new File(PropertyLoader.PROP_LIST.getProperty("userservice.bulkupload.csv.path"));
 
-        return given().header("Content-Type", "multipart/form-data").body(csvFile).when().put(signedUrl);
+        return given().contentType("text/csv").body(csvFile).when().put(signedUrl);
     }
 
     public static Response loginCreatedBulkUser(String identifier, String password) {
@@ -225,6 +226,8 @@ public class CommonUtilityUserService {
 
             Thread.sleep(15000);
         }
+
+        fail("Created user login failed after " + maxRetries + " retries for identifier: " + identifier);
     }
 
 }

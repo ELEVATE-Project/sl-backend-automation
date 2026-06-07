@@ -179,7 +179,7 @@ public class CommonUtilityUserService {
 
         File csvFile = new File(PropertyLoader.PROP_LIST.getProperty("userservice.bulkupload.csv.path"));
 
-        return given().header("Content-Type", "multipart/form-data").body(csvFile).when().put(signedUrl);
+        return given().contentType("text/csv").body(csvFile).when().put(signedUrl);
     }
 
     public static Response loginCreatedBulkUser(String identifier, String password) {
@@ -225,6 +225,8 @@ public class CommonUtilityUserService {
 
             Thread.sleep(15000);
         }
+
+        throw new AssertionError("Created user login validation failed after " + maxRetries + " retries");
     }
 
 }

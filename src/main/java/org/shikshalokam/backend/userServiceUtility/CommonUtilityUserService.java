@@ -164,15 +164,60 @@ public class CommonUtilityUserService {
     }
 
     // Create Entity Type
-    public static Response createEntityType(String token, String value, String label) {
+    public static Response createEntityType(
+            String token,
+            String value,
+            String label
+    ) {
 
         RestAssured.baseURI = baseUrl;
 
-        String requestBody = "{" + "\"value\":\"" + value + "\"," + "\"label\":\"" + label + "\"," + "\"status\":\"ACTIVE\"," + "\"type\":\"SYSTEM\"," + "\"allow_filtering\":true," + "\"model_names\":[\"User\"]," + "\"data_type\":\"STRING\"" + "}";
+        String requestBody =
+                "{"
+                        + "\"value\":\"" + value + "\","
+                        + "\"label\":\"" + label + "\","
+                        + "\"status\":\""
+                        + fetchProperty(
+                        "userservice.entitytype.status"
+                )
+                        + "\","
+                        + "\"type\":\""
+                        + fetchProperty(
+                        "userservice.entitytype.type"
+                )
+                        + "\","
+                        + "\"allow_filtering\":true,"
+                        + "\"model_names\":[\""
+                        + fetchProperty(
+                        "userservice.entitytype.modelname"
+                )
+                        + "\"],"
+                        + "\"data_type\":\""
+                        + fetchProperty(
+                        "userservice.entitytype.datatype"
+                )
+                        + "\""
+                        + "}";
 
-        logger.info("Create Entity Type Request Body : {}", requestBody);
+        logger.info(
+                "Create Entity Type Request Body : {}",
+                requestBody
+        );
 
-        Response response = given().header("X-auth-token", token).contentType("application/json").body(requestBody).when().post(fetchProperty("userservice.entitytype.create.endpoint"));
+        Response response =
+                given()
+                        .header(
+                                "X-auth-token",
+                                token
+                        )
+                        .contentType("application/json")
+                        .body(requestBody)
+                        .when()
+                        .post(
+                                fetchProperty(
+                                        "userservice.entitytype.create.endpoint"
+                                )
+                        );
 
         response.prettyPrint();
 
@@ -256,7 +301,10 @@ public class CommonUtilityUserService {
 
         RestAssured.baseURI = baseUrl;
 
-        Response response = given().header("X-auth-token", token).when().delete(fetchProperty("userservice.entitytype.delete.endpoint") + entityTypeId);
+        Response response = given()
+                .header("X-auth-token", token)
+                .when()
+                .delete(fetchProperty("userservice.entitytype.delete.endpoint") + entityTypeId);
 
         response.prettyPrint();
 

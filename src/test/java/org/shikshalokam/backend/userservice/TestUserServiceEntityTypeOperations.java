@@ -30,19 +30,46 @@ public class TestUserServiceEntityTypeOperations extends UserServiceBaseTest {
     @Test(description = "Create Entity Type")
     public void testCreateEntityType() {
 
-        Response response = CommonUtilityUserService.createEntityType(adminToken, randomValue, randomLabel);
+        Response response =
+                CommonUtilityUserService.createEntityType(
+                        adminToken,
+                        randomValue,
+                        randomLabel
+                );
 
         response.prettyPrint();
 
-        Assert.assertEquals(response.getStatusCode(), 201, "Entity Type Creation Failed");
+        Assert.assertEquals(
+                response.getStatusCode(),
+                201,
+                "Entity Type Creation Failed"
+        );
 
-        Assert.assertTrue(response.getBody().asString().contains(randomValue));
+        Assert.assertTrue(
+                response.getBody()
+                        .asString()
+                        .contains(randomValue)
+        );
 
-        Assert.assertTrue(response.getBody().asString().contains(randomLabel));
+        Assert.assertTrue(
+                response.getBody()
+                        .asString()
+                        .contains(randomLabel)
+        );
 
-        entityTypeId = response.jsonPath().getInt("result.id");
+        entityTypeId =
+                response.jsonPath()
+                        .getInt("result.id");
 
-        logger.info("Created Entity Type Id : {}", entityTypeId);
+        Assert.assertTrue(
+                entityTypeId > 0,
+                "Invalid Entity Type Id Generated"
+        );
+
+        logger.info(
+                "Created Entity Type Id : {}",
+                entityTypeId
+        );
     }
 
     @Test(dependsOnMethods = "testCreateEntityType", description = "Read Created Entity Type")

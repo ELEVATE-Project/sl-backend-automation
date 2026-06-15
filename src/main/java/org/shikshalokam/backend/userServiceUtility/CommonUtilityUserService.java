@@ -218,15 +218,10 @@ public class CommonUtilityUserService {
 
         origin = isSG ? fetchProperty("ep.sg.origin") : fetchProperty("ep.sl.origin");
 
-        HashMap<String, Object> requestBody = new HashMap<>();
-
-        requestBody.put("identifier", identifier);
-
-        requestBody.put("password", password);
-
-        return given().header("Origin", origin)
-                .contentType("application/json")
-                .body(requestBody)
+        return given().contentType("application/x-www-form-urlencoded; charset=UTF-8")
+                .formParam("identifier", identifier)
+                .formParam("password", password)
+                .header("Origin", origin)
                 .when()
                 .post(fetchProperty("userservice.login.endpointasuser"));
     }

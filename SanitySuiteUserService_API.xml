@@ -37,6 +37,14 @@
                     <include name="testUpdateUserWithEmptyName"/>
                 </methods>
             </class>
+            <class name="org.shikshalokam.backend.userservice.TestUserServiceEntityTypeOperations">
+                <methods>
+                    <include name="testCreateEntityType"/>
+                    <include name="testReadEntityTypes"/>
+                    <include name="testReadAllEntityTypesWithEntities"/>
+                    <include name="testDeleteEntityType"/>
+                </methods>
+            </class>
         </classes>
     </test>
 </suite>

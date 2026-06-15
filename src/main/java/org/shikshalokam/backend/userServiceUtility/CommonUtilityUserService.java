@@ -162,4 +162,104 @@ public class CommonUtilityUserService {
 
         return PropertyLoader.PROP_LIST.getProperty(key);
     }
+
+    // Create Entity Type
+    public static Response createEntityType(String token, String value, String label) {
+
+        RestAssured.baseURI = baseUrl;
+
+        String requestBody = "{" + "\"value\":\"" + value + "\"," + "\"label\":\"" + label + "\"," + "\"status\":\"ACTIVE\"," + "\"type\":\"SYSTEM\"," + "\"allow_filtering\":true," + "\"model_names\":[\"User\"]," + "\"data_type\":\"STRING\"" + "}";
+
+        logger.info("Create Entity Type Request Body : {}", requestBody);
+
+        Response response = given().header("X-auth-token", token).contentType("application/json").body(requestBody).when().post(fetchProperty("userservice.entitytype.create.endpoint"));
+
+        response.prettyPrint();
+
+        return response;
+    }
+
+    // Read Single Entity Type
+    public static Response readEntityType(
+            String token,
+            String value
+    ) {
+
+        RestAssured.baseURI = baseUrl;
+
+        String requestBody =
+                "{"
+                        + "\"value\":["
+                        + "\"" + value + "\""
+                        + "]"
+                        + "}";
+
+        logger.info(
+                "Read Entity Type Request Body : {}",
+                requestBody
+        );
+
+        Response response =
+                given()
+                        .header(
+                                "X-auth-token",
+                                token
+                        )
+                        .header(
+                                "Content-Type",
+                                "application/json"
+                        )
+                        .body(requestBody)
+                        .when()
+                        .post(
+                                fetchProperty(
+                                        "userservice.entitytype.read.endpoint"
+                                )
+                        );
+
+        response.prettyPrint();
+
+        return response;
+    }
+
+    // Read All Entity Types
+    public static Response readAllEntityTypes(
+            String token
+    ) {
+
+        RestAssured.baseURI = baseUrl;
+
+        Response response =
+                given()
+                        .header(
+                                "X-auth-token",
+                                token
+                        )
+                        .header(
+                                "Content-Type",
+                                "application/json"
+                        )
+                        .when()
+                        .post(
+                                fetchProperty(
+                                        "userservice.entitytype.read.endpoint"
+                                )
+                        );
+
+        response.prettyPrint();
+
+        return response;
+    }
+
+    // Delete Entity Type
+    public static Response deleteEntityType(String token, int entityTypeId) {
+
+        RestAssured.baseURI = baseUrl;
+
+        Response response = given().header("X-auth-token", token).when().delete(fetchProperty("userservice.entitytype.delete.endpoint") + entityTypeId);
+
+        response.prettyPrint();
+
+        return response;
+    }
 }

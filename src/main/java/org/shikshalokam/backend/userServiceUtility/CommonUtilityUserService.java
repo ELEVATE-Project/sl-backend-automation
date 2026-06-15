@@ -32,7 +32,12 @@ public class CommonUtilityUserService {
 
         origin = isSG ? fetchProperty("ep.sg.origin") : fetchProperty("ep.sl.origin");
 
-        Response response = given().contentType("application/x-www-form-urlencoded; charset=UTF-8").formParam("identifier", fetchProperty("userservice.qa.phone.login.identifier")).formParam("password", fetchProperty("userservice.qa.phone.login.password")).header("Origin", origin).when().post(fetchProperty("userservice.login.endpointasuser"));
+        Response response = given().contentType("application/x-www-form-urlencoded; charset=UTF-8")
+                .formParam("identifier", fetchProperty("userservice.qa.phone.login.identifier"))
+                .formParam("password", fetchProperty("userservice.qa.phone.login.password"))
+                .header("Origin", origin)
+                .when()
+                .post(fetchProperty("userservice.login.endpointasuser"));
 
         if (response.getStatusCode() != 200) {
 
@@ -60,7 +65,12 @@ public class CommonUtilityUserService {
 
         origin = isSG ? fetchProperty("ep.sg.origin") : fetchProperty("ep.sl.origin");
 
-        Response response = given().contentType("application/x-www-form-urlencoded; charset=UTF-8").formParam("identifier", fetchProperty("userservice.qa.admin.login.user")).formParam("password", fetchProperty("userservice.qa.admin.login.password")).header("Origin", origin).when().post(fetchProperty("userservice.admin.login.endpoint"));
+        Response response = given().contentType("application/x-www-form-urlencoded; charset=UTF-8")
+                .formParam("identifier", fetchProperty("userservice.qa.admin.login.user"))
+                .formParam("password", fetchProperty("userservice.qa.admin.login.password"))
+                .header("Origin", origin)
+                .when()
+                .post(fetchProperty("userservice.admin.login.endpoint"));
 
         if (response.getStatusCode() != 200) {
 
@@ -88,7 +98,12 @@ public class CommonUtilityUserService {
 
         origin = isSG ? fetchProperty("ep.sg.origin") : fetchProperty("ep.sl.origin");
 
-        Response response = given().contentType("application/x-www-form-urlencoded; charset=UTF-8").formParam("identifier", loginId).formParam("password", password).header("Origin", origin).when().post(fetchProperty("userservice.login.endpointasuser"));
+        Response response = given().contentType("application/x-www-form-urlencoded; charset=UTF-8")
+                .formParam("identifier", loginId)
+                .formParam("password", password)
+                .header("Origin", origin)
+                .when()
+                .post(fetchProperty("userservice.login.endpointasuser"));
 
         if (response.getStatusCode() != 200) {
 
@@ -113,7 +128,12 @@ public class CommonUtilityUserService {
 
         origin = isSG ? fetchProperty("ep.sg.origin") : fetchProperty("ep.sl.origin");
 
-        Response response = given().contentType("application/x-www-form-urlencoded; charset=UTF-8").formParam("identifier", loginId).formParam("password", password).header("Origin", origin).when().post(fetchProperty("userservice.admin.login.endpoint"));
+        Response response = given().contentType("application/x-www-form-urlencoded; charset=UTF-8")
+                .formParam("identifier", loginId)
+                .formParam("password", password)
+                .header("Origin", origin)
+                .when()
+                .post(fetchProperty("userservice.admin.login.endpoint"));
 
         if (response.getStatusCode() != 200) {
 
@@ -135,7 +155,9 @@ public class CommonUtilityUserService {
             throw new RuntimeException("User_ID or adminToken is null.");
         }
 
-        Response response = given().header("X-auth-token", adminToken).when().delete(fetchProperty("userservice.deleteUserEndPoint") + User_ID);
+        Response response = given().header("X-auth-token", adminToken)
+                .when()
+                .delete(fetchProperty("userservice.deleteUserEndPoint") + User_ID);
 
         if (response.getStatusCode() != 200) {
 
@@ -166,23 +188,35 @@ public class CommonUtilityUserService {
         return PropertyLoader.PROP_LIST.getProperty(key);
     }
 
+    // Generate Signed URL
     public static Response getSignedUrlForBulkUpload(String adminToken) {
 
+        RestAssured.baseURI = baseUrl;
+
         return given().header("X-auth-token", adminToken)
-                      .queryParam("fileName", PropertyLoader.PROP_LIST.getProperty("userservice.bulkupload.csv.filename"))
-                      .contentType("text/plain").body("")
-                      .when()
-                      .get(PropertyLoader.PROP_LIST.getProperty("userservice.bulkupload.getsignedurl.endpoint"));
+                .queryParam("fileName", fetchProperty("userservice.bulkupload.csv.filename"))
+                .contentType("text/plain")
+                .body("")
+                .when()
+                .get(fetchProperty("userservice.bulkupload.getsignedurl.endpoint"));
     }
 
+    // Upload CSV File
     public static Response uploadBulkCsvFile(String signedUrl) {
 
-        File csvFile = new File(PropertyLoader.PROP_LIST.getProperty("userservice.bulkupload.csv.path"));
+        File csvFile = new File(fetchProperty("userservice.bulkupload.csv.path"));
 
         return given().header("Content-Type", "multipart/form-data").body(csvFile).when().put(signedUrl);
     }
 
+    // Login Created Bulk User
     public static Response loginCreatedBulkUser(String identifier, String password) {
+
+        RestAssured.baseURI = baseUrl;
+
+        boolean isSG = DerivingSystem();
+
+        origin = isSG ? fetchProperty("ep.sg.origin") : fetchProperty("ep.sl.origin");
 
         HashMap<String, Object> requestBody = new HashMap<>();
 
@@ -190,13 +224,14 @@ public class CommonUtilityUserService {
 
         requestBody.put("password", password);
 
-        return given().header("Origin", PropertyLoader.PROP_LIST.getProperty("ep.sl.origin"))
-                      .contentType("application/json")
-                      .body(requestBody)
-                      .when()
-                      .post(PropertyLoader.PROP_LIST.getProperty("userservice.login.endpointasuser"));
+        return given().header("Origin", origin)
+                .contentType("application/json")
+                .body(requestBody)
+                .when()
+                .post(fetchProperty("userservice.login.endpointasuser"));
     }
 
+    // Validate Created User Login
     public static void validateCreatedUserLogin(String identifier, String password) throws Exception {
 
         Response loginResponse = null;
@@ -223,8 +258,11 @@ public class CommonUtilityUserService {
                 }
             }
 
+            logger.info("Created User Login Failed. Waiting before retry...");
+
             Thread.sleep(15000);
         }
-    }
 
+        throw new RuntimeException("Created User Login Failed After " + maxRetries + " Retries");
+    }
 }

@@ -7,7 +7,6 @@ import org.apache.logging.log4j.Logger;
 import org.shikshalokam.backend.PropertyLoader;
 
 import java.io.File;
-import java.util.HashMap;
 
 import static io.restassured.RestAssured.given;
 
@@ -17,7 +16,7 @@ public class CommonUtilityUserService {
     public static String UserToken = null;
     public static String adminToken = null;
 
-    static String baseUrl = fetchProperty("userservice.qa.api.base.url");
+    static String baseUrl = null;
 
     static String origin;
 
@@ -25,7 +24,7 @@ public class CommonUtilityUserService {
 
     // Generate Normal User Token
     public static String generateNormalUserToken() {
-
+        baseUrl = fetchProperty("userservice.qa.api.base.url");
         RestAssured.baseURI = baseUrl;
 
         boolean isSG = DerivingSystem();
@@ -59,6 +58,7 @@ public class CommonUtilityUserService {
     // Generate Admin Token
     public static String generateAdminToken() {
 
+        baseUrl = fetchProperty("userservice.qa.api.base.url");
         RestAssured.baseURI = baseUrl;
 
         boolean isSG = DerivingSystem();
@@ -91,7 +91,7 @@ public class CommonUtilityUserService {
 
     // Existing Login Method
     public static void loginToUser(String loginId, String password) {
-
+        baseUrl = fetchProperty("userservice.qa.api.base.url");
         RestAssured.baseURI = baseUrl;
 
         boolean isSG = DerivingSystem();
@@ -121,7 +121,7 @@ public class CommonUtilityUserService {
 
     // Login To Admin
     public static void loginTOAdmin(String loginId, String password) {
-
+        baseUrl = fetchProperty("userservice.qa.api.base.url");
         RestAssured.baseURI = baseUrl;
 
         boolean isSG = DerivingSystem();
@@ -190,15 +190,13 @@ public class CommonUtilityUserService {
 
     // Generate Signed URL
     public static Response getSignedUrlForBulkUpload(String adminToken) {
-
+        baseUrl = fetchProperty("userservice.qa.api.base.url");
         RestAssured.baseURI = baseUrl;
 
         return given().header("X-auth-token", adminToken)
                 .queryParam("fileName", fetchProperty("userservice.bulkupload.csv.filename"))
                 .contentType("text/plain")
-                .body("")
-                .when()
-                .get(fetchProperty("userservice.bulkupload.getsignedurl.endpoint"));
+                .body("").when().get(fetchProperty("userservice.bulkupload.getsignedurl.endpoint"));
     }
 
     // Upload CSV File
@@ -212,6 +210,8 @@ public class CommonUtilityUserService {
     // Login Created Bulk User
     public static Response loginCreatedBulkUser(String identifier, String password) {
 
+        baseUrl = fetchProperty("userservice.qa.api.base.url");
+
         RestAssured.baseURI = baseUrl;
 
         boolean isSG = DerivingSystem();
@@ -224,40 +224,5 @@ public class CommonUtilityUserService {
                 .header("Origin", origin)
                 .when()
                 .post(fetchProperty("userservice.login.endpointasuser"));
-    }
-
-    // Validate Created User Login
-    public static void validateCreatedUserLogin(String identifier, String password) throws Exception {
-
-        Response loginResponse = null;
-
-        int maxRetries = 10;
-
-        for (int retry = 1; retry <= maxRetries; retry++) {
-
-            logger.info("Attempting Login For Created User - Retry : {}", retry);
-
-            loginResponse = loginCreatedBulkUser(identifier, password);
-
-            loginResponse.prettyPrint();
-
-            if (loginResponse.getStatusCode() == 200) {
-
-                String accessToken = loginResponse.jsonPath().getString("result.access_token");
-
-                if (accessToken != null && !accessToken.isEmpty()) {
-
-                    logger.info("Created User Login Successful");
-
-                    return;
-                }
-            }
-
-            logger.info("Created User Login Failed. Waiting before retry...");
-
-            Thread.sleep(15000);
-        }
-
-        throw new RuntimeException("Created User Login Failed After " + maxRetries + " Retries");
     }
 }

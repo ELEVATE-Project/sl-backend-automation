@@ -23,11 +23,21 @@ public class TestUsersBulkUpload extends UserServiceBaseTest {
     @BeforeMethod
     public void setup() {
 
-        RestAssured.baseURI = PropertyLoader.PROP_LIST.getProperty("userservice.qa.api.base.url");
+        String baseUrl = PropertyLoader.PROP_LIST.getProperty("userservice.qa.api.base.url");
+
+        Assert.assertNotNull(baseUrl, "Base URL Is Null In automation.properties");
+
+        RestAssured.baseURI = baseUrl;
+
+        logger.info("Base URI : {}", RestAssured.baseURI);
 
         logger.info("Generating Admin Token");
 
         adminToken = CommonUtilityUserService.generateAdminToken();
+
+        Assert.assertNotNull(adminToken, "Admin Token Generation Failed");
+
+        Assert.assertFalse(adminToken.isEmpty(), "Admin Token Is Empty");
 
         logger.info("Admin Token Generated Successfully");
     }
@@ -69,34 +79,66 @@ public class TestUsersBulkUpload extends UserServiceBaseTest {
         logger.info("Bulk Upload Request Body : {}", requestBody);
 
         Response bulkUploadResponse = given().header("X-auth-token", adminToken)
-                .header("x-tenant-code", PropertyLoader.PROP_LIST.getProperty(
-                        "userservice.bulkupload.tenant.code")
-                )
-                .header("x-org-code", PropertyLoader.PROP_LIST.getProperty(
-                        "userservice.bulkupload.org.code")
-                )
+                .header("x-tenant-code", PropertyLoader.PROP_LIST.getProperty("userservice.bulkupload.tenant.code"))
+                .header("x-org-code", PropertyLoader.PROP_LIST.getProperty("userservice.bulkupload.org.code"))
                 .contentType("application/json")
                 .body(requestBody)
                 .when()
-                .post(PropertyLoader.PROP_LIST.getProperty(
-                        "userservice.bulkupload.create.endpoint")
-                );
+                .post(PropertyLoader.PROP_LIST.getProperty("userservice.bulkupload.create.endpoint"));
 
         bulkUploadResponse.prettyPrint();
 
         Assert.assertEquals(bulkUploadResponse.getStatusCode(), 200, "Bulk User Upload Failed");
 
         logger.info("Bulk User Upload Completed Successfully");
+    }
 
-        // Step 4 : Validate Created User Login
+    @Test(dependsOnMethods = "testBulkUserUpload", description = "Validate Created Bulk Upload User Login")
+    public void testValidateBulkUploadusers() throws Exception {
 
-        CommonUtilityUserService.validateCreatedUserLogin(
-                "rahulsher@yopmail.com",
-                "PASSword##11"
-        );
+        String identifier = "rahulsher@yopmail.com";
 
-        logger.info(
-                "Created User Login Validation Completed Successfully"
-        );
+        String password = "PASSword##11";
+
+        Response loginResponse = null;
+
+        boolean isLoginSuccessful = false;
+
+        int maxRetries = 10;
+
+        int retryCount = 1;
+
+        while (retryCount <= maxRetries) {
+
+            logger.info("Attempting Login For Created User - Retry : {}", retryCount);
+
+            loginResponse = CommonUtilityUserService.loginCreatedBulkUser(identifier, password);
+
+            loginResponse.prettyPrint();
+
+            if (loginResponse.getStatusCode() == 200) {
+
+                String accessToken = loginResponse.jsonPath().getString("result.access_token");
+
+                if (accessToken != null && !accessToken.trim().isEmpty()) {
+
+                    isLoginSuccessful = true;
+
+                    logger.info("Created User Login Successful");
+
+                    break;
+                }
+            }
+
+            logger.info("Created User Login Failed. Waiting before next retry...");
+
+            Thread.sleep(15000);
+
+            retryCount++;
+        }
+
+        Assert.assertTrue(isLoginSuccessful, "Created User Login Failed After Retries");
+
+        logger.info("Created User Login Validation Completed Successfully");
     }
 }

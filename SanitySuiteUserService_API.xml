@@ -26,6 +26,11 @@
                     <include name="emptyPasswordWithPhoneNumber"/>
                 </methods>
             </class>
+            <class name="org.shikshalokam.backend.userservice.TestUsersBulkUpload">
+                <methods>
+                    <include name="testBulkUserUpload"/>
+                </methods>
+            </class>
             <class name="org.shikshalokam.backend.userservice.TestUsersOperations">
                 <methods>
                     <include name="testReadUser"/>
@@ -37,9 +42,9 @@
                     <include name="testUpdateUserWithEmptyName"/>
                 </methods>
             </class>
-            <class name="org.shikshalokam.backend.userservice.TestUsersBulkUpload">
+            <class name="org.shikshalokam.backend.userservice.TestUsersOperations">
                 <methods>
-                    <include name="testBulkUserUpload"/>
+                        <include name="testValidateBulkUploadusers"/>
                 </methods>
             </class>
         </classes>

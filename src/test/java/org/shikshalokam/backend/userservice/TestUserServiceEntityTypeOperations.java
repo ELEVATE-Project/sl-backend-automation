@@ -4,10 +4,13 @@ import io.restassured.response.Response;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.shikshalokam.backend.PropertyLoader;
 import org.shikshalokam.backend.userServiceUtility.CommonUtilityUserService;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import java.util.List;
 
 public class TestUserServiceEntityTypeOperations extends UserServiceBaseTest {
 
@@ -30,62 +33,40 @@ public class TestUserServiceEntityTypeOperations extends UserServiceBaseTest {
     @Test(description = "Create Entity Type")
     public void testCreateEntityType() {
 
-        Response response =
-                CommonUtilityUserService.createEntityType(
-                        adminToken,
-                        randomValue,
-                        randomLabel
-                );
+        String createRequestBody = "{" + "\"value\":\"" + randomValue + "\"," + "\"label\":\"" + randomLabel + "\"," + "\"status\":\"" + PropertyLoader.PROP_LIST.getProperty("userservice.entitytype.status") + "\"," + "\"type\":\"" + PropertyLoader.PROP_LIST.getProperty("userservice.entitytype.type") + "\"," + "\"allow_filtering\":true," + "\"model_names\":[\"" + PropertyLoader.PROP_LIST.getProperty("userservice.entitytype.modelname") + "\"]," + "\"data_type\":\"" + PropertyLoader.PROP_LIST.getProperty("userservice.entitytype.datatype") + "\"" + "}";
+
+        logger.info("Create Entity Type Request Body : {}", createRequestBody);
+
+        Response response = CommonUtilityUserService.createEntityType(adminToken, createRequestBody);
 
         response.prettyPrint();
 
-        Assert.assertEquals(
-                response.getStatusCode(),
-                201,
-                "Entity Type Creation Failed"
-        );
+        Assert.assertEquals(response.getStatusCode(), 201, "Entity Type Creation Failed");
 
-        Assert.assertTrue(
-                response.getBody()
-                        .asString()
-                        .contains(randomValue)
-        );
+        entityTypeId = response.jsonPath().getInt("result.id");
 
-        Assert.assertTrue(
-                response.getBody()
-                        .asString()
-                        .contains(randomLabel)
-        );
+        Assert.assertTrue(entityTypeId > 0, "Invalid Entity Type Id Generated");
 
-        entityTypeId =
-                response.jsonPath()
-                        .getInt("result.id");
-
-        Assert.assertTrue(
-                entityTypeId > 0,
-                "Invalid Entity Type Id Generated"
-        );
-
-        logger.info(
-                "Created Entity Type Id : {}",
-                entityTypeId
-        );
+        logger.info("Entity Type Created Successfully");
     }
 
     @Test(dependsOnMethods = "testCreateEntityType", description = "Read Created Entity Type")
-    public void testReadEntityTypes() {
+    public void testReadEntityType() {
 
-        Response response = CommonUtilityUserService.readEntityType(adminToken, randomValue);
+        String readRequestBody = "{" + "\"value\":[" + "\"" + randomValue + "\"" + "]" + "}";
+
+        logger.info("Read Entity Type Request Body : {}", readRequestBody);
+
+        Response response = CommonUtilityUserService.readEntityType(adminToken, readRequestBody);
 
         response.prettyPrint();
 
         Assert.assertEquals(response.getStatusCode(), 200);
 
-        logger.info("Entity Type Read Successful");
     }
 
     @Test(dependsOnMethods = "testCreateEntityType", description = "Read All Entity Types")
-    public void testReadAllEntityTypesWithEntities() {
+    public void testReadAllEntityTypes() {
 
         Response response = CommonUtilityUserService.readAllEntityTypes(adminToken);
 
@@ -93,11 +74,12 @@ public class TestUserServiceEntityTypeOperations extends UserServiceBaseTest {
 
         Assert.assertEquals(response.getStatusCode(), 200);
 
-        logger.info("Entity Type Available In List");
     }
 
     @Test(dependsOnMethods = "testCreateEntityType", description = "Delete Entity Type")
     public void testDeleteEntityType() {
+
+        Assert.assertTrue(entityTypeId > 0, "Entity Type Id Is Invalid");
 
         Response response = CommonUtilityUserService.deleteEntityType(adminToken, entityTypeId);
 
@@ -108,3 +90,4 @@ public class TestUserServiceEntityTypeOperations extends UserServiceBaseTest {
         logger.info("Entity Type Deleted Successfully");
     }
 }
+

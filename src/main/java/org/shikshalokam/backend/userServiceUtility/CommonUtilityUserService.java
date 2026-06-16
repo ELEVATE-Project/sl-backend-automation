@@ -14,7 +14,7 @@ public class CommonUtilityUserService {
     public static String UserToken = null;
     public static String adminToken = null;
 
-    static String baseUrl = fetchProperty("userservice.qa.api.base.url");
+    static String baseUrl = null;
 
     static String origin;
 
@@ -23,6 +23,7 @@ public class CommonUtilityUserService {
     // Generate Normal User Token
     public static String generateNormalUserToken() {
 
+        baseUrl = fetchProperty("userservice.qa.api.base.url");
         RestAssured.baseURI = baseUrl;
 
         boolean isSG = DerivingSystem();
@@ -50,7 +51,7 @@ public class CommonUtilityUserService {
 
     // Generate Admin Token
     public static String generateAdminToken() {
-
+        baseUrl = fetchProperty("userservice.qa.api.base.url");
         RestAssured.baseURI = baseUrl;
 
         boolean isSG = DerivingSystem();
@@ -78,7 +79,7 @@ public class CommonUtilityUserService {
 
     // Existing Login Method
     public static void loginToUser(String loginId, String password) {
-
+        baseUrl = fetchProperty("userservice.qa.api.base.url");
         RestAssured.baseURI = baseUrl;
 
         boolean isSG = DerivingSystem();
@@ -103,7 +104,7 @@ public class CommonUtilityUserService {
 
     // Login To Admin
     public static void loginTOAdmin(String loginId, String password) {
-
+        baseUrl = fetchProperty("userservice.qa.api.base.url");
         RestAssured.baseURI = baseUrl;
 
         boolean isSG = DerivingSystem();
@@ -164,147 +165,35 @@ public class CommonUtilityUserService {
     }
 
     // Create Entity Type
-    public static Response createEntityType(
-            String token,
-            String value,
-            String label
-    ) {
-
+    public static Response createEntityType(String token, String requestBody) {
+        baseUrl = fetchProperty("userservice.qa.api.base.url");
         RestAssured.baseURI = baseUrl;
 
-        String requestBody =
-                "{"
-                        + "\"value\":\"" + value + "\","
-                        + "\"label\":\"" + label + "\","
-                        + "\"status\":\""
-                        + fetchProperty(
-                        "userservice.entitytype.status"
-                )
-                        + "\","
-                        + "\"type\":\""
-                        + fetchProperty(
-                        "userservice.entitytype.type"
-                )
-                        + "\","
-                        + "\"allow_filtering\":true,"
-                        + "\"model_names\":[\""
-                        + fetchProperty(
-                        "userservice.entitytype.modelname"
-                )
-                        + "\"],"
-                        + "\"data_type\":\""
-                        + fetchProperty(
-                        "userservice.entitytype.datatype"
-                )
-                        + "\""
-                        + "}";
-
-        logger.info(
-                "Create Entity Type Request Body : {}",
-                requestBody
-        );
-
-        Response response =
-                given()
-                        .header(
-                                "X-auth-token",
-                                token
-                        )
-                        .contentType("application/json")
-                        .body(requestBody)
-                        .when()
-                        .post(
-                                fetchProperty(
-                                        "userservice.entitytype.create.endpoint"
-                                )
-                        );
-
-        response.prettyPrint();
-
-        return response;
+        return given().header("X-auth-token", token).contentType("application/json").body(requestBody).when().post(fetchProperty("userservice.entitytype.create.endpoint"));
     }
 
-    // Read Single Entity Type
-    public static Response readEntityType(
-            String token,
-            String value
-    ) {
-
+    // Read Entity Type
+    public static Response readEntityType(String token, String requestBody) {
+        baseUrl = fetchProperty("userservice.qa.api.base.url");
         RestAssured.baseURI = baseUrl;
 
-        String requestBody =
-                "{"
-                        + "\"value\":["
-                        + "\"" + value + "\""
-                        + "]"
-                        + "}";
-
-        logger.info(
-                "Read Entity Type Request Body : {}",
-                requestBody
-        );
-
-        Response response =
-                given()
-                        .header(
-                                "X-auth-token",
-                                token
-                        )
-                        .header(
-                                "Content-Type",
-                                "application/json"
-                        )
-                        .body(requestBody)
-                        .when()
-                        .post(
-                                fetchProperty(
-                                        "userservice.entitytype.read.endpoint"
-                                )
-                        );
-
-        response.prettyPrint();
-
-        return response;
+        return given().header("X-auth-token", token).contentType("application/json").body(requestBody).when().post(fetchProperty("userservice.entitytype.read.endpoint"));
     }
 
     // Read All Entity Types
-    public static Response readAllEntityTypes(
-            String token
-    ) {
-
+    public static Response readAllEntityTypes(String token) {
+        baseUrl = fetchProperty("userservice.qa.api.base.url");
         RestAssured.baseURI = baseUrl;
 
-        Response response =
-                given()
-                        .header(
-                                "X-auth-token",
-                                token
-                        )
-                        .header(
-                                "Content-Type",
-                                "application/json"
-                        )
-                        .when()
-                        .post(
-                                fetchProperty(
-                                        "userservice.entitytype.read.endpoint"
-                                )
-                        );
-
-        response.prettyPrint();
-
-        return response;
+        return given().header("X-auth-token", token).contentType("application/json").when().post(fetchProperty("userservice.entitytype.read.endpoint"));
     }
 
     // Delete Entity Type
     public static Response deleteEntityType(String token, int entityTypeId) {
-
+        baseUrl = fetchProperty("userservice.qa.api.base.url");
         RestAssured.baseURI = baseUrl;
 
-        Response response = given()
-                .header("X-auth-token", token)
-                .when()
-                .delete(fetchProperty("userservice.entitytype.delete.endpoint") + entityTypeId);
+        Response response = given().header("X-auth-token", token).when().delete(fetchProperty("userservice.entitytype.delete.endpoint") + entityTypeId);
 
         response.prettyPrint();
 

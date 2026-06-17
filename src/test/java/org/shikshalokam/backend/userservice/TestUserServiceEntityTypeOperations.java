@@ -64,7 +64,7 @@ public class TestUserServiceEntityTypeOperations extends UserServiceBaseTest {
     }
 
     @Test(dependsOnMethods = "testCreateEntityType", description = "Read All Entity Types")
-    public void testReadAllEntityTypes() {
+    public void testReadAllEntityTypesWithEntities() {
 
         Response response = CommonUtilityUserService.readAllEntityTypes(adminToken);
 

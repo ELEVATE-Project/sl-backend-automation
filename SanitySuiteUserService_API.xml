@@ -42,7 +42,7 @@
                     <include name="testUpdateUserWithEmptyName"/>
                 </methods>
             </class>
-            <class name="org.shikshalokam.backend.userservice.TestUsersOperations">
+            <class name="org.shikshalokam.backend.userservice.TestUsersBulkUpload">
                 <methods>
                         <include name="testValidateBulkUploadusers"/>
                 </methods>
@@ -50,7 +50,7 @@
             <class name="org.shikshalokam.backend.userservice.TestUserServiceEntityTypeOperations">
                 <methods>
                     <include name="testCreateEntityType"/>
-                    <include name="testReadEntityTypes"/>
+                    <include name="testReadEntityType"/>
                     <include name="testReadAllEntityTypesWithEntities"/>
                     <include name="testDeleteEntityType"/>
                 </methods>

@@ -91,3 +91,5 @@ public class TestUserServiceEntityTypeOperations extends UserServiceBaseTest {
     }
 }
 
+public class TestUserServiceEntityTypeOperations {
+}

@@ -15,6 +15,7 @@ public class CommonUtilityUserService {
     public static String User_ID = null;
     public static String UserToken = null;
     public static String adminToken = null;
+    public static String tenantAdminToken = null;
 
     static String baseUrl = null;
 
@@ -147,6 +148,33 @@ public class CommonUtilityUserService {
         adminToken = response.jsonPath().getString("result.access_token");
     }
 
+    // Login To Tenant Admin
+    public static void loginAsTenantAdmin(String loginId, String password) {
+
+        RestAssured.baseURI = baseUrl;
+
+        boolean isSG = DerivingSystem();
+
+        origin = isSG ? fetchProperty("ep.sg.origin") : fetchProperty("ep.sl.origin");
+
+        Response response = given()
+                .contentType("application/x-www-form-urlencoded; charset=UTF-8")
+                .formParam("identifier", loginId)
+                .formParam("password", password)
+                .header("Origin", origin)
+                .when()
+                .post(fetchProperty("userservice.login.endpointasuser"));
+
+        if (response.getStatusCode() != 200) {
+
+            logger.error("Tenant Admin login failed → Status Code: {}", response.getStatusCode());
+
+        } else {
+
+            logger.info("Tenant Admin login successful");
+        }
+        tenantAdminToken = response.jsonPath().getString("result.access_token");
+    }
     // Delete User API
     public static void deleteUserFromAdmin() {
 

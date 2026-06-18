@@ -57,4 +57,35 @@
             </class>
         </classes>
     </test>
+    <!-- Run CRUD tests as admin -->
+    <test name="CRUD User Roles - Admin">
+        <parameter name="role" value="admin"/>
+        <classes>
+            <class name="org.shikshalokam.backend.userservice.TestCRUDUserRoles">
+                <methods>
+                    <include name="testCreateUserRoles"/>
+                    <include name="testCreateUserRoles_MissingRequiredFields"/>
+                    <include name="testUpdateUserRoles"/>
+                    <include name="testUpdateUserRoles_MissingRequiredFields"/>
+                    <include name="testDeleteUserRole"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <!-- Run CRUD tests as tenant admin -->
+    <test name="CRUD User Roles - Tenant Admin">
+        <parameter name="role" value="tenantAdmin"/>
+        <classes>
+            <class name="org.shikshalokam.backend.userservice.TestCRUDUserRoles">
+                <methods>
+                    <include name="testCreateUserRoles"/>
+                    <include name="testCreateUserRoles_MissingRequiredFields"/>
+                    <include name="testUpdateUserRoles"/>
+                    <include name="testUpdateUserRoles_MissingRequiredFields"/>
+                    <include name="testDeleteUserRole"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
 </suite>

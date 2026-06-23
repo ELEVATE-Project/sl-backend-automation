@@ -150,7 +150,7 @@ public class CommonUtilityUserService {
 
     // Login To Tenant Admin
     public static void loginAsTenantAdmin(String loginId, String password) {
-
+        baseUrl = fetchProperty("userservice.qa.api.base.url");
         RestAssured.baseURI = baseUrl;
 
         boolean isSG = DerivingSystem();

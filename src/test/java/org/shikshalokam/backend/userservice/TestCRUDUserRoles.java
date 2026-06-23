@@ -20,7 +20,7 @@ import static org.shikshalokam.backend.userServiceUtility.CommonUtilityUserServi
 import static org.shikshalokam.backend.userServiceUtility.CommonUtilityUserService.loginTOAdmin;
 import static org.testng.Assert.*;
 
-public class TestCRUDUserRoles extends MentorEDBaseTest {
+public class TestCRUDUserRoles extends UserServiceBaseTest {
 
     public static final Logger logger = LogManager.getLogger(TestCRUDUserRoles.class);
     private URI createUserRolesEndpoint, getUserRolesEndPoint, updateUserRolesEndpoint, deleteUserRolesEndpoint;
@@ -28,7 +28,7 @@ public class TestCRUDUserRoles extends MentorEDBaseTest {
 
     @BeforeTest
     @org.testng.annotations.Parameters({"role"})
-    public void init(String role) {
+    public void init(String role) throws Exception {
         logger.info("Running tests for role: " + role);
 
         if (role.equalsIgnoreCase("admin")) {
@@ -53,8 +53,8 @@ public class TestCRUDUserRoles extends MentorEDBaseTest {
         assertNotNull(token, "Token is null for role: " + role);
         assertFalse(token.isEmpty(), "Token is empty for role: " + role);
 
-        createUserRolesEndpoint = MentorBase.createURI("/user/v1/user-role/create");
-        getUserRolesEndPoint = MentorBase.createURI("/user/v1/user-role/list");
+        createUserRolesEndpoint = new URI("/user/v1/user-role/create");
+        getUserRolesEndPoint = new URI("/user/v1/user-role/list");
 
         userRoleTitle = "userroletitle" + RandomStringUtils.randomAlphabetic(5).toLowerCase();
         label = "R" + userRoleTitle;

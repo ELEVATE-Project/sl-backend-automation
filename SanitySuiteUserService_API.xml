@@ -1,0 +1,42 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="UserServiceApiTestSuite">
+    <listeners>
+        <listener class-name="org.shikshalokam.Listerners.SLCustomListener"/>
+    </listeners>
+    <test name="UserServiceSanityTests">
+        <classes>
+
+            <class name="org.shikshalokam.backend.userservice.TestUserServiceLoginPassing">
+                <methods>
+                    <include name="successfulLoginWithPhoneNumber"/>
+                    <include name="invalidLoginWithPhoneNumber"/>
+                    <include name="emptyPasswordWithPhoneNumber"/>
+                    <include name="successfulLoginWithUsername"/>
+                    <include name="invalidLoginWithUsername"/>
+                    <include name="emptyPasswordWithUsername"/>
+                    <include name="successfulLoginWithEmail"/>
+                    <include name="invalidLoginWithEmail"/>
+                    <include name="emptyPasswordWithEmail"/>
+                </methods>
+            </class>
+            <class name="org.shikshalokam.backend.userservice.TestGetListOfUsersByID">
+                <methods>
+                    <include name="testGetListOfUsersById"/>
+                    <include name="testGetListOfUsersByInvalidId"/>
+                    <include name="emptyPasswordWithPhoneNumber"/>
+                </methods>
+            </class>
+            <class name="org.shikshalokam.backend.userservice.TestUsersModules">
+                <methods>
+                    <include name="testReadUser"/>
+                    <include name="testReadUserWithInvalidToken"/>
+                    <include name="testGetUserProfileById"/>
+                    <include name="testGetUserProfileByInvalidId"/>
+                    <include name="testUpdateUser"/>
+                    <include name="testUpdateUserWithInvalidToken"/>
+                    <include name="testUpdateUserWithEmptyName"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>

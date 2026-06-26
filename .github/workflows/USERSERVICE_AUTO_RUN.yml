@@ -1,0 +1,81 @@
+name: Elevate automation run
+
+on:
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        java-version: [11]  # Specify the JDK version(s) here
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6  # Checks out your repository
+
+      - name: Set up JDK ${{ matrix.java-version }}
+        uses: actions/setup-java@v5
+        with:
+          java-version: ${{ matrix.java-version }}
+          distribution: 'zulu'  # Or 'zulu', 'temurin', depending on your preferred JDK distribution
+          cache: 'maven'
+
+      - name: Check Current Directory
+        run: |
+          echo "Current Directory:"
+          pwd  # Print the current working directory
+          echo "Files in Current Directory:"
+          ls -al  # List files and directories in the current directory
+      - name: Copy Configuration File
+        run: cp ./src/main/resources/config/automation.userServiceAPI.properties ./src/main/resources/config/automation.properties
+
+
+      - name: Build with Maven and run tests
+        run: mvn clean test -DsuiteXmlFile="SanitySuiteUserService_API.xml"  # -B is for batch mode to reduce output noise
+
+      - name: Check Extent Report Exists
+        if: always()
+        run: |
+          if [ -f "./target/ExtentReport.html" ]; then
+            echo "REPORT_EXISTS=true" >> $GITHUB_ENV
+          else
+            echo "REPORT_EXISTS=false" >> $GITHUB_ENV
+          fi
+
+      - name: Send Email Notification With Report
+        if: always() && env.REPORT_EXISTS == 'true'
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: "Test Status - ${{ github.workflow }}"
+          body: "The test run for the project has completed with status: ${{ job.status }}"
+          to: "sl-qa@shikshalokam.org"
+          from: "automation@shikshalokam.org"
+          secure: false
+          attachments: ./target/ExtentReport.html
+
+      - name: Send Email Notification Without Report
+        if: always() && env.REPORT_EXISTS == 'false'
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: "Test Status - ${{ github.workflow }}"
+          body: |
+            The test run completed with status: ${{ job.status }}
+
+            ExtentReport.html was not generated.
+          to: "sl-qa@shikshalokam.org"
+          from: "automation@shikshalokam.org"
+          secure: false

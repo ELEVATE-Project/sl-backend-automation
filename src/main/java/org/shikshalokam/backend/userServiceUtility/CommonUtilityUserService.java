@@ -1,11 +1,13 @@
 package org.shikshalokam.backend.userServiceUtility;
 
 import io.restassured.RestAssured;
-import io.restassured.config.EncoderConfig;
 import io.restassured.response.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.shikshalokam.backend.PropertyLoader;
+
+import java.io.File;
+import io.restassured.config.EncoderConfig;
 
 import static io.restassured.RestAssured.given;
 
@@ -14,8 +16,9 @@ public class CommonUtilityUserService {
     public static String User_ID = null;
     public static String UserToken = null;
     public static String adminToken = null;
+    public static String tenantAdminToken = null;
 
-    static String baseUrl = fetchProperty("userservice.qa.api.base.url");
+    static String baseUrl = null;
 
     static String origin;
 
@@ -23,14 +26,19 @@ public class CommonUtilityUserService {
 
     // Generate Normal User Token
     public static String generateNormalUserToken() {
-
+        baseUrl = fetchProperty("userservice.qa.api.base.url");
         RestAssured.baseURI = baseUrl;
 
         boolean isSG = DerivingSystem();
 
         origin = isSG ? fetchProperty("ep.sg.origin") : fetchProperty("ep.sl.origin");
 
-        Response response = given().contentType("application/x-www-form-urlencoded; charset=UTF-8").formParam("identifier", fetchProperty("userservice.qa.phone.login.identifier")).formParam("password", fetchProperty("userservice.qa.phone.login.password")).header("Origin", origin).when().post(fetchProperty("userservice.login.endpointasuser"));
+        Response response = given().contentType("application/x-www-form-urlencoded; charset=UTF-8")
+                .formParam("identifier", fetchProperty("userservice.qa.phone.login.identifier"))
+                .formParam("password", fetchProperty("userservice.qa.phone.login.password"))
+                .header("Origin", origin)
+                .when()
+                .post(fetchProperty("userservice.login.endpointasuser"));
 
         if (response.getStatusCode() != 200) {
 
@@ -52,13 +60,19 @@ public class CommonUtilityUserService {
     // Generate Admin Token
     public static String generateAdminToken() {
 
+        baseUrl = fetchProperty("userservice.qa.api.base.url");
         RestAssured.baseURI = baseUrl;
 
         boolean isSG = DerivingSystem();
 
         origin = isSG ? fetchProperty("ep.sg.origin") : fetchProperty("ep.sl.origin");
 
-        Response response = given().contentType("application/x-www-form-urlencoded; charset=UTF-8").formParam("identifier", fetchProperty("userservice.qa.admin.login.user")).formParam("password", fetchProperty("userservice.qa.admin.login.password")).header("Origin", origin).when().post(fetchProperty("userservice.admin.login.endpoint"));
+        Response response = given().contentType("application/x-www-form-urlencoded; charset=UTF-8")
+                .formParam("identifier", fetchProperty("userservice.qa.admin.login.user"))
+                .formParam("password", fetchProperty("userservice.qa.admin.login.password"))
+                .header("Origin", origin)
+                .when()
+                .post(fetchProperty("userservice.admin.login.endpoint"));
 
         if (response.getStatusCode() != 200) {
 
@@ -79,14 +93,19 @@ public class CommonUtilityUserService {
 
     // Existing Login Method
     public static void loginToUser(String loginId, String password) {
-
+        baseUrl = fetchProperty("userservice.qa.api.base.url");
         RestAssured.baseURI = baseUrl;
 
         boolean isSG = DerivingSystem();
 
         origin = isSG ? fetchProperty("ep.sg.origin") : fetchProperty("ep.sl.origin");
 
-        Response response = given().contentType("application/x-www-form-urlencoded; charset=UTF-8").formParam("identifier", loginId).formParam("password", password).header("Origin", origin).when().post(fetchProperty("userservice.login.endpointasuser"));
+        Response response = given().contentType("application/x-www-form-urlencoded; charset=UTF-8")
+                .formParam("identifier", loginId)
+                .formParam("password", password)
+                .header("Origin", origin)
+                .when()
+                .post(fetchProperty("userservice.login.endpointasuser"));
 
         if (response.getStatusCode() != 200) {
 
@@ -104,14 +123,19 @@ public class CommonUtilityUserService {
 
     // Login To Admin
     public static void loginTOAdmin(String loginId, String password) {
-
+        baseUrl = fetchProperty("userservice.qa.api.base.url");
         RestAssured.baseURI = baseUrl;
 
         boolean isSG = DerivingSystem();
 
         origin = isSG ? fetchProperty("ep.sg.origin") : fetchProperty("ep.sl.origin");
 
-        Response response = given().contentType("application/x-www-form-urlencoded; charset=UTF-8").formParam("identifier", loginId).formParam("password", password).header("Origin", origin).when().post(fetchProperty("userservice.admin.login.endpoint"));
+        Response response = given().contentType("application/x-www-form-urlencoded; charset=UTF-8")
+                .formParam("identifier", loginId)
+                .formParam("password", password)
+                .header("Origin", origin)
+                .when()
+                .post(fetchProperty("userservice.admin.login.endpoint"));
 
         if (response.getStatusCode() != 200) {
 
@@ -125,6 +149,33 @@ public class CommonUtilityUserService {
         adminToken = response.jsonPath().getString("result.access_token");
     }
 
+    // Login To Tenant Admin
+    public static void loginAsTenantAdmin(String loginId, String password) {
+        baseUrl = fetchProperty("userservice.qa.api.base.url");
+        RestAssured.baseURI = baseUrl;
+
+        boolean isSG = DerivingSystem();
+
+        origin = isSG ? fetchProperty("ep.sg.origin") : fetchProperty("ep.sl.origin");
+
+        Response response = given()
+                .contentType("application/x-www-form-urlencoded; charset=UTF-8")
+                .formParam("identifier", loginId)
+                .formParam("password", password)
+                .header("Origin", origin)
+                .when()
+                .post(fetchProperty("userservice.login.endpointasuser"));
+
+        if (response.getStatusCode() != 200) {
+
+            logger.error("Tenant Admin login failed → Status Code: {}", response.getStatusCode());
+
+        } else {
+
+            logger.info("Tenant Admin login successful");
+        }
+        tenantAdminToken = response.jsonPath().getString("result.access_token");
+    }
     // Delete User API
     public static void deleteUserFromAdmin() {
 
@@ -133,7 +184,9 @@ public class CommonUtilityUserService {
             throw new RuntimeException("User_ID or adminToken is null.");
         }
 
-        Response response = given().header("X-auth-token", adminToken).when().delete(fetchProperty("userservice.deleteUserEndPoint") + User_ID);
+        Response response = given().header("X-auth-token", adminToken)
+                .when()
+                .delete(fetchProperty("userservice.deleteUserEndPoint") + User_ID);
 
         if (response.getStatusCode() != 200) {
 
@@ -164,6 +217,78 @@ public class CommonUtilityUserService {
         return PropertyLoader.PROP_LIST.getProperty(key);
     }
 
+    // Generate Signed URL
+    public static Response getSignedUrlForBulkUpload(String adminToken) {
+        baseUrl = fetchProperty("userservice.qa.api.base.url");
+        RestAssured.baseURI = baseUrl;
+
+        return given().header("X-auth-token", adminToken)
+                .queryParam("fileName", fetchProperty("userservice.bulkupload.csv.filename"))
+                .contentType("text/plain")
+                .body("").when().get(fetchProperty("userservice.bulkupload.getsignedurl.endpoint"));
+    }
+
+    // Upload CSV File
+    public static Response uploadBulkCsvFile(String signedUrl) {
+
+        File csvFile = new File(fetchProperty("userservice.bulkupload.csv.path"));
+
+        return given().header("Content-Type", "multipart/form-data").body(csvFile).when().put(signedUrl);
+    }
+
+    // Login Created Bulk User
+    public static Response loginCreatedBulkUser(String identifier, String password) {
+
+        baseUrl = fetchProperty("userservice.qa.api.base.url");
+
+        RestAssured.baseURI = baseUrl;
+
+        boolean isSG = DerivingSystem();
+
+        origin = isSG ? fetchProperty("ep.sg.origin") : fetchProperty("ep.sl.origin");
+
+        return given().contentType("application/x-www-form-urlencoded; charset=UTF-8")
+                .formParam("identifier", identifier)
+                .formParam("password", password)
+                .header("Origin", origin)
+                .when()
+                .post(fetchProperty("userservice.login.endpointasuser"));
+    }
+    // Create Entity Type
+    public static Response createEntityType(String token, String requestBody) {
+        baseUrl = fetchProperty("userservice.qa.api.base.url");
+        RestAssured.baseURI = baseUrl;
+
+        return given().header("X-auth-token", token).contentType("application/json").body(requestBody).when().post(fetchProperty("userservice.entitytype.create.endpoint"));
+    }
+
+    // Read Entity Type
+    public static Response readEntityType(String token, String requestBody) {
+        baseUrl = fetchProperty("userservice.qa.api.base.url");
+        RestAssured.baseURI = baseUrl;
+
+        return given().header("X-auth-token", token).contentType("application/json").body(requestBody).when().post(fetchProperty("userservice.entitytype.read.endpoint"));
+    }
+
+    // Read All Entity Types
+    public static Response readAllEntityTypes(String token) {
+        baseUrl = fetchProperty("userservice.qa.api.base.url");
+        RestAssured.baseURI = baseUrl;
+
+        return given().header("X-auth-token", token).contentType("application/json").when().post(fetchProperty("userservice.entitytype.read.endpoint"));
+    }
+
+    // Delete Entity Type
+    public static Response deleteEntityType(String token, int entityTypeId) {
+        baseUrl = fetchProperty("userservice.qa.api.base.url");
+        RestAssured.baseURI = baseUrl;
+
+        Response response = given().header("X-auth-token", token).when().delete(fetchProperty("userservice.entitytype.delete.endpoint") + entityTypeId);
+
+        response.prettyPrint();
+
+        return response;
+    }
     // Create Entity
     public static Response createEntity(String token, String requestBody) {
 

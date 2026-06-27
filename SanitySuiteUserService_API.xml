@@ -26,7 +26,12 @@
                     <include name="emptyPasswordWithPhoneNumber"/>
                 </methods>
             </class>
-            <class name="org.shikshalokam.backend.userservice.TestUsersModules">
+            <class name="org.shikshalokam.backend.userservice.TestUsersBulkUpload">
+                <methods>
+                    <include name="testBulkUserUpload"/>
+                </methods>
+            </class>
+            <class name="org.shikshalokam.backend.userservice.TestUsersOperations">
                 <methods>
                     <include name="testReadUser"/>
                     <include name="testReadUserWithInvalidToken"/>
@@ -37,12 +42,56 @@
                     <include name="testUpdateUserWithEmptyName"/>
                 </methods>
             </class>
+            <class name="org.shikshalokam.backend.userservice.TestUsersBulkUpload">
+                <methods>
+                        <include name="testValidateBulkUploadusers"/>
+                </methods>
+            </class>
+            <class name="org.shikshalokam.backend.userservice.TestUserServiceEntityTypeOperations">
+                <methods>
+                    <include name="testCreateEntityType"/>
+                    <include name="testReadEntityType"/>
+                    <include name="testReadAllEntityTypesWithEntities"/>
+                    <include name="testDeleteEntityType"/>
+                </methods>
+            </class>
             <class name="org.shikshalokam.backend.userservice.TestUserServiceEntityOperations">
                 <methods>
                     <include name="testCreateEntity"/>
                     <include name="testReadEntity"/>
                     <include name="testUpdateEntity"/>
                     <include name="testDeleteEntity"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    <!-- Run CRUD tests as admin -->
+    <test name="CRUD User Roles - Admin">
+        <parameter name="role" value="admin"/>
+        <classes>
+            <class name="org.shikshalokam.backend.userservice.TestCRUDUserRoles">
+                <methods>
+                    <include name="testCreateUserRoles"/>
+                    <include name="testCreateUserRoles_MissingRequiredFields"/>
+                    <include name="testUpdateUserRoles"/>
+                    <include name="testUpdateUserRoles_MissingRequiredFields"/>
+                    <include name="testDeleteUserRole"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <!-- Run CRUD tests as tenant admin -->
+    <test name="CRUD User Roles - Tenant Admin">
+        <parameter name="role" value="tenantAdmin"/>
+        <classes>
+            <class name="org.shikshalokam.backend.userservice.TestCRUDUserRoles">
+                <methods>
+                    <include name="testCreateUserRoles"/>
+                    <include name="testCreateUserRoles_MissingRequiredFields"/>
+                    <include name="testUpdateUserRoles"/>
+                    <include name="testUpdateUserRoles_MissingRequiredFields"/>
+                    <include name="testDeleteUserRole"/>
                 </methods>
             </class>
         </classes>

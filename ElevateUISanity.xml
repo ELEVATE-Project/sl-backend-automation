@@ -98,5 +98,13 @@
         </classes>
     </test>
 
+    <!--Observation LED IMP flow-->
+
+    <test name="TestObservationLEDIMPFlow">
+        <classes>
+            <class name="org.shikshalokam.frontend.ep.TestObservationLEDIMPFlow"/>
+        </classes>
+    </test>
+
 </suite>
 

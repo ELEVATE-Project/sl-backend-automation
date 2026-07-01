@@ -44,4 +44,7 @@ public class AppAllPages {
     public static AppSubmitObservationWithRubricDeeplink observationWithRubricDeeplink = new AppSubmitObservationWithRubricDeeplink(fetchProperty("ep.AppProgramPage.title"));
     public static AppSubmitObservationWithOutRubricDeeplink observationWithOutRubricDeeplink = new AppSubmitObservationWithOutRubricDeeplink(fetchProperty("ep.AppProgramPage.title"));
     public static AppSubmitSurveyDeeplink submitSurveyDeeplink = new AppSubmitSurveyDeeplink(fetchProperty("ep.AppProgramPage.title"));
+
+    // LED IMP Flow
+    public static AppObservationLEDIMPFlowPage observationLEDIMPFlowPage = new AppObservationLEDIMPFlowPage(fetchProperty("ep.AppProgramPage.title"));
 }

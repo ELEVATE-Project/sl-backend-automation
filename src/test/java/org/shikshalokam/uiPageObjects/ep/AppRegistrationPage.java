@@ -22,9 +22,13 @@ public class AppRegistrationPage extends PWBasePage {
         logger.info("Registration form filling started");
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Register")).click();
         page.getByLabel("First Name *").click();
-        page.getByLabel("First Name *").fill(fetchProperty("ep.username"));
+        page.getByLabel("First Name *").fill(fetchProperty("ep.nameoftheuser"));
         page.getByLabel("Username *").click();
-        page.getByLabel("Username *").fill(fetchProperty("ep.mail"));
+        page.getByLabel("Username *").fill(fetchProperty("ep.username"));
+        page.getByLabel("Email").click();
+        page.getByLabel("Email").fill(fetchProperty("ep.mail"));
+        page.getByLabel("Contact Number (optional)").click();
+        page.getByLabel("Contact Number (optional)").fill(fetchProperty("ep.phoneNumber"));
         page.getByLabel("Password *", new Page.GetByLabelOptions().setExact(true)).click();
         page.getByLabel("Password *", new Page.GetByLabelOptions().setExact(true)).fill(fetchProperty("ep.password"));
         page.getByLabel("Confirm Password*").click();

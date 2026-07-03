@@ -18,7 +18,8 @@ public class AppSubmitSurveyFromProgram extends PWBasePage {
     public AppSubmitSurveyFromProgram submitSurveyFromProgram(String surveyName) {
         logger.info("Submitting a Survey (from Program) started.");
         page.locator("ion-title").filter(new Locator.FilterOptions().setHasText("surveys")).locator("div").click();
-        accessingSurvey(surveyName);
+        page.getByText(surveyName, new Page.GetByTextOptions().setExact(true)).click();
+        accessingSurvey();
         page.getByRole(AriaRole.BANNER).locator("path").click();
         logger.info("Submitting a Survey (from Program) ended.");
         return this;

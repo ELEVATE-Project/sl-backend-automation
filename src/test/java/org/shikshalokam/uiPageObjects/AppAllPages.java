@@ -38,4 +38,10 @@ public class AppAllPages {
     public static AppSubmitObservationWithRubricFromTile submitObservationWithRubricFromTile = new AppSubmitObservationWithRubricFromTile(fetchProperty("ep.AppProgramPage.title"));
     public static AppSubmitObservationWithoutRubricFromTile submitObservationWithoutRubricFromTile = new AppSubmitObservationWithoutRubricFromTile(fetchProperty("ep.AppProgramPage.title"));
     public static AppSubmitSurveyFromTile submitSurveyFromTile = new AppSubmitSurveyFromTile(fetchProperty("ep.AppProgramPage.title"));
+
+    // Deep links
+    public static AppSubmitProjectDeeplink submitProjectDeeplink = new AppSubmitProjectDeeplink(fetchProperty("ep.AppProgramPage.title"));
+    public static AppSubmitObservationWithRubricDeeplink observationWithRubricDeeplink = new AppSubmitObservationWithRubricDeeplink(fetchProperty("ep.AppProgramPage.title"));
+    public static AppSubmitObservationWithOutRubricDeeplink observationWithOutRubricDeeplink = new AppSubmitObservationWithOutRubricDeeplink(fetchProperty("ep.AppProgramPage.title"));
+    public static AppSubmitSurveyDeeplink submitSurveyDeeplink = new AppSubmitSurveyDeeplink(fetchProperty("ep.AppProgramPage.title"));
 }

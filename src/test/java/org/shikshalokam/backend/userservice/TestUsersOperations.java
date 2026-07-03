@@ -17,9 +17,9 @@ import static org.shikshalokam.backend.PropertyLoader.PROP_LIST;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
-public class TestUsersModules extends UserServiceBaseTest {
+public class TestUsersOperations extends UserServiceBaseTest {
 
-    public static final Logger logger = LogManager.getLogger(TestUsersModules.class);
+    public static final Logger logger = LogManager.getLogger(TestUsersOperations.class);
 
     private String normalUserToken;
     private String adminToken;

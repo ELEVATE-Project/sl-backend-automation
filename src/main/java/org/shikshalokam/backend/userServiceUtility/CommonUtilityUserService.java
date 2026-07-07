@@ -176,6 +176,7 @@ public class CommonUtilityUserService {
         }
         tenantAdminToken = response.jsonPath().getString("result.access_token");
     }
+
     // Delete User API
     public static void deleteUserFromAdmin() {
 
@@ -254,6 +255,7 @@ public class CommonUtilityUserService {
                 .when()
                 .post(fetchProperty("userservice.login.endpointasuser"));
     }
+
     // Create Entity Type
     public static Response createEntityType(String token, String requestBody) {
         baseUrl = fetchProperty("userservice.qa.api.base.url");
@@ -289,6 +291,7 @@ public class CommonUtilityUserService {
 
         return response;
     }
+
     // Create Entity
     public static Response createEntity(String token, String requestBody) {
 
@@ -309,8 +312,11 @@ public class CommonUtilityUserService {
 
         RestAssured.baseURI = baseUrl;
 
-        RestAssured.config = RestAssured.config().encoderConfig(io.restassured.config.EncoderConfig.encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
-        return given().header("X-auth-token", token).queryParam("id", entityId).when().post(fetchProperty("userservice.entity.read.endpoint"));
+        return given().config(RestAssured.config().encoderConfig(EncoderConfig.encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false)))
+                .header("X-auth-token", token)
+                .queryParam("id", entityId)
+                .when()
+                .post(fetchProperty("userservice.entity.read.endpoint"));
     }
 
     // Update Entity
@@ -320,9 +326,12 @@ public class CommonUtilityUserService {
 
         RestAssured.baseURI = baseUrl;
 
-        RestAssured.config = RestAssured.config().encoderConfig(EncoderConfig.encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
-
-        return given().header("X-auth-token", token).contentType("application/json").body(requestBody).when().post(fetchProperty("userservice.entity.update.endpoint") + entityId);
+        return given().config(RestAssured.config().encoderConfig(EncoderConfig.encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false)))
+                .header("X-auth-token", token)
+                .contentType("application/json")
+                .body(requestBody)
+                .when()
+                .post(fetchProperty("userservice.entity.update.endpoint") + entityId);
     }
 
     // Delete Entity
@@ -332,6 +341,8 @@ public class CommonUtilityUserService {
 
         RestAssured.baseURI = baseUrl;
 
-        return given().header("X-auth-token", token).when().delete(fetchProperty("userservice.entity.delete.endpoint") + entityId);
+        return given().header("X-auth-token", token)
+                .when()
+                .delete(fetchProperty("userservice.entity.delete.endpoint") + entityId);
     }
 }

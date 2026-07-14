@@ -5,6 +5,9 @@ import io.restassured.response.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.shikshalokam.backend.userServiceUtility.CommonUtilityUserService;
+
+import static org.testng.Assert.fail;
+
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -42,12 +45,10 @@ public class TestUsersTenantCRUDOperations extends UserServiceBaseTest {
         adminToken = CommonUtilityUserService.generateAdminToken();
 
         if (adminToken == null || adminToken.isEmpty()) {
-
-            throw new RuntimeException("Admin token generation failed");
+            fail("Admin token generation failed");
         }
 
         // Generate random tenant data
-
         String random = UUID.randomUUID().toString().replace("-", "").substring(0, 6);
 
         tenantCode = "autotenant" + random;
@@ -60,7 +61,7 @@ public class TestUsersTenantCRUDOperations extends UserServiceBaseTest {
         logger.info("Admin Token Generated Successfully");
     }
 
-    @Test(priority = 1)
+    @Test
     public void testCreateTenant() throws URISyntaxException {
 
         logger.info("Started Create Tenant API");
@@ -82,7 +83,7 @@ public class TestUsersTenantCRUDOperations extends UserServiceBaseTest {
         logger.info("Tenant Created Successfully");
     }
 
-    @Test(priority = 2)
+    @Test(dependsOnMethods = "testCreateTenant")
     public void testUpdateTenant() throws URISyntaxException {
 
         logger.info("Started Update Tenant API");
@@ -112,14 +113,12 @@ public class TestUsersTenantCRUDOperations extends UserServiceBaseTest {
         logger.info("Tenant Updated Successfully");
     }
 
-    @Test(priority = 3)
+    @Test(dependsOnMethods = "testUpdateTenant")
     public void testAddDomainToTenant() throws URISyntaxException {
 
         logger.info("Started Add Domain API");
 
-        addedDomain = "test" + UUID.randomUUID().toString()
-                .replace("-", "")
-                .substring(0, 5) + ".domain.com";
+        addedDomain = "test" + UUID.randomUUID().toString().replace("-", "").substring(0, 5) + ".domain.com";
 
         URI addDomainEndpoint = new URI(PROP_LIST.getProperty("userservice.add.domain.endpoint") + "/" + tenantCode);
 
@@ -148,7 +147,7 @@ public class TestUsersTenantCRUDOperations extends UserServiceBaseTest {
         logger.info("Domain Added Successfully");
     }
 
-    @Test(priority = 4)
+    @Test(dependsOnMethods = "testAddDomainToTenant")
     public void testRemoveDomainFromTenant() throws URISyntaxException {
 
         logger.info("Started Remove Domain API");
@@ -180,7 +179,7 @@ public class TestUsersTenantCRUDOperations extends UserServiceBaseTest {
         logger.info("Domain Removed Successfully");
     }
 
-    @Test(priority = 5)
+    @Test(dependsOnMethods = "testRemoveDomainFromTenant")
     public void testReadTenant() throws URISyntaxException {
 
         logger.info("Started Read Tenant API");
@@ -211,7 +210,7 @@ public class TestUsersTenantCRUDOperations extends UserServiceBaseTest {
         logger.info("Tenant Read Successfully");
     }
 
-    @Test(priority = 6)
+    @Test(dependsOnMethods = "testReadTenant")
     public void testListTenants() throws URISyntaxException {
 
         logger.info("Started Tenant List API");

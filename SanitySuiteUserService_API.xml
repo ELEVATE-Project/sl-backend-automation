@@ -44,7 +44,7 @@
             </class>
             <class name="org.shikshalokam.backend.userservice.TestUsersBulkUpload">
                 <methods>
-                    <include name="testValidateBulkUploadusers"/>
+                        <include name="testValidateBulkUploadusers"/>
                 </methods>
             </class>
             <class name="org.shikshalokam.backend.userservice.TestUserServiceEntityTypeOperations">
@@ -53,6 +53,14 @@
                     <include name="testReadEntityType"/>
                     <include name="testReadAllEntityTypesWithEntities"/>
                     <include name="testDeleteEntityType"/>
+                </methods>
+            </class>
+            <class name="org.shikshalokam.backend.userservice.TestUserServiceEntityOperations">
+                <methods>
+                    <include name="testCreateEntity"/>
+                    <include name="testReadEntity"/>
+                    <include name="testUpdateEntity"/>
+                    <include name="testDeleteEntity"/>
                 </methods>
             </class>
             <class name="org.shikshalokam.backend.userservice.TestUsersTenantCRUDOperations">

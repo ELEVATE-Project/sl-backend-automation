@@ -5,6 +5,7 @@ import io.restassured.response.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.shikshalokam.backend.PropertyLoader;
+import io.restassured.config.EncoderConfig;
 
 import java.io.File;
 
@@ -175,6 +176,7 @@ public class CommonUtilityUserService {
         }
         tenantAdminToken = response.jsonPath().getString("result.access_token");
     }
+
     // Delete User API
     public static void deleteUserFromAdmin() {
 
@@ -253,6 +255,7 @@ public class CommonUtilityUserService {
                 .when()
                 .post(fetchProperty("userservice.login.endpointasuser"));
     }
+
     // Create Entity Type
     public static Response createEntityType(String token, String requestBody) {
         baseUrl = fetchProperty("userservice.qa.api.base.url");
@@ -287,5 +290,59 @@ public class CommonUtilityUserService {
         response.prettyPrint();
 
         return response;
+    }
+
+    // Create Entity
+    public static Response createEntity(String token, String requestBody) {
+
+        baseUrl = fetchProperty("userservice.qa.api.base.url");
+
+        RestAssured.baseURI = baseUrl;
+
+        return given().header("X-auth-token", token).contentType("application/json")
+                .body(requestBody)
+                .when()
+                .post(fetchProperty("userservice.entity.create.endpoint"));
+    }
+
+    // Read Entity
+    public static Response readEntity(String token, int entityId) {
+
+        baseUrl = fetchProperty("userservice.qa.api.base.url");
+
+        RestAssured.baseURI = baseUrl;
+
+        return given().config(RestAssured.config().encoderConfig(EncoderConfig.encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false)))
+                .header("X-auth-token", token)
+                .queryParam("id", entityId)
+                .when()
+                .post(fetchProperty("userservice.entity.read.endpoint"));
+    }
+
+    // Update Entity
+    public static Response updateEntity(String token, int entityId, String requestBody) {
+
+        baseUrl = fetchProperty("userservice.qa.api.base.url");
+
+        RestAssured.baseURI = baseUrl;
+
+        return given().config(RestAssured.config().encoderConfig(EncoderConfig.encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false)))
+                .header("X-auth-token", token)
+                .contentType("application/json")
+                .body(requestBody)
+                .when()
+                .post(fetchProperty("userservice.entity.update.endpoint") + entityId);
+    }
+
+    // Delete Entity
+    public static Response deleteEntity(String token, int entityId) {
+
+        baseUrl = fetchProperty("userservice.qa.api.base.url");
+
+        RestAssured.baseURI = baseUrl;
+
+        return given().header("X-auth-token", token)
+                .when()
+                .delete(fetchProperty("userservice.entity.delete.endpoint") + entityId);
     }
 }

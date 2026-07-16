@@ -47,4 +47,5 @@ public class AppAllPages {
 
     // LED IMP Flow
     public static AppObservationLEDIMPFlowPage observationLEDIMPFlowPage = new AppObservationLEDIMPFlowPage(fetchProperty("ep.AppProgramPage.title"));
+    public static AppObservationAsTask observationAsTask = new AppObservationAsTask(fetchProperty("ep.AppProgramPage.title"));
 }

@@ -27,7 +27,7 @@ public class TestEPLogin {
         robot.sees(AppAllPages.homePage).verifyHomePage();
         robot.quitAppBrowser();
     }
-    @Test(description = "Verify log in page with Name and password working properly.")
+    @Test(description = "Verify log in page with Phone Number and password working properly.")
     public void testLoginWithPhoneNumber() {
         Robot robot = new Robot();
         String userName = fetchProperty("ep.phoneNumber");
@@ -39,7 +39,7 @@ public class TestEPLogin {
     }
 
 //Negative test cases for login with wrong credentials
-    @Test(description = "Verify log in page with Name and password working.")
+    @Test(description = "Verify log in fails when Name is used instead of Username, Phone Number or Email.")
     public void testLoginWithName() {
         Robot robot = new Robot();
         String userName = fetchProperty("ep.nameoftheuser");
@@ -123,16 +123,17 @@ public class TestEPLogin {
         String userName = fetchProperty("ep.username");
         String password = fetchProperty("ep.password");
         robot.sees(AppAllPages.eploginpage).openURL();
-        robot.sees(AppAllPages.eploginpage).testLoginWithMultipleOptions(userName+"1",password,"Negative test");
+        robot.sees(AppAllPages.eploginpage).testLoginWithMultipleOptions(userName,password+"1","Negative test");
         robot.quitAppBrowser();
     }
-    @Test(description = "Verify log in page with email and Wrong password.")
-    public void testLoginWithWrongPassword() {
+
+    @Test(description = "Verify log in page with Wrong User Name and password.")
+    public void testLoginWithWrongUserName() {
         Robot robot = new Robot();
         String userName = fetchProperty("ep.mail");
         String password = fetchProperty("ep.password");
         robot.sees(AppAllPages.eploginpage).openURL();
-        robot.sees(AppAllPages.eploginpage).testLoginWithMultipleOptions(userName,password+"1","Negative test");
+        robot.sees(AppAllPages.eploginpage).testLoginWithMultipleOptions(userName+"1",password,"Negative test");
         robot.quitAppBrowser();
     }
 

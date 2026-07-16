@@ -117,8 +117,8 @@ public class TestEPLogin {
         robot.quitAppBrowser();
     }
 
-    @Test(description = "Verify log in page with Wrong User Name and password.")
-    public void testLoginWithWrongUserName() {
+    @Test(description = "Verify log in page with User Name and Wrong password.")
+    public void testLoginWithWrongPassword() {
         Robot robot = new Robot();
         String userName = fetchProperty("ep.username");
         String password = fetchProperty("ep.password");

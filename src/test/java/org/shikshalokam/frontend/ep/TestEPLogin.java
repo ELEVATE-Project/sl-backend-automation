@@ -1,5 +1,6 @@
 package org.shikshalokam.frontend.ep;
 
+import org.shikshalokam.backend.elevateUtility.CommonUtilitySAAS;
 import org.shikshalokam.uiPageObjects.AppAllPages;
 import org.shikshalokam.uiPageObjects.Robot;
 import org.testng.annotations.Test;
@@ -116,8 +117,8 @@ public class TestEPLogin {
         robot.quitAppBrowser();
     }
 
-    @Test(description = "Verify log in page with User Name and Wrong password.")
-    public void testLoginWithWrongPassword() {
+    @Test(description = "Verify log in page with Wrong User Name and password.")
+    public void testLoginWithWrongUserName() {
         Robot robot = new Robot();
         String userName = fetchProperty("ep.username");
         String password = fetchProperty("ep.password");
@@ -125,13 +126,35 @@ public class TestEPLogin {
         robot.sees(AppAllPages.eploginpage).testLoginWithMultipleOptions(userName+"1",password,"Negative test");
         robot.quitAppBrowser();
     }
-    @Test(description = "Verify log in page with Wrong email and password.")
-    public void testLoginWithWrongUserName() {
+    @Test(description = "Verify log in page with email and Wrong password.")
+    public void testLoginWithWrongPassword() {
         Robot robot = new Robot();
         String userName = fetchProperty("ep.mail");
         String password = fetchProperty("ep.password");
         robot.sees(AppAllPages.eploginpage).openURL();
         robot.sees(AppAllPages.eploginpage).testLoginWithMultipleOptions(userName,password+"1","Negative test");
+        robot.quitAppBrowser();
+    }
+
+    @Test(description = "Verify forgot password.")
+    public void testForgotPassword() {
+        Robot robot = new Robot();
+        robot.sees(AppAllPages.eploginpage).openURL();
+        robot.sees(AppAllPages.eploginpage).verifyForgotPassword();
+        robot.quitAppBrowser();
+    }
+
+    @Test(dependsOnMethods = "testForgotPassword", description = "Verify Reset password.")
+    public void testResetPassword() {
+        Robot robot = new Robot();
+        String userName = fetchProperty("ep.mail");
+        String password = fetchProperty("ep.password");
+        robot.sees(AppAllPages.eploginpage).openURL();
+        robot.sees(AppAllPages.eploginpage).testLoginWithMultipleOptions(userName,password+"1","Reset Password");
+        robot.sees(AppAllPages.eploginpage).verifyResetPassword();
+        robot.sees(AppAllPages.eploginpage).openURL();
+        robot.sees(AppAllPages.eploginpage).logIntoPortal();
+        robot.sees(AppAllPages.homePage).verifyHomePage();
         robot.quitAppBrowser();
     }
 }

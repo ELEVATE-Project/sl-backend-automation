@@ -106,5 +106,11 @@
         </classes>
     </test>
 
+    <test name="TestObservationAsTaskFlow">
+        <classes>
+            <class name="org.shikshalokam.frontend.ep.TestObservationAsTask"/>
+        </classes>
+    </test>
+
 </suite>
 

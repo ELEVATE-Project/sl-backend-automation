@@ -1,34 +1,60 @@
-package org.shikshalokam.backend;
+package org.shikshalokam.backend.userservice;
 
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.testng.annotations.BeforeMethod;
+import org.shikshalokam.backend.PropertyLoader;
+import org.shikshalokam.backend.userServiceUtility.CommonUtilityUserService;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import java.net.URI;
 import java.util.HashMap;
+import java.util.List;
 import static io.restassured.RestAssured.given;
-import static org.shikshalokam.backend.PropertyLoader.PROP_LIST;
+import static org.shikshalokam.backend.userServiceUtility.CommonUtilityUserService.loginAsTenantAdmin;
+import static org.shikshalokam.backend.userServiceUtility.CommonUtilityUserService.loginTOAdmin;
 import static org.testng.Assert.*;
 
-public class TestCRUDUserModules extends MentorEDBaseTest{
+public class TestCRUDUserModules extends UserServiceBaseTest {
 
     public static final Logger logger = LogManager.getLogger(TestCRUDUserModules.class);
     private URI createUserModulesEndpoint, getUserModulesEndpoint, updateUserModulesEndpoint, deleteUserModulesEndpoint;
-    private String userModuleCodeName, createdModuleID,updateUserModuleCode;
+    private String token,userModuleCodeName, createdModuleID,updateUserModuleCode;
     HashMap<String, String> databody = new HashMap<>();
 
-    @BeforeMethod
-    public void init() {
-        logger.info("Logging into the application :");
-        loginToMentorED(PROP_LIST.get("mentor.qa.sysadmin.login.user").toString(), PROP_LIST.get("mentor.qa.sysadmin.login.password").toString());
+    @BeforeTest
+    @org.testng.annotations.Parameters({"role"})
+    public void init(String role) throws Exception {
+        logger.info("Running tests for user modules: " + role);
 
-        createUserModulesEndpoint = MentorBase.createURI("/user/v1/modules/create");
-        getUserModulesEndpoint = MentorBase.createURI("/user/v1/modules/list");
-        updateUserModulesEndpoint = MentorBase.createURI("/user/v1/modules/update/");
-        deleteUserModulesEndpoint = MentorBase.createURI("/user/v1/modules/delete/");
+        if (role.equalsIgnoreCase("admin")) {
+            loginTOAdmin(
+                    PropertyLoader.PROP_LIST.getProperty("userservice.qa.admin.login.user"),
+                    PropertyLoader.PROP_LIST.getProperty("userservice.qa.admin.login.password")
+            );
+            token = CommonUtilityUserService.adminToken;
+
+        } else if (role.equalsIgnoreCase("tenantAdmin")) {
+            loginAsTenantAdmin(
+                    PropertyLoader.PROP_LIST.getProperty("userservice.qa.tenantadmin.login.user"),
+                    PropertyLoader.PROP_LIST.getProperty("userservice.qa.tenantadmin.login.password")
+            );
+            token = CommonUtilityUserService.tenantAdminToken;
+
+        } else {
+            assertTrue(
+                    role.equalsIgnoreCase("admin") || role.equalsIgnoreCase("tenantAdmin"),
+                    "Invalid role passed: " + role);
+        }
+        assertNotNull(token, "Token is null for role: " + role);
+        assertFalse(token.isEmpty(), "Token is empty for role: " + role);
+
+        createUserModulesEndpoint = new URI("/user/v1/modules/create");
+        getUserModulesEndpoint = new URI("/user/v1/modules/list");
+        updateUserModulesEndpoint = new URI("/user/v1/modules/update/");
+        deleteUserModulesEndpoint = new URI("/user/v1/modules/delete/");
 
         userModuleCodeName = "userModuleCode" + RandomStringUtils.randomAlphabetic(10).toLowerCase();
         updateUserModuleCode = "updUserModuleCode" + RandomStringUtils.randomAlphabetic(10).toLowerCase();
@@ -39,11 +65,26 @@ public class TestCRUDUserModules extends MentorEDBaseTest{
         logger.info("Started calling ------------ Create User Modules API ------------");
         Response response = createUserModules(userModuleCodeName);
 
-        logger.info("Response Code: {}", response.getStatusCode());
-        assertEquals(response.getStatusCode(), 201, "User Module creation failed with" + response.getStatusCode());
+        logger.info(
+                "\nResponse Code : {}" +
+                        "\nMessage       : {}" +
+                        "\nModule ID     : {}" +
+                        "\nCode          : {}" +
+                        "\nStatus        : {}",
+                response.getStatusCode(),
+                response.jsonPath().getString("message"),
+                response.jsonPath().getInt("result.Id"),
+                response.jsonPath().getString("result.code"),
+                response.jsonPath().getString("result.status")
+        );
 
-        getUserModules(true,userModuleCodeName);
+        assertEquals(response.getStatusCode(), 201, "User Module creation failed with" + response.getStatusCode());
+        createdModuleID = response.jsonPath().getString("result.Id");
         assertNotNull(createdModuleID, "Module ID not found in the response");
+
+        // Optional: Verify the module exists via GET
+        Response getResponse = getUserModules(false, userModuleCodeName);
+        assertEquals(getResponse.getStatusCode(), 200);
 
         logger.info("Ended calling -------- Create User Modules API : with assertions completed");
     }
@@ -69,7 +110,19 @@ public class TestCRUDUserModules extends MentorEDBaseTest{
         logger.info("Started calling ------------ Update User Modules API ------------");
         Response response = updateUserModules(updateUserModuleCode);
 
-        logger.info("Response Code: {}", response.getStatusCode());
+        logger.info(
+                "\nResponse Code : {}" +
+                        "\nMessage       : {}" +
+                        "\nModule ID     : {}" +
+                        "\nCode          : {}" +
+                        "\nStatus        : {}",
+                response.getStatusCode(),
+                response.jsonPath().getString("message"),
+                response.jsonPath().getInt("result.id"),
+                response.jsonPath().getString("result.code"),
+                response.jsonPath().getString("result.status")
+        );
+
         assertEquals(response.getStatusCode(), 201, "User Module updation failed with" + response.getStatusCode());
 
         Response responsebody = getUserModules(false, updateUserModuleCode);
@@ -108,12 +161,15 @@ public class TestCRUDUserModules extends MentorEDBaseTest{
         assertEquals(response.getStatusCode(), 202, "Expected status code 202 for successful deletion, got" + response.getStatusCode());
 
         // Optionally, try to get the deleted role to ensure it no longer exists
-        Response codeExists = getUserModules(true, userModuleCodeName);
-        if (codeExists == null) {
+        Response codeExists = getUserModules(false, updateUserModuleCode);
+
+        List<?> data = codeExists.jsonPath().getList("result.data");
+        if (data == null || data.isEmpty()) {
             logger.info("Verified: ID is no longer present in the system.");
         } else {
             logger.warn("ID -" + createdModuleID + " still exists in the system.");
         }
+
         logger.info("Ended calling ------------ Delete User Modules API: with assertions completed.");
     }
 
@@ -122,13 +178,12 @@ public class TestCRUDUserModules extends MentorEDBaseTest{
         databody.put("code", code);
 
         Response response = given()
-                .header("X-auth-token", "bearer " + X_AUTH_TOKEN)
+                .header("X-auth-token", token)
                 .contentType(ContentType.JSON)
                 .body(databody)
                 .when().post(createUserModulesEndpoint);
 
-        response.prettyPrint();
-        return response;
+               return response;
     }
 
     private Response updateUserModules(String code){
@@ -136,13 +191,12 @@ public class TestCRUDUserModules extends MentorEDBaseTest{
         databody.put("code", code);
 
         Response response = given()
-                .header("X-auth-token", "bearer " + X_AUTH_TOKEN)
+                .header("X-auth-token", token)
                 .pathParam("id",createdModuleID)
                 .contentType(ContentType.JSON)
                 .body(databody)
                 .when().post(updateUserModulesEndpoint+"{id}");
 
-        response.prettyPrint();
         return response;
     }
 
@@ -150,21 +204,16 @@ public class TestCRUDUserModules extends MentorEDBaseTest{
         logger.info("Started calling ---------- GET User Module API -------------");
 
         Response response = given()
-                .header("X-auth-token", "bearer " + X_AUTH_TOKEN)
+                .header("X-auth-token", token)
                 .queryParam("search", code)
                 .when().get(getUserModulesEndpoint);
 
-        if (idNeeded && response!=null) {
-            createdModuleID = response.jsonPath().getString("result.data[0].id"); // Extract the created user module ID from the response
-            return null;
-        } else {
-            return response; // If idNeeded is false, return the full response
-        }
+        return response; // If idNeeded is false, return the full response
     }
 
     private Response deleteUserModules() {
         Response response = given()
-                .header("X-auth-token", "bearer " + X_AUTH_TOKEN)
+                .header("X-auth-token", token)
                 .pathParam("id",createdModuleID)
                 .contentType(ContentType.JSON)
                 .when().delete(deleteUserModulesEndpoint+"{id}");

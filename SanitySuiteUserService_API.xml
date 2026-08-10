@@ -5,7 +5,6 @@
     </listeners>
     <test name="UserServiceSanityTests">
         <classes>
-
             <class name="org.shikshalokam.backend.userservice.TestUserServiceLoginPassing">
                 <methods>
                     <include name="successfulLoginWithPhoneNumber"/>
@@ -99,6 +98,15 @@
                     <include name="testUpdateUserRoles"/>
                     <include name="testUpdateUserRoles_MissingRequiredFields"/>
                     <include name="testDeleteUserRole"/>
+                </methods>
+            </class>
+            <class name="org.shikshalokam.backend.userservice.TestCRUDUserModules">
+                <methods>
+                    <include name="testCreateUserModules"/>
+                    <include name="testCreateUserModules_MissingRequiredFields"/>
+                    <include name="testUpdateUserModules"/>
+                    <include name="testUpdateUserModules_MissingRequiredFields"/>
+                    <include name="testDeleteModules"/>
                 </methods>
             </class>
         </classes>

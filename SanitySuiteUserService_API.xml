@@ -73,6 +73,19 @@
                     <include name="testListTenants"/>
                 </methods>
             </class>
+            <class name="org.shikshalokam.backend.userservice.TestFeatureCRUDOperations">
+                <methods>
+                    <include name="testCreateFeature"/>
+                    <include name="testUpdateFeature"/>
+                    <include name="testListFeatures"/>
+                    <include name="testDeleteFeature"/>
+                    <include name="testMapFeatureToOrganization"/>
+                    <include name="testUpdateOrganizationFeatureMapping"/>
+                    <include name="testReadOrganizationFeatureMapping"/>
+                    <include name="testListOrganizationFeatureMappings"/>
+                    <include name="testDeleteOrganizationFeatureMapping"/>
+                </methods>
+            </class>
         </classes>
     </test>
     <!-- Run CRUD tests as admin -->
